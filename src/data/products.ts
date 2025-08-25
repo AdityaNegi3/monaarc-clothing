@@ -17,7 +17,7 @@ export const products: Product[] = [
   {
     id: 'anime-2',
     name: 'itachi',
-    price: 999,
+    price: 1,
     images: {
       front: 'itachi front.png',
       back: '/itachi back.png'
