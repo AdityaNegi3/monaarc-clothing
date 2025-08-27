@@ -15,6 +15,11 @@ import Signup from './pages/Signup';
 import { Product } from './types';
 
 function AppInner() {
+  // build stamp to verify fresh bundle is loaded
+  useEffect(() => {
+    console.log('App build stamp:', 'v3-OrderFlow-OK');
+  }, []);
+
   const [orderForm, setOrderForm] = useState<{
     isOpen: boolean;
     product: Product | null;
@@ -54,12 +59,23 @@ function AppInner() {
     });
   }, []);
 
-  // Optional: close modal on route change
+  // Close modal on route change
   const location = useLocation();
   useEffect(() => {
     if (orderForm.isOpen) closeOrderForm();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  // Lock body scroll while modal is open (nice UX)
+  useEffect(() => {
+    if (orderForm.isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [orderForm.isOpen]);
 
   return (
     <div className="App">
