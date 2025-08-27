@@ -34,9 +34,9 @@ const Home: React.FC<HomeProps> = ({ onBuyNow }) => {
           >
             MONAARC
           </h1>
-          <p className="text-2xl md:text-3xl text-white font-light tracking-wide">
+          {/* <p className="text-2xl md:text-3xl text-white font-light tracking-wide">
             Where Power Meets Elegance
-          </p>
+          </p> */}
         </div>
       </section>
 
