@@ -20,7 +20,7 @@ const Home: React.FC<HomeProps> = ({ onBuyNow }) => {
       <section
         className="relative h-screen flex items-center justify-center bg-cover bg-center"
         style={{
-          backgroundImage: "url('/bg.png')",
+          backgroundImage: "url('/background.png')",
           filter: "brightness(1.3)", // Brightness increased (1.0 = normal)
         }}
       >
