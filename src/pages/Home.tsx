@@ -19,7 +19,10 @@ const Home: React.FC<HomeProps> = ({ onBuyNow }) => {
       {/* Hero Section with bg.png */}
       <section
         className="relative h-screen flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: "url('/bg.png')" }}
+        style={{
+          backgroundImage: "url('/bg.png')",
+          filter: "brightness(1.3)", // Brightness increased (1.0 = normal)
+        }}
       >
         {/* Overlay for readability */}
         <div className="absolute inset-0 bg-black/60" />
