@@ -16,11 +16,11 @@ export const products: Product[] = [
   },
   {
     id: 'anime-2',
-    name: 'itachi',
+    name: 'yami',
     price: 1,
     images: {
-      front: 'itachi front.png',
-      back: '/itachi back.png'
+      front: '/yami front.png',
+      back: '/yami back.png'
     },
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     edition: 'anime',
