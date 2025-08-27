@@ -58,14 +58,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
       formSubmitData.append('order_details', orderDetails);
       formSubmitData.append('total_amount', totalAmount.toString());
 
-      await fetch('https://formsubmit.co/orders@MONAARC.com', {
+      await fetch('https://formsubmit.co/monaarc.clothing@gmail.com', {
         method: 'POST',
         body: formSubmitData
       });
 
       // Redirect to Razorpay (placeholder implementation)
       const razorpayOptions = {
-        key: 'rzp_test_placeholder_key', // User will replace this
+        key: 'rzp_live_RAN3mONBuaMP9h', // User will replace this
         amount: totalAmount * 100, // Amount in paise
         currency: 'INR',
         name: 'MONAARC',
