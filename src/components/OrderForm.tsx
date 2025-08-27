@@ -77,26 +77,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!hasItems) {
-      alert("Your cart is empty or the product/size is missing.");
-      return;
-    }
-    // basic sanity on envs
-    if (!API_BASE) {
-      console.error("Missing API base URL env. Set VITE_API_BASE_URL or REACT_APP_API_BASE_URL.");
-      alert("Payments are temporarily unavailable. Please try again shortly.");
-      return;
-    }
-    if (!RAZORPAY_KEY_ID) {
-      console.error("Missing Razorpay Key ID env.");
-      alert("Payment configuration error. Please contact support.");
-      return;
-    }
+    if (!hasItems) return;
+
+    // env checks
+    if (!API_BASE || !RAZORPAY_KEY_ID) return;
 
     setIsSubmitting(true);
 
     try {
-      // sanitize inputs
       const name = formData.name.trim();
       const phone = formData.phone.trim();
       const email = formData.email.trim();
@@ -104,23 +92,19 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
       const { text: orderDetails, total: totalAmount } = buildOrderDetails();
       const amountPaise = Math.round(Number(totalAmount) * 100);
-
       if (!amountPaise || amountPaise < 100) {
-        // Razorpay minimum is ₹1.00 (100 paise) for testing; you’re already showing ₹1 in screenshot.
-        alert("Invalid amount. Please check your cart.");
         setIsSubmitting(false);
         return;
       }
 
-      // 1) Load SDK (must be before new Razorpay)
+      // 1) Load SDK
       const loaded = await loadRazorpay();
       if (!loaded) {
-        alert("Razorpay failed to load. Check your network and try again.");
         setIsSubmitting(false);
         return;
       }
 
-      // 2) Create order on your backend
+      // 2) Create order on backend
       const createOrderRes = await fetch(`${API_BASE.replace(/\/+$/, "")}/api/razorpay/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -135,41 +119,36 @@ const OrderForm: React.FC<OrderFormProps> = ({
           },
         }),
       });
-
       if (!createOrderRes.ok) {
-        const t = await createOrderRes.text();
-        console.error("Create order failed:", t);
-        alert("Could not start payment. Please try again.");
         setIsSubmitting(false);
         return;
       }
-
       const { order } = await createOrderRes.json();
       if (!order?.id || !order?.amount) {
-        console.error("Invalid order payload:", order);
-        alert("Payment service error. Please try again.");
         setIsSubmitting(false);
         return;
       }
 
-      // 3) Prepare checkout options
+      // 3) Open Razorpay immediately (no alerts)
       const options = {
         key: RAZORPAY_KEY_ID,
         name: "MONAARC",
         description: "Order Payment",
         currency: "INR",
-        amount: order.amount, // integer paise from server
+        amount: order.amount,
         order_id: order.id,
         prefill: { name, email, contact: phone },
         notes: { order_details: orderDetails },
         theme: { color: "#000000" },
+        // Keep redirect false (popup) for better UX. Set to true if you prefer fullpage checkout.
+        // redirect: false,
         handler: async (response: {
           razorpay_payment_id: string;
           razorpay_order_id: string;
           razorpay_signature: string;
         }) => {
           try {
-            // 4) Verify on server
+            // Verify on server
             const verifyRes = await fetch(`${API_BASE.replace(/\/+$/, "")}/api/razorpay/verify`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -179,15 +158,13 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 razorpay_signature: response.razorpay_signature,
               }),
             });
-
             const verifyJson = await verifyRes.json();
             if (!verifyJson.ok) {
-              alert("Payment verification failed. Please contact support with your Order ID.");
               setIsSubmitting(false);
               return;
             }
 
-            // 5) Email receipt / order to you via FormSubmit AJAX
+            // Email via FormSubmit (AJAX JSON)
             await fetch("https://formsubmit.co/ajax/monaarc.clothing@gmail.com", {
               method: "POST",
               headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -205,37 +182,23 @@ const OrderForm: React.FC<OrderFormProps> = ({
               }),
             });
 
-            // success UX
             onClose();
-            alert("Payment successful! Order confirmed.");
           } catch (err) {
-            console.error("Post-payment flow error:", err);
-            alert("Payment captured, but we couldn't auto-confirm the order. We'll reach out shortly.");
+            // swallow errors (no alerts)
           } finally {
             setIsSubmitting(false);
           }
         },
         modal: {
-          ondismiss: () => {
-            setIsSubmitting(false);
-          },
+          ondismiss: () => setIsSubmitting(false),
         },
       };
 
       const rzp = new window.Razorpay(options);
 
-      // Optional: listen to payment failures for nicer messaging
-      rzp.on?.("payment.failed", (resp: any) => {
-        console.error("Razorpay payment.failed", resp);
-        setIsSubmitting(false);
-        alert("Payment failed or cancelled. You were not charged.");
-      });
-
-      // 4) Open checkout
-      rzp.open();
+      // If popup ever gets blocked, a zero-timeout nudge helps some browsers
+      setTimeout(() => rzp.open(), 0);
     } catch (error) {
-      console.error("Order submission error:", error);
-      alert("Something went wrong while starting the payment. Please try again.");
       setIsSubmitting(false);
     }
   };
