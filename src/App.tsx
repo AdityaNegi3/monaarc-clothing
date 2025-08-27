@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
@@ -14,73 +14,90 @@ import Contact from './pages/Contact';
 import Signup from './pages/Signup';
 import { Product } from './types';
 
-function App() {
-  const [orderForm, setOrderForm] = useState({
+function AppInner() {
+  const [orderForm, setOrderForm] = useState<{
+    isOpen: boolean;
+    product: Product | null;
+    selectedSize: string;
+    isCartCheckout: boolean;
+  }>({
     isOpen: false,
-    product: null as Product | null,
+    product: null,
     selectedSize: '',
-    isCartCheckout: false
+    isCartCheckout: false,
   });
 
-  const handleBuyNow = (product: Product, size: string) => {
+  const handleBuyNow = useCallback((product: Product, size: string) => {
     setOrderForm({
       isOpen: true,
       product,
       selectedSize: size,
-      isCartCheckout: false
+      isCartCheckout: false,
     });
-  };
+  }, []);
 
-  const handleCartCheckout = () => {
+  const handleCartCheckout = useCallback(() => {
     setOrderForm({
       isOpen: true,
       product: null,
       selectedSize: '',
-      isCartCheckout: true
+      isCartCheckout: true,
     });
-  };
+  }, []);
 
-  const closeOrderForm = () => {
+  const closeOrderForm = useCallback(() => {
     setOrderForm({
       isOpen: false,
       product: null,
       selectedSize: '',
-      isCartCheckout: false
+      isCartCheckout: false,
     });
-  };
+  }, []);
 
+  // Optional: close modal on route change
+  const location = useLocation();
+  useEffect(() => {
+    if (orderForm.isOpen) closeOrderForm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
+  return (
+    <div className="App">
+      <Navbar />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home onBuyNow={handleBuyNow} />} />
+          <Route path="/collections/:edition" element={<Collections onBuyNow={handleBuyNow} />} />
+          <Route path="/new-arrivals" element={<NewArrivals onBuyNow={handleBuyNow} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </main>
+
+      <Cart onCheckout={handleCartCheckout} />
+
+      <OrderForm
+        isOpen={orderForm.isOpen}
+        onClose={closeOrderForm}
+        product={orderForm.product ?? undefined}
+        selectedSize={orderForm.selectedSize || undefined}
+        isCartCheckout={orderForm.isCartCheckout}
+      />
+
+      <CookieConsent />
+    </div>
+  );
+}
+
+export default function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <Router>
-          <div className="App">
-            <Navbar />
-            <main>
-              <Routes>
-                <Route path="/" element={<Home onBuyNow={handleBuyNow} />} />
-                <Route path="/collections/:edition" element={<Collections onBuyNow={handleBuyNow} />} />
-                <Route path="/new-arrivals" element={<NewArrivals onBuyNow={handleBuyNow} />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/signup" element={<Signup />} />
-              </Routes>
-            </main>
-            
-            <Cart onCheckout={handleCartCheckout} />
-            
-            <OrderForm
-              isOpen={orderForm.isOpen}
-              onClose={closeOrderForm}
-              product={orderForm.product}
-              selectedSize={orderForm.selectedSize}
-              isCartCheckout={orderForm.isCartCheckout}
-            />
-            
-            <CookieConsent />
-          </div>
+          <AppInner />
         </Router>
       </CartProvider>
     </AuthProvider>
   );
 }
-
-export default App;
