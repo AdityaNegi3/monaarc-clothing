@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import { Product } from "../types";
 import { useCart } from "../contexts/CartContext";
@@ -26,18 +26,28 @@ const API_BASE: string =
 const RAZORPAY_KEY_ID: string =
   (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_RAZORPAY_KEY_ID) ||
   (typeof process !== "undefined" && (process as any).env?.REACT_APP_RAZORPAY_KEY_ID) ||
-  "rzp_live_RAN3mONBuaMP9h"; // public key is safe in browser
+  ""; // don't hardcode live key; read from env
 
-const loadRazorpay = () =>
-  new Promise<boolean>((resolve) => {
-    if (typeof window !== "undefined" && window.Razorpay) return resolve(true);
+function useRazorpayLoader() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.Razorpay) {
+      setReady(true);
+      return;
+    }
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
+    script.onload = () => setReady(true);
+    script.onerror = () => setReady(false);
     document.body.appendChild(script);
-  });
+    return () => {
+      // don't remove the script; keep it cached for subsequent opens
+    };
+  }, []);
+  return ready;
+}
 
 const OrderForm: React.FC<OrderFormProps> = ({
   isOpen,
@@ -47,6 +57,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
   isCartCheckout = false,
 }) => {
   const { state } = useCart();
+  const rzpReady = useRazorpayLoader();
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -55,57 +67,69 @@ const OrderForm: React.FC<OrderFormProps> = ({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const sanitizedApiBase = useMemo(() => API_BASE.replace(/\/+$/, ""), []);
+  const cartTotal = useMemo(() => Number(state?.total || 0), [state?.total]);
+
   const hasItems = useMemo(() => {
-    if (isCartCheckout) return state.items && state.items.length > 0;
+    if (isCartCheckout) return Array.isArray(state.items) && state.items.some(i => i.quantity > 0);
     return !!product && !!selectedSize;
   }, [isCartCheckout, state.items, product, selectedSize]);
 
   if (!isOpen) return null;
 
-  const buildOrderDetails = () => {
+  function buildOrderDetails() {
     if (isCartCheckout) {
-      const lines = state.items.map(
+      const lines = (state.items || []).map(
         (item) =>
-          `${item.name} (Size: ${item.selectedSize}, Qty: ${item.quantity}) - ₹${item.price * item.quantity}`
+          `${item.name} (Size: ${item.selectedSize}, Qty: ${item.quantity}) - ₹${Number(item.price) * Number(item.quantity)}`
       );
-      return { text: lines.join("\n"), total: Number(state.total) || 0 };
+      return { text: lines.join("\n"), total: cartTotal };
     } else if (product && selectedSize) {
-      return { text: `${product.name} (Size: ${selectedSize}) - ₹${product.price}`, total: Number(product.price) || 0 };
+      return { text: `${product.name} (Size: ${selectedSize}) - ₹${Number(product.price)}`, total: Number(product.price) || 0 };
     }
     return { text: "", total: 0 };
-  };
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault(); // ensure no page reload
     if (!hasItems) return;
 
-    // env checks
-    if (!API_BASE || !RAZORPAY_KEY_ID) return;
+    if (!sanitizedApiBase) {
+      alert("Payment server URL is not set (VITE_API_BASE_URL).");
+      return;
+    }
+    if (!RAZORPAY_KEY_ID) {
+      alert("Razorpay key is not set (VITE_RAZORPAY_KEY_ID).");
+      return;
+    }
+
+    const name = formData.name.trim();
+    const phone = formData.phone.trim();
+    const email = formData.email.trim();
+    const address = formData.address.trim();
+    if (!name || !phone || !email || !address) {
+      alert("Please fill all fields.");
+      return;
+    }
+
+    const { text: orderDetails, total: totalAmount } = buildOrderDetails();
+    const amountPaise = Math.max(0, Math.round(Number(totalAmount) * 100)); // ₹→paise
+    if (!amountPaise || amountPaise < 100) {
+      alert("Invalid amount.");
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      const name = formData.name.trim();
-      const phone = formData.phone.trim();
-      const email = formData.email.trim();
-      const address = formData.address.trim();
-
-      const { text: orderDetails, total: totalAmount } = buildOrderDetails();
-      const amountPaise = Math.round(Number(totalAmount) * 100);
-      if (!amountPaise || amountPaise < 100) {
+      if (!rzpReady || !window.Razorpay) {
+        alert("Payment SDK failed to load. Check your network/adblock.");
         setIsSubmitting(false);
         return;
       }
 
-      // 1) Load SDK
-      const loaded = await loadRazorpay();
-      if (!loaded) {
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 2) Create order on backend
-      const createOrderRes = await fetch(`${API_BASE.replace(/\/+$/, "")}/api/razorpay/order`, {
+      // 1) Create order on backend
+      const createOrderRes = await fetch(`${sanitizedApiBase}/api/razorpay/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -115,21 +139,22 @@ const OrderForm: React.FC<OrderFormProps> = ({
             customer_name: name,
             customer_phone: phone,
             customer_email: email,
+            address,
             order_details: orderDetails,
           },
         }),
       });
+
       if (!createOrderRes.ok) {
-        setIsSubmitting(false);
-        return;
-      }
-      const { order } = await createOrderRes.json();
-      if (!order?.id || !order?.amount) {
-        setIsSubmitting(false);
-        return;
+        const t = await createOrderRes.text();
+        throw new Error(t || "Failed to create order");
       }
 
-      // 3) Open Razorpay immediately (no alerts)
+      const data = await createOrderRes.json();
+      const order = data?.order || data; // support either shape
+      if (!order?.id || !order?.amount) throw new Error("Malformed order from server");
+
+      // 2) Open Razorpay
       const options = {
         key: RAZORPAY_KEY_ID,
         name: "MONAARC",
@@ -140,16 +165,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
         prefill: { name, email, contact: phone },
         notes: { order_details: orderDetails },
         theme: { color: "#000000" },
-        // Keep redirect false (popup) for better UX. Set to true if you prefer fullpage checkout.
-        // redirect: false,
         handler: async (response: {
           razorpay_payment_id: string;
           razorpay_order_id: string;
           razorpay_signature: string;
         }) => {
           try {
-            // Verify on server
-            const verifyRes = await fetch(`${API_BASE.replace(/\/+$/, "")}/api/razorpay/verify`, {
+            // 3) Verify signature on backend
+            const verifyRes = await fetch(`${sanitizedApiBase}/api/razorpay/verify`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -159,32 +182,36 @@ const OrderForm: React.FC<OrderFormProps> = ({
               }),
             });
             const verifyJson = await verifyRes.json();
-            if (!verifyJson.ok) {
-              setIsSubmitting(false);
-              return;
+            if (!verifyRes.ok || !verifyJson?.ok) {
+              throw new Error(verifyJson?.error || "Payment verification failed");
             }
 
-            // Email via FormSubmit (AJAX JSON)
-            await fetch("https://formsubmit.co/ajax/monaarc.clothing@gmail.com", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Accept: "application/json" },
-              body: JSON.stringify({
-                name,
-                phone,
-                email,
-                address,
-                order_details: orderDetails,
-                total_amount: String(totalAmount),
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                _subject: "New MONAARC Order",
-                _captcha: "false",
-              }),
-            });
+            // 4) Send order email to you (optional; can be moved server-side)
+            try {
+              await fetch("https://formsubmit.co/ajax/monaarc.clothing@gmail.com", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Accept: "application/json" },
+                body: JSON.stringify({
+                  name,
+                  phone,
+                  email,
+                  address,
+                  order_details: orderDetails,
+                  total_amount: String(totalAmount),
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  _subject: "New MONAARC Order",
+                  _captcha: "false",
+                }),
+              });
+            } catch {
+              // ignore email failures
+            }
 
             onClose();
-          } catch (err) {
-            // swallow errors (no alerts)
+            alert("Payment successful 🎉");
+          } catch (err: any) {
+            alert(err?.message || "Payment verification failed");
           } finally {
             setIsSubmitting(false);
           }
@@ -195,20 +222,20 @@ const OrderForm: React.FC<OrderFormProps> = ({
       };
 
       const rzp = new window.Razorpay(options);
-
-      // If popup ever gets blocked, a zero-timeout nudge helps some browsers
-      setTimeout(() => rzp.open(), 0);
-    } catch (error) {
+      rzp.open();
+    } catch (error: any) {
+      console.error(error);
+      alert(error?.message || "Something went wrong");
       setIsSubmitting(false);
     }
-  };
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4">
       <div className="bg-black border border-gray-800 rounded-lg max-w-md w-full p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-white">Order Details</h2>
-          <button onClick={onClose} className="text-white hover:text-gray-300 transition-colors">
+          <button onClick={onClose} className="text-white hover:text-gray-300 transition-colors" type="button">
             <X size={24} />
           </button>
         </div>
@@ -267,13 +294,13 @@ const OrderForm: React.FC<OrderFormProps> = ({
             <h3 className="text-white font-semibold mb-2">Order Summary</h3>
             {isCartCheckout ? (
               <div className="space-y-1">
-                {state.items.map((item) => (
+                {state.items.map((item: any) => (
                   <div key={`${item.id}-${item.selectedSize}`} className="text-gray-300 text-sm">
                     {item.name} (Size: {item.selectedSize}, Qty: {item.quantity})
                   </div>
                 ))}
                 <div className="border-t border-gray-700 pt-2 mt-2">
-                  <div className="text-white font-bold">Total: ₹{state.total}</div>
+                  <div className="text-white font-bold">Total: ₹{cartTotal}</div>
                 </div>
               </div>
             ) : product && selectedSize ? (
@@ -281,17 +308,17 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 <div className="text-gray-300 text-sm">
                   {product.name} (Size: {selectedSize})
                 </div>
-                <div className="text-white font-bold">₹{product.price}</div>
+                <div className="text-white font-bold">₹{Number(product.price)}</div>
               </div>
             ) : null}
           </div>
 
           <button
             type="submit"
-            disabled={isSubmitting || !hasItems}
+            disabled={isSubmitting || !hasItems || !rzpReady}
             className="w-full bg-white text-black py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
           >
-            {isSubmitting ? "Processing..." : "Proceed to Payment"}
+            {isSubmitting ? "Processing..." : (rzpReady ? "Proceed to Payment" : "Loading payment...")}
           </button>
         </form>
       </div>
