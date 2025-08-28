@@ -1,53 +1,57 @@
 // src/components/Header.tsx
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/clerk-react";
 
-interface HeaderProps {}
-
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC = () => {
   const { getTotalItems } = useCart();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showComingSoon, setShowComingSoon] = useState(false);
   const totalItems = getTotalItems();
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleSignatureClick = () => {
-    setShowComingSoon(true);
-    setTimeout(() => setShowComingSoon(false), 3000);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [collectionsOpen, setCollectionsOpen] = useState(false);
+
+  // hover delay for Collections dropdown
+  const hoverTimer = useRef<number | null>(null);
+  const openCollections = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    setCollectionsOpen(true);
   };
-
-  const handleMouseEnter = () => {
-    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-    setDropdownOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => setDropdownOpen(false), 200);
+  const closeCollections = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 120);
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-lg border-b border-white/10 transition-all duration-500">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        {/* Line 1: Logo Centered */}
-        <div className="flex justify-center">
-          <Link
-            to="/"
-            className="text-2xl font-bold text-white hover:text-yellow-400 transition-colors duration-300"
-          >
-            OSIRIS
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md border-b border-white/10">
+      <div className="max-w-7xl mx-auto w-full">
+        {/* ===== DESKTOP: ROW 1 (Centered logo) ===== */}
+        <div className="hidden md:flex justify-center items-center h-16 px-6">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/logo.png" alt="MONAARC Logo" className="h-10 w-auto object-contain" />
+            <span className="text-2xl font-serif font-extrabold text-white tracking-wide">
+              MONAARC
+            </span>
           </Link>
         </div>
 
-        {/* Line 2: Cart LEFT, Nav CENTER, Auth RIGHT */}
-        <div className="hidden md:flex items-center justify-between mt-4 relative">
-          {/* LEFT: Cart */}
-          <div className="w-1/3 flex items-center">
-            <Link to="/cart" className="relative text-white hover:text-yellow-400">
-              <ShoppingBag className="w-6 h-6" />
+        {/* ===== DESKTOP: ROW 2 (Cart | Nav | Auth) ===== */}
+        <div className="hidden md:grid grid-cols-3 items-center h-14 px-6">
+          {/* Left: Cart */}
+          <div className="flex items-center">
+            <Link
+              to="/cart"
+              className="relative text-white hover:text-yellow-400 transition"
+              aria-label="Cart"
+            >
+              <ShoppingCart className="w-6 h-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                   {totalItems}
@@ -56,173 +60,131 @@ const Header: React.FC<HeaderProps> = () => {
             </Link>
           </div>
 
-          {/* CENTER: Navigation */}
-          <div className="flex justify-center space-x-8 w-1/3 absolute left-1/2 -translate-x-1/2">
-            <Link to="/" className="text-white hover:text-yellow-400 font-medium">
-              Home
-            </Link>
+          {/* Center: Nav */}
+          <nav className="flex justify-center items-center gap-10">
+            <Link to="/" className="text-white hover:text-yellow-400 font-medium">Home</Link>
 
             <div
               className="relative"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={openCollections}
+              onMouseLeave={closeCollections}
             >
               <button
-                className="text-white hover:text-yellow-400 font-medium focus:outline-none focus:ring-2 focus:ring-yellow-400/50 rounded"
+                type="button"
+                className="inline-flex items-center gap-1 text-white hover:text-yellow-400 font-medium"
                 aria-haspopup="menu"
-                aria-expanded={dropdownOpen}
+                aria-expanded={collectionsOpen}
               >
-                Collections
+                Collections <ChevronDown className="w-4 h-4" />
               </button>
-              {dropdownOpen && (
-                <div
-                  className="absolute mt-2 w-48 bg-black/90 border border-white/10 rounded shadow-lg z-50"
-                  role="menu"
-                >
-                  <a
-                    href="/#f1-edition"
-                    className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
-                    role="menuitem"
-                  >
-                    Chaos Edition
-                  </a>
-                  <a
-                    href="/#dark-edition"
-                    className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
-                    role="menuitem"
-                  >
-                    Dark Edition
-                  </a>
-                  <button
-                    onClick={handleSignatureClick}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-800 text-white text-sm"
-                    role="menuitem"
-                  >
-                    Signature Edition
-                  </button>
+
+              {collectionsOpen && (
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-48 rounded-xl bg-black/90 ring-1 ring-white/10 shadow-lg p-2">
+                  <Link to="/#anime" className="block px-3 py-2 rounded-lg text-white/90 hover:bg-white/10">Anime Edition</Link>
+                  <Link to="/#gym" className="block px-3 py-2 rounded-lg text-white/90 hover:bg-white/10">Gym Edition</Link>
+                  <span className="block px-3 py-2 rounded-lg text-gray-500 select-none">MONAARC Edition (Coming Soon)</span>
                 </div>
               )}
             </div>
 
-            <Link to="/about" className="text-white hover:text-yellow-400 font-medium">
-              About
-            </Link>
-          </div>
+            <Link to="/new-arrivals" className="text-white hover:text-yellow-400 font-medium">New Arrivals</Link>
+            <Link to="/about" className="text-white hover:text-yellow-400 font-medium">About</Link>
+          </nav>
 
-          {/* RIGHT: Auth (Clerk) */}
-          <div className="w-1/3 flex justify-end items-center gap-3">
+          {/* Right: Auth (Clerk) */}
+          <div className="flex justify-end items-center gap-3">
             <SignedOut>
-              <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
-                <button
-                  type="button"
-                  className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
-                >
+              <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/sign-up">
+                <button className="px-4 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black text-sm">
                   Sign In
                 </button>
               </SignInButton>
+              <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
+                <button className="px-4 py-1 rounded-md bg-yellow-400 text-black hover:opacity-90 text-sm">
+                  Sign Up
+                </button>
+              </SignUpButton>
             </SignedOut>
             <SignedIn>
-              <UserButton
-                appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
-                afterSignOutUrl="/"
-              />
+              <UserButton afterSignOutUrl="/" />
             </SignedIn>
           </div>
         </div>
 
-        {/* Mobile: Cart (left) + Menu (right) */}
-        <div className="md:hidden flex justify-between items-center mt-4">
-          <Link to="/cart" className="relative text-white hover:text-yellow-400">
-            <ShoppingBag className="w-6 h-6" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            )}
-          </Link>
+        {/* ===== MOBILE: single row (burger | logo | auth) ===== */}
+        <div className="md:hidden flex items-center justify-between px-4 h-14">
+          {/* left: menu button */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 rounded"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
+            onClick={() => setIsMenuOpen((v) => !v)}
+            className="text-white hover:text-yellow-400"
+            aria-label="Toggle menu"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
+
+          {/* center: small logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <img src="/logo.png" alt="MONAARC Logo" className="h-7 w-auto" />
+            <span className="text-lg font-serif font-extrabold text-white tracking-wide">MONAARC</span>
+          </Link>
+
+          {/* right: AUTH — ALWAYS VISIBLE ON MOBILE */}
+          <div className="flex items-center gap-2">
+            <SignedOut>
+              <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/sign-up">
+                <button className="px-2.5 py-1 rounded-md border border-yellow-400 text-[13px] text-yellow-400 hover:bg-yellow-400 hover:text-black">
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
+                <button className="px-2.5 py-1 rounded-md bg-yellow-400 text-[13px] text-black hover:opacity-90">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* ===== MOBILE MENU (drawer-style below bar) ===== */}
         {isMenuOpen && (
-          <div
-            id="mobile-menu"
-            className="md:hidden mt-2 bg-black/95 backdrop-blur-md border-b border-white/10 rounded-b-lg"
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link
-                to="/"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
-              >
-                Home
-              </Link>
-              <a
-                href="/#f1-edition"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
-              >
-                Chaos Edition
-              </a>
-              <a
-                href="/#dark-edition"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
-              >
-                Dark Edition
-              </a>
-              <button
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  handleSignatureClick();
-                }}
-                className="block w-full text-left px-3 py-2 text-white hover:text-yellow-400"
-              >
-                Signature Edition
-              </button>
-              <Link
-                to="/about"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
-              >
-                About
-              </Link>
+          <div className="md:hidden px-4 pb-3 pt-2 bg-black/85 backdrop-blur border-t border-white/10">
+            <nav className="space-y-1">
+              <Link to="/" className="block px-2 py-2 text-white hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Home</Link>
 
-              {/* Mobile Auth (Clerk) */}
-              <SignedOut>
-                <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
-                  <button className="block w-full text-left px-3 py-2 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-md">
-                    Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-              <SignedIn>
-                <div className="px-3 py-2">
-                  <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }} />
+              <details className="px-2 py-2 border border-white/10 rounded-lg text-white">
+                <summary className="cursor-pointer list-none flex items-center justify-between">
+                  <span>Collections</span>
+                  <ChevronDown className="w-4 h-4" />
+                </summary>
+                <div className="mt-2 space-y-1">
+                  <Link to="/#anime" className="block px-2 py-2 text-white/90 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Anime Edition</Link>
+                  <Link to="/#gym" className="block px-2 py-2 text-white/90 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Gym Edition</Link>
+                  <span className="block px-2 py-2 text-gray-500 select-none">MONAARC Edition (Coming Soon)</span>
                 </div>
-              </SignedIn>
-            </div>
-          </div>
-        )}
+              </details>
 
-        {/* Coming Soon Toast */}
-        {showComingSoon && (
-          <div className="fixed bottom-5 right-5 bg-yellow-400 text-black px-4 py-2 rounded shadow-lg z-50">
-            Coming Soon!
-            <button
-              onClick={() => setShowComingSoon(false)}
-              className="ml-4 font-bold focus:outline-none"
-              aria-label="Close"
-            >
-              ✕
-            </button>
+              <Link to="/new-arrivals" className="block px-2 py-2 text-white hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>New Arrivals</Link>
+              <Link to="/about" className="block px-2 py-2 text-white hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>About</Link>
+
+              {/* extra: auth buttons also inside the menu for convenience */}
+              <div className="pt-2 flex gap-2">
+                <SignedOut>
+                  <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/sign-up">
+                    <button className="flex-1 px-3 py-2 rounded-md border border-white/20 text-white hover:bg-white/10">
+                      Sign In
+                    </button>
+                  </SignInButton>
+                  <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
+                    <button className="flex-1 px-3 py-2 rounded-md bg-white text-black hover:opacity-90">
+                      Sign Up
+                    </button>
+                  </SignUpButton>
+                </SignedOut>
+              </div>
+            </nav>
           </div>
         )}
       </div>
