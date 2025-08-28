@@ -12,13 +12,13 @@ import CartPage from "./pages/CartPage";
 import AboutPage from "./pages/AboutPage";
 import ThankYou from "./pages/ThankYou";
 
-// ✅ Pages for ANIME and GYM Editions
-const F1Edition = () => (
+// ✅ Pages for ANIME and gym Editions
+const animeEdition = () => (
   <div className="p-8 text-center text-xl">ANIME Edition Collection</div>
 );
 
-const GYMEdition = () => (
-  <div className="p-8 text-center text-xl">GYM Edition Collection</div>
+const gymEdition = () => (
+  <div className="p-8 text-center text-xl">gym Edition Collection</div>
 );
 
 // 🔁 Scroll to top on route change
@@ -57,8 +57,8 @@ export default function App() {
             <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/collections/f1" element={<F1Edition />} />
-            <Route path="/collections/GYM" element={<GYMEdition />} />
+            <Route path="/collections/anime" element={<animeEdition />} />
+            <Route path="/collections/gym" element={<gymEdition />} />
             <Route path="/thank-you" element={<ThankYou />} />
           </Routes>
         </main>

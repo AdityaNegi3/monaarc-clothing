@@ -91,18 +91,18 @@ const Header: React.FC<HeaderProps> = () => {
                   role="menu"
                 >
                   <a
-                    href="/#f1-edition"
+                    href="/#anime-edition"
                     className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
                     role="menuitem"
                   >
                     ANIME Edition
                   </a>
                   <a
-                    href="/#GYM-edition"
+                    href="/#gym-edition"
                     className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
                     role="menuitem"
                   >
-                    GYM Edition
+                    gym Edition
                   </a>
                   <button
                     onClick={handleSignatureClick}
@@ -176,18 +176,18 @@ const Header: React.FC<HeaderProps> = () => {
                 Home
               </Link>
               <a
-                href="/#f1-edition"
+                href="/#anime-edition"
                 onClick={() => setIsMenuOpen(false)}
                 className="block px-3 py-2 text-white hover:text-yellow-400"
               >
                 ANIME Edition
               </a>
               <a
-                href="/#GYM-edition"
+                href="/#gym-edition"
                 onClick={() => setIsMenuOpen(false)}
                 className="block px-3 py-2 text-white hover:text-yellow-400"
               >
-                GYM Edition
+                gym Edition
               </a>
               <button
                 onClick={() => {

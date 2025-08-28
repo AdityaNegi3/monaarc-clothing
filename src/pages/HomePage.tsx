@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 const HomePage: React.FC = () => {
   const limitedProducts = products.filter((p) => p.category === 'limited');
-  const darkProducts = products.filter((p) => p.category === 'dark');
+  const gymProducts = products.filter((p) => p.category === 'gym');
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
 
       {/* Chaos (Limited) Edition */}
       <section
-        id="f1-edition"
+        id="anime-edition"
         className="py-20 relative bg-black bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/file_0000000044c8622fb0caf79179595f70.png')" }}
       >
@@ -81,7 +81,7 @@ const HomePage: React.FC = () => {
             </h2>
             <div className="h-px w-32 bg-yellow-400 mx-auto mb-6"></div>
             <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-              No rules. No repeats. Just pure chaos.
+             blah blah.
             </p>
           </div>
 
@@ -132,17 +132,17 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* GYM Edition */}
+      {/* gym Edition */}
       <section
-        id="dark-edition"
+        id="gym-edition"
         className="py-20 relative bg-cover bg-center"
-        style={{ backgroundImage: "url('/dark-bg.png')" }}
+        style={{ backgroundImage: "url('/gym-bg.png')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide">
-              GYM Edition
+            GYM Edition
             </h2>
             <div className="h-px w-32 bg-yellow-400 mx-auto mb-6" />
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -151,7 +151,7 @@ const HomePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 overflow-x-hidden">
-            {darkProducts.map((product, i) => {
+            {gymProducts.map((product, i) => {
               const col = i % 4;
               const fromX = col === 0 ? -100 : col === 3 ? 100 : 0;
 
