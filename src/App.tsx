@@ -17,7 +17,7 @@ const F1Edition = () => (
   <div className="p-8 text-center text-xl">ANIME Edition Collection</div>
 );
 
-const DarkEdition = () => (
+const GYMEdition = () => (
   <div className="p-8 text-center text-xl">GYM Edition Collection</div>
 );
 
@@ -58,7 +58,7 @@ export default function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/collections/f1" element={<F1Edition />} />
-            <Route path="/collections/dark" element={<DarkEdition />} />
+            <Route path="/collections/GYM" element={<GYMEdition />} />
             <Route path="/thank-you" element={<ThankYou />} />
           </Routes>
         </main>

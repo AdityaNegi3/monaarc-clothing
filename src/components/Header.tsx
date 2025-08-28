@@ -36,7 +36,18 @@ const Header: React.FC<HeaderProps> = () => {
         <div className="flex justify-center">
           <Link
             to="/"
-            className="text-2xl font-bold text-white hover:text-yellow-400 transition-colors duration-300"
+            className="
+              text-2xl md:text-3xl font-extrabold
+              tracking-[0.18em] md:tracking-[0.22em] uppercase
+              bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-700
+              bg-clip-text text-transparent select-none transition
+              hover:scale-105 hover:brightness-110
+            "
+            style={{
+              fontFamily: `'Cinzel', serif`,
+              textShadow: "0 4px 12px rgba(255,215,0,0.18), 0 2px 6px rgba(0,0,0,0.35)",
+              letterSpacing: "0.22em",
+            }}
           >
             MONAARC
           </Link>
@@ -84,10 +95,10 @@ const Header: React.FC<HeaderProps> = () => {
                     className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
                     role="menuitem"
                   >
-                    ANIME  Edition
+                    ANIME Edition
                   </a>
                   <a
-                    href="/#dark-edition"
+                    href="/#GYM-edition"
                     className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
                     role="menuitem"
                   >
@@ -169,10 +180,10 @@ const Header: React.FC<HeaderProps> = () => {
                 onClick={() => setIsMenuOpen(false)}
                 className="block px-3 py-2 text-white hover:text-yellow-400"
               >
-                ANIME  Edition
+                ANIME Edition
               </a>
               <a
-                href="/#dark-edition"
+                href="/#GYM-edition"
                 onClick={() => setIsMenuOpen(false)}
                 className="block px-3 py-2 text-white hover:text-yellow-400"
               >

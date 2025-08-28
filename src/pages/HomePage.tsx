@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { products } from '../data/products';
 import { ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion'; // ✅ Added
+import { motion } from 'framer-motion';
 
 const HomePage: React.FC = () => {
   const limitedProducts = products.filter((p) => p.category === 'limited');
@@ -10,26 +10,61 @@ const HomePage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <div className="pt-16 overflow-x-hidden bg-black"> {/* ✅ Prevents horizontal scroll */}
+    <div className="pt-16 overflow-x-hidden bg-black">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden hero-background">
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-black/50" />
+
         <div className="relative z-10 text-center px-4">
-          <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-wider luxury-float">
+          {/* ===== LUXE MONAARC HEADING ===== */}
+          <h1
+            className="
+              mb-6
+              text-6xl md:text-8xl font-extrabold 
+              tracking-[0.18em] md:tracking-[0.22em] 
+              uppercase
+              bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-700
+              bg-clip-text text-transparent
+              select-none
+            "
+            style={{
+              fontFamily: `'Cinzel', serif`,
+              textShadow: '0 6px 18px rgba(255,215,0,0.18), 0 2px 6px rgba(0,0,0,0.35)',
+              letterSpacing: '0.22em',
+            }}
+            aria-label="MONAARC"
+          >
             MONAARC
           </h1>
+
+          {/* thin luxe underline */}
+          <div className="mx-auto mb-7 h-[2px] w-28 bg-gradient-to-r from-transparent via-yellow-400 to-transparent rounded-full" />
+
           <p className="text-xl md:text-2xl text-gray-300 mb-8 font-light tracking-wide">
-            Where Luxury Meets Legacy
+            The world bows to the one who refuses to bow to failure
           </p>
-          <div className="h-px w-24 bg-yellow-400 mx-auto mb-8"></div>
-          <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed luxury-glow">
-            Discover the epitome of luxury fashion. Each piece crafted with precision, 
-            designed for those who understand that true elegance is timeless.
+          <div className="h-px w-24 bg-yellow-400 mx-auto mb-8" />
+          <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            “Clothing is not just fabric stitched together — it’s the armor of identity, the language of rebellion, and the power to turn silence into presence.
+             Wear what defines you, not what confines you.”
           </p>
         </div>
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-px h-12 bg-gradient-to-b from-yellow-400 to-transparent"></div>
+
+        {/* gentle shimmer line */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="w-px h-12 bg-gradient-to-b from-yellow-400 to-transparent" />
         </div>
+
+        {/* subtle gold sheen sweep */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-20"
+          style={{
+            background:
+              'linear-gradient(75deg, rgba(255,215,0,0.0) 40%, rgba(255,215,0,0.12) 50%, rgba(255,215,0,0.0) 60%)',
+            maskImage:
+              'radial-gradient(1200px 600px at 50% 50%, black 40%, transparent 70%)',
+          }}
+        />
       </section>
 
       {/* Chaos (Limited) Edition */}
@@ -42,7 +77,7 @@ const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide">
-              ANIME  Edition
+              ANIME Edition
             </h2>
             <div className="h-px w-32 bg-yellow-400 mx-auto mb-6"></div>
             <p className="text-gray-300 text-lg max-w-2xl mx-auto">
@@ -50,9 +85,9 @@ const HomePage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 overflow-x-hidden"> {/* ✅ Fixed */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 overflow-x-hidden">
             {limitedProducts.map((product, i) => {
-              const col = i % 3; // detect column
+              const col = i % 3;
               const fromX = col === 0 ? -100 : col === 2 ? 100 : 0;
 
               return (
@@ -65,16 +100,14 @@ const HomePage: React.FC = () => {
                 >
                   <Link
                     to={`/product/${product.id}`}
-                    className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105" // ✅ Only on desktop
+                    className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105"
                   >
                     <div className="relative overflow-hidden">
-                      {/* Front */}
                       <img
                         src={product.frontImage}
                         alt={product.name}
                         className="w-full object-contain transition-opacity duration-700 group-hover:opacity-0"
                       />
-                      {/* Back */}
                       <img
                         src={product.backImage}
                         alt={`${product.name} back`}
@@ -105,20 +138,19 @@ const HomePage: React.FC = () => {
         className="py-20 relative bg-cover bg-center"
         style={{ backgroundImage: "url('/dark-bg.png')" }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black"></div>
-
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide">
               GYM Edition
             </h2>
-            <div className="h-px w-32 bg-yellow-400 mx-auto mb-6"></div>
+            <div className="h-px w-32 bg-yellow-400 mx-auto mb-6" />
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
               Embrace the shadows. Where mystery meets elegance in perfect harmony.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 overflow-x-hidden"> {/* ✅ Fixed */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 overflow-x-hidden">
             {darkProducts.map((product, i) => {
               const col = i % 4;
               const fromX = col === 0 ? -100 : col === 3 ? 100 : 0;
@@ -133,16 +165,14 @@ const HomePage: React.FC = () => {
                 >
                   <Link
                     to={`/product/${product.id}`}
-                    className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105" // ✅ Only on desktop
+                    className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105"
                   >
                     <div className="relative overflow-hidden">
-                      {/* Front */}
                       <img
                         src={product.frontImage}
                         alt={product.name}
                         className="w-full object-contain transition-opacity duration-700 group-hover:opacity-0"
                       />
-                      {/* Back */}
                       <img
                         src={product.backImage}
                         alt={`${product.name} back`}

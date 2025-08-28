@@ -2,7 +2,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
-  category: 'limited' | 'dark';
+  category: 'limited' | 'GYM';
   frontImage: string;
   backImage: string;
   description: string;

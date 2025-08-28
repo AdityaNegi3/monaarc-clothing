@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { Check, Info } from 'lucide-react';
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState('M');
   const [showSizeChart, setShowSizeChart] = useState(false);
@@ -26,6 +27,12 @@ const ProductPage: React.FC = () => {
     setTimeout(() => setAddedToCart(false), 2000);
   };
 
+  // NEW: Buy Now → add + go to cart (swap to '/checkout' if you have a checkout route)
+  const handleBuyNow = () => {
+    addToCart(product, selectedSize);
+    navigate('/cart');
+  };
+
   return (
     <div className="pt-16 min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -39,7 +46,7 @@ const ProductPage: React.FC = () => {
                 className="w-full h-96 lg:h-[600px] object-cover"
               />
             </div>
-            
+
             {/* View Toggle */}
             <div className="flex space-x-4">
               <button
@@ -111,24 +118,36 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Add to Cart */}
-            <button
-              onClick={handleAddToCart}
-              className={`w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300 ${
-                addedToCart
-                  ? 'bg-green-600 text-white'
-                  : 'bg-yellow-400 text-black hover:bg-yellow-300'
-              } flex items-center justify-center`}
-            >
-              {addedToCart ? (
-                <>
-                  <Check className="w-5 h-5 mr-2" />
-                  Added to Cart!
-                </>
-              ) : (
-                'Add to Cart'
-              )}
-            </button>
+            {/* Actions: Add to Cart + Buy Now */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                onClick={handleAddToCart}
+                className={`w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300 ${
+                  addedToCart
+                    ? 'bg-green-600 text-white'
+                    : 'bg-yellow-400 text-black hover:bg-yellow-300'
+                } flex items-center justify-center`}
+              >
+                {addedToCart ? (
+                  <>
+                    <Check className="w-5 h-5 mr-2" />
+                    Added to Cart!
+                  </>
+                ) : (
+                  'Add to Cart'
+                )}
+              </button>
+
+              <button
+                onClick={handleBuyNow}
+                className="w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300
+                           border border-yellow-400 text-yellow-400 bg-transparent
+                           hover:bg-yellow-400 hover:text-black"
+                aria-label="Buy Now"
+              >
+                Buy Now
+              </button>
+            </div>
 
             {/* Product Features */}
             <div className="border-t border-white/10 pt-8">
