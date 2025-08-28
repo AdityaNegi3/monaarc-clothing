@@ -1,75 +1,77 @@
-// App.tsx
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { SignIn, SignUp } from '@clerk/clerk-react';
-import { CartProvider } from './context/CartContext';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import ProductPage from './pages/ProductPage';
-import CartPage from './pages/CartPage';
-import AboutPage from './pages/AboutPage';
-import ThankYou from './pages/ThankYou';
+// src/App.tsx
+import React, { useEffect } from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { SignIn, SignUp, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import { CartProvider } from "./context/CartContext";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import HomePage from "./pages/HomePage";
+import ProductPage from "./pages/ProductPage";
+import CartPage from "./pages/CartPage";
+import AboutPage from "./pages/AboutPage";
+import ThankYou from "./pages/ThankYou";
 
 function ScrollToHash() {
   const location = useLocation();
   useEffect(() => {
     if (location.hash) {
-      const id = location.hash.slice(1);
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const el = document.querySelector(location.hash);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location]);
   return null;
 }
 
-function ScrollToTop() {
-  const { pathname, hash } = useLocation();
-  useEffect(() => {
-    if (!hash) window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [pathname, hash]);
-  return null;
+// Example protected route (ONLY this path needs auth; everything else is public)
+function CheckoutGuard({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <SignedIn>{children}</SignedIn>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
+    </>
+  );
 }
 
 function App() {
   return (
     <CartProvider>
-      <Router>
-        <div className="min-h-screen bg-black text-white">
-          <Header />
+      <div className="min-h-screen flex flex-col bg-black text-white">
+        <Header />
+        <main className="flex-1 pt-16">
           <ScrollToHash />
-          <ScrollToTop />
-          <main>
-            <Routes>
-              {/* Site pages */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/product/:id" element={<ProductPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/thank-you" element={<ThankYou />} />
+          <Routes>
+            {/* PUBLIC ROUTES */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/thank-you" element={<ThankYou />} />
 
-              {/* Clerk full-page auth */}
-              <Route
-                path="/sign-in"
-                element={
-                  <div className="min-h-screen flex items-center justify-center bg-black">
-                    <SignIn afterSignInUrl="/" signUpUrl="/sign-up" />
-                  </div>
-                }
-              />
-              <Route
-                path="/sign-up"
-                element={
-                  <div className="min-h-screen flex items-center justify-center bg-black">
-                    <SignUp afterSignUpUrl="/" signInUrl="/sign-in" />
-                  </div>
-                }
-              />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
+            {/* CLERK AUTH PAGES (still public) */}
+            <Route path="/sign-in" element={<SignIn afterSignInUrl="/" signUpUrl="/sign-up" />} />
+            <Route path="/sign-up" element={<SignUp afterSignUpUrl="/" signInUrl="/sign-in" />} />
+
+            {/* EXAMPLE: ONLY /checkout NEEDS LOGIN */}
+            <Route
+              path="/checkout"
+              element={
+                <CheckoutGuard>
+                  {/* your checkout component goes here */}
+                  <div className="p-8">Checkout (protected)</div>
+                </CheckoutGuard>
+              }
+            />
+
+            {/* 404 */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </CartProvider>
   );
 }
