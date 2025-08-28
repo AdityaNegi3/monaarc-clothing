@@ -5,7 +5,7 @@ const AuthCTA: React.FC = () => {
   return (
     <div className="flex flex-col items-center gap-3 text-sm">
       <div className="text-white/80">
-        Already using <span className="font-semibold text-white">Osiris</span>?{" "}
+        Already using <span className="font-semibold text-white">MONAARC</span>?{" "}
         <SignInButton mode="modal">
           <button className="underline text-violet-400 hover:text-violet-300">
             Sign in
