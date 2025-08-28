@@ -42,32 +42,16 @@ export default function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/thank-you" element={<ThankYou />} />
-
-            {/* OPTIONAL: public checkout (no protection) */}
             <Route path="/checkout" element={<div className="p-8">Checkout (public)</div>} />
 
-            {/* CLERK AUTH ROUTES (React Router v6) */}
+            {/* CLERK AUTH ROUTES */}
             <Route
               path="/sign-in/*"
-              element={
-                <SignIn
-                  routing="path"
-                  path="/sign-in"
-                  signUpUrl="/sign-up"
-                  afterSignInUrl="/"
-                />
-              }
+              element={<SignIn redirectUrl="/" signUpUrl="/sign-up" />}
             />
             <Route
               path="/sign-up/*"
-              element={
-                <SignUp
-                  routing="path"
-                  path="/sign-up"
-                  signInUrl="/sign-in"
-                  afterSignUpUrl="/"
-                />
-              }
+              element={<SignUp redirectUrl="/" signInUrl="/sign-in" />}
             />
 
             {/* 404 → home */}
