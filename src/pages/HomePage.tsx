@@ -4,34 +4,34 @@ import { products } from '../data/products';
 import { ArrowRight } from 'lucide-react';
 import { SignedOut, SignUpButton } from '@clerk/clerk-react';
 
+// ✅ Import your custom font
+import '../index.css';
+
 const HomePage: React.FC = () => {
   const limitedProducts = products.filter(p => p.category === 'limited');
   const darkProducts = products.filter(p => p.category === 'dark');
 
   return (
     <div className="pt-16">
-      {/* Hero Section (Public) */}
+      {/* Hero Section */}
       <section
-        className="relative h-screen flex items-center justify-center overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: "url('/backg.png')" }}   // ✅ Changed from bg.png → backg.png
+        className="relative h-screen w-full overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: "url('/backg.png')" }}
       >
+        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/50"></div>
 
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-wider luxury-float">
+        {/* ✅ Centered MONAARC */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+          <h1
+            className="text-6xl md:text-8xl font-bold text-white tracking-wider"
+            style={{ fontFamily: 'MONAARC, serif' }}
+          >
             MONAARC
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 font-light tracking-wide">
-            {/* Optional tagline here */}
-          </p>
-          <div className="h-px w-24 bg-yellow-400 mx-auto mb-8"></div>
-          <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed luxury-glow">
-            {/* Optional description here */}
-          </p>
 
-          {/* Show a single Sign Up button only when logged out */}
           <SignedOut>
-            <div className="mt-8 flex items-center justify-center">
+            <div className="mt-10 flex items-center justify-center">
               <SignUpButton mode="modal">
                 <button className="px-6 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition">
                   Sign Up
@@ -41,12 +41,13 @@ const HomePage: React.FC = () => {
           </SignedOut>
         </div>
 
+        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="w-px h-12 bg-gradient-to-b from-yellow-400 to-transparent"></div>
         </div>
       </section>
 
-      {/* ANIME Edition Collection (Public) */}
+      {/* ANIME Edition */}
       <section id="anime" className="py-20 relative bg-black scroll-mt-24">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -65,7 +66,7 @@ const HomePage: React.FC = () => {
               <Link
                 key={product.id}
                 to={`/product/${product.id}`}
-                className="group bg-gray-900/50 rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 hover:transform hover:scale-105"
+                className="group bg-gray-900/50 rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 hover:scale-105"
               >
                 <div className="aspect-w-3 aspect-h-4 relative overflow-hidden">
                   <img
@@ -91,7 +92,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* GYM Edition Collection (Public) */}
+      {/* GYM Edition */}
       <section id="gym" className="py-20 relative scroll-mt-24">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -110,7 +111,7 @@ const HomePage: React.FC = () => {
               <Link
                 key={product.id}
                 to={`/product/${product.id}`}
-                className="group bg-gray-900/50 rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 hover:transform hover:scale-105"
+                className="group bg-gray-900/50 rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 hover:scale-105"
               >
                 <div className="aspect-w-3 aspect-h-4 relative overflow-hidden">
                   <img

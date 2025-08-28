@@ -48,8 +48,10 @@ export default function App() {
     <CartProvider>
       <div className="min-h-screen flex flex-col bg-black text-white">
         <Header />
+        {/* keep padding-top to clear sticky header height */}
         <main className="flex-1 pt-16">
           <ScrollToHash />
+
           <Routes>
             {/* PUBLIC ROUTES */}
             <Route path="/" element={<HomePage />} />
@@ -58,7 +60,7 @@ export default function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/thank-you" element={<ThankYou />} />
 
-            {/* CLERK AUTH ROUTES (must include /* and routing="path") */}
+            {/* CLERK AUTH ROUTES — note the /* and routing="path" */}
             <Route
               path="/sign-in/*"
               element={
@@ -80,7 +82,7 @@ export default function App() {
               }
             />
 
-            {/* OPTIONAL: PROTECTED ROUTE EXAMPLE */}
+            {/* PROTECTED ROUTE EXAMPLE */}
             <Route
               path="/checkout"
               element={

@@ -5,10 +5,10 @@ import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import {
   SignInButton,
+  SignUpButton,
   SignedIn,
   SignedOut,
   UserButton,
-  useUser,
 } from "@clerk/clerk-react";
 
 const Header: React.FC = () => {
@@ -18,7 +18,6 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
 
-  // Prevent dropdown flicker
   const hoverTimer = useRef<number | null>(null);
   const openCollections = () => {
     if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
@@ -26,34 +25,33 @@ const Header: React.FC = () => {
   };
   const closeCollections = () => {
     if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
-    hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 150);
+    hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 120);
   };
 
-  // Show a placeholder while Clerk bootstraps
-  const { isLoaded, isSignedIn } = useUser();
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* ROW 1: Centered logo */}
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* === ROW 1: Centered Logo === */}
         <div className="flex justify-center items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/logo.png" alt="MONAARC Logo" className="h-10 w-auto object-contain" />
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="MONAARC Logo"
+              className="h-10 w-auto object-contain"
+            />
             <span className="hidden md:block text-2xl font-serif font-bold text-white tracking-wide">
               MONAARC
             </span>
           </Link>
         </div>
 
-        {/* ROW 2 (Desktop): Cart | Nav | Auth */}
-        <div className="hidden md:grid grid-cols-3 items-center h-12">
+        {/* === ROW 2: Cart | Nav | Auth === */}
+        <div className="hidden md:grid grid-cols-3 items-center h-14">
           {/* Left: Cart */}
           <div className="flex items-center">
             <Link
               to="/cart"
-              className="relative text-white hover:text-yellow-400 transition-colors duration-300"
-              aria-label="Cart"
+              className="relative text-white hover:text-yellow-400 transition"
             >
               <ShoppingCart className="w-6 h-6" />
               {totalItems > 0 && (
@@ -65,8 +63,8 @@ const Header: React.FC = () => {
           </div>
 
           {/* Center: Nav */}
-          <nav className="flex justify-center items-center space-x-10">
-            <Link to="/" className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium">
+          <nav className="flex justify-center items-center gap-10">
+            <Link to="/" className="text-white hover:text-yellow-400 font-medium">
               Home
             </Link>
 
@@ -74,178 +72,89 @@ const Header: React.FC = () => {
               className="relative"
               onMouseEnter={openCollections}
               onMouseLeave={closeCollections}
-              onFocus={openCollections}
-              onBlur={(e) => {
-                const container = e.currentTarget as HTMLElement;
-                const next = (e.relatedTarget as Node) || null;
-                if (!next || !container.contains(next)) setCollectionsOpen(false);
-              }}
             >
               <button
                 type="button"
-                className="inline-flex items-center gap-1 text-white hover:text-yellow-400 transition-colors duration-300 font-medium"
-                aria-haspopup="menu"
-                aria-expanded={collectionsOpen}
-                aria-controls="collections-menu"
+                className="inline-flex items-center gap-1 text-white hover:text-yellow-400 font-medium"
               >
                 Collections <ChevronDown className="w-4 h-4" />
               </button>
-
               {collectionsOpen && (
-                <div
-                  id="collections-menu"
-                  role="menu"
-                  className="absolute left-1/2 -translate-x-1/2 top-full w-56 pt-3"
-                >
-                  {/* invisible padding bridge to prevent hover gap */}
-                  <div className="absolute -top-2 left-0 right-0 h-2" />
-                  <div className="rounded-2xl bg-black/95 backdrop-blur ring-1 ring-white/10 shadow-xl p-2">
-                    <Link
-                      to="/#anime"
-                      className="block px-3 py-2 rounded-lg text-white/90 hover:text-black hover:bg-yellow-400 transition"
-                    >
-                      Anime Edition
-                    </Link>
-                    <Link
-                      to="/#gym"
-                      className="block px-3 py-2 rounded-lg text-white/90 hover:text-black hover:bg-yellow-400 transition"
-                    >
-                      Gym Edition
-                    </Link>
-                    <span className="block px-3 py-2 rounded-lg text-gray-500 cursor-not-allowed select-none">
-                      MONAARC Edition (Coming Soon)
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <Link to="/new-arrivals" className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium">
-              New Arrivals
-            </Link>
-            <Link to="/about" className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium">
-              About
-            </Link>
-          </nav>
-
-          {/* RIGHT: Auth (Clerk) */}
-          <div className="w-1/3 flex justify-end items-center gap-3">
-            <SignedOut>
-              {/* Removed asChild so the modal is reliably clickable */}
-              <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
-                <button
-                  type="button"
-                  className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
-                >
-                  Sign In
-                </button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton
-                appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
-                afterSignOutUrl="/"
-              />
-            </SignedIn>
-          </div>
-        </div>
-
-        {/* MOBILE: burger + cart */}
-        <div className="md:hidden flex items-center justify-between py-2">
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-yellow-400 transition-colors duration-300"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-
-          <Link
-            to="/cart"
-            className="relative text-white hover:text-yellow-400 transition-colors duration-300"
-            aria-label="Cart"
-          >
-            <ShoppingCart className="w-6 h-6" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            )}
-          </Link>
-        </div>
-
-        {/* MOBILE MENU */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-black/95 backdrop-blur-md border-t border-white/10">
-            <div className="px-3 py-3 space-y-1">
-              <Link
-                to="/"
-                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-
-              <details className="px-3 py-2 border border-white/10 rounded-lg text-white">
-                <summary className="cursor-pointer list-none flex items-center justify-between">
-                  <span>Collections</span>
-                  <ChevronDown className="w-4 h-4" />
-                </summary>
-                <div className="mt-2 space-y-1">
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-48 rounded-xl bg-black/90 ring-1 ring-white/10 shadow-lg p-2">
                   <Link
                     to="/#anime"
-                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
-                    onClick={() => setIsMenuOpen(false)}
+                    className="block px-3 py-2 rounded-lg text-white/90 hover:bg-white/10"
                   >
                     Anime Edition
                   </Link>
                   <Link
                     to="/#gym"
-                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
-                    onClick={() => setIsMenuOpen(false)}
+                    className="block px-3 py-2 rounded-lg text-white/90 hover:bg-white/10"
                   >
                     Gym Edition
                   </Link>
-                  <span className="block px-2 py-2 text-gray-500 cursor-not-allowed select-none">
+                  <span className="block px-3 py-2 rounded-lg text-gray-500 select-none">
                     MONAARC Edition (Coming Soon)
                   </span>
                 </div>
-              </details>
-
-              <Link
-                to="/new-arrivals"
-                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                New Arrivals
-              </Link>
-              <Link
-                to="/about"
-                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About
-              </Link>
-
-              {/* Mobile auth */}
-              <SignedOut>
-                <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
-                  <button
-                    className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-              <SignedIn>
-                <div className="px-3 mt-2">
-                  <UserButton afterSignOutUrl="/" />
-                </div>
-              </SignedIn>
+              )}
             </div>
+
+            <Link
+              to="/new-arrivals"
+              className="text-white hover:text-yellow-400 font-medium"
+            >
+              New Arrivals
+            </Link>
+            <Link
+              to="/about"
+              className="text-white hover:text-yellow-400 font-medium"
+            >
+              About
+            </Link>
+          </nav>
+
+          {/* Right: Auth */}
+          <div className="flex justify-end items-center gap-3">
+            <SignedOut>
+              <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/sign-up">
+                <button className="px-4 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black text-sm">
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
+                <button className="px-4 py-1 rounded-md bg-yellow-400 text-black hover:opacity-90 text-sm">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* MOBILE: Single row with burger + cart */}
+      <div className="md:hidden flex items-center justify-between px-6 py-3 border-t border-white/10">
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-white hover:text-yellow-400"
+        >
+          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+
+        <Link
+          to="/cart"
+          className="relative text-white hover:text-yellow-400"
+        >
+          <ShoppingCart className="w-6 h-6" />
+          {totalItems > 0 && (
+            <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+              {totalItems}
+            </span>
+          )}
+        </Link>
       </div>
     </header>
   );
