@@ -18,6 +18,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
 
+  // Prevent dropdown flicker
   const hoverTimer = useRef<number | null>(null);
   const openCollections = () => {
     if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
@@ -28,13 +29,14 @@ const Header: React.FC = () => {
     hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 150);
   };
 
+  // Show a placeholder while Clerk bootstraps
   const { isLoaded, isSignedIn } = useUser();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* ROW 1: Centered logo only */}
+        {/* ROW 1: Centered logo */}
         <div className="flex justify-center items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <img src="/logo.png" alt="MONAARC Logo" className="h-10 w-auto object-contain" />
@@ -118,15 +120,12 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Right: Auth (only one Sign In OR avatar) */}
+          {/* Right: Auth (ONE option: Sign In modal, or avatar if signed in) */}
           <div className="w-1/3 flex justify-end items-center gap-3">
             {!isLoaded ? (
-              <Link
-                to="#"
-                className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 opacity-70 pointer-events-none"
-              >
+              <span className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 opacity-70">
                 Sign In
-              </Link>
+              </span>
             ) : isSignedIn ? (
               <UserButton
                 appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
@@ -134,7 +133,7 @@ const Header: React.FC = () => {
               />
             ) : (
               <SignedOut>
-                <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+                <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
                   <button
                     type="button"
                     className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
@@ -182,6 +181,33 @@ const Header: React.FC = () => {
               >
                 Home
               </Link>
+
+              <details className="px-3 py-2 border border-white/10 rounded-lg text-white">
+                <summary className="cursor-pointer list-none flex items-center justify-between">
+                  <span>Collections</span>
+                  <ChevronDown className="w-4 h-4" />
+                </summary>
+                <div className="mt-2 space-y-1">
+                  <Link
+                    to="/#anime"
+                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Anime Edition
+                  </Link>
+                  <Link
+                    to="/#gym"
+                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Gym Edition
+                  </Link>
+                  <span className="block px-2 py-2 text-gray-500 cursor-not-allowed select-none">
+                    MONAARC Edition (Coming Soon)
+                  </span>
+                </div>
+              </details>
+
               <Link
                 to="/new-arrivals"
                 className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
@@ -197,7 +223,7 @@ const Header: React.FC = () => {
                 About
               </Link>
 
-              {/* Mobile auth */}
+              {/* Mobile auth: ONE Sign In button (modal) or avatar */}
               {!isLoaded ? (
                 <button
                   className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 opacity-70"
@@ -211,7 +237,7 @@ const Header: React.FC = () => {
                 </div>
               ) : (
                 <SignedOut>
-                  <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+                  <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
                     <button
                       className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
                       onClick={() => setIsMenuOpen(false)}
