@@ -31,8 +31,8 @@ function ScrollToHash() {
   return null;
 }
 
-// Example protected wrapper (use for pages like /checkout if needed)
-function CheckoutGuard({ children }: { children: React.ReactNode }) {
+// Protect any route you wrap with this
+function Protected({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SignedIn>{children}</SignedIn>
@@ -48,8 +48,9 @@ export default function App() {
     <CartProvider>
       <div className="min-h-screen flex flex-col bg-black text-white">
         <Header />
-        {/* keep padding-top to clear sticky header height */}
-        <main className="flex-1 pt-16">
+
+        {/* keep padding-top to clear sticky 2-row desktop header */}
+        <main className="flex-1 pt-14 md:pt-[7.5rem]">
           <ScrollToHash />
 
           <Routes>
@@ -60,14 +61,15 @@ export default function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/thank-you" element={<ThankYou />} />
 
-            {/* CLERK AUTH ROUTES — note the /* and routing="path" */}
+            {/* CLERK AUTH ROUTES (React Router v6) */}
             <Route
               path="/sign-in/*"
               element={
                 <SignIn
                   routing="path"
-                  afterSignInUrl="/"
+                  path="/sign-in"
                   signUpUrl="/sign-up"
+                  afterSignInUrl="/"
                 />
               }
             />
@@ -76,19 +78,20 @@ export default function App() {
               element={
                 <SignUp
                   routing="path"
-                  afterSignUpUrl="/"
+                  path="/sign-up"
                   signInUrl="/sign-in"
+                  afterSignUpUrl="/"
                 />
               }
             />
 
-            {/* PROTECTED ROUTE EXAMPLE */}
+            {/* EXAMPLE: PROTECTED ROUTE */}
             <Route
               path="/checkout"
               element={
-                <CheckoutGuard>
+                <Protected>
                   <div className="p-8">Checkout (protected)</div>
-                </CheckoutGuard>
+                </Protected>
               }
             />
 
@@ -96,6 +99,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
+
         <Footer />
       </div>
     </CartProvider>
