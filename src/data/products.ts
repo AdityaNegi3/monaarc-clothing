@@ -13,7 +13,7 @@ export const products: Product[] = [
   },
   {
     id: 'limited-2',
-    name: 'gay',
+    name: 'test',
     price: 1499,
     category: 'limited',
     frontImage: 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
@@ -22,7 +22,7 @@ export const products: Product[] = [
   },
   {
     id: 'limited-3',
-    name: 'gay asf',
+    name: 'test',
     price: 1499,
     category: 'limited',
     frontImage: 'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',

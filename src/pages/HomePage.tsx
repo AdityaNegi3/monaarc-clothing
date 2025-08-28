@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
       {/* Hero Section (Public) */}
       <section
         className="relative h-screen flex items-center justify-center overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: "url('/bg.png')" }}
+        style={{ backgroundImage: "url('/backg.png')" }}   // ✅ Changed from bg.png → backg.png
       >
         <div className="absolute inset-0 bg-black/50"></div>
 
