@@ -1,7 +1,14 @@
 // src/App.tsx
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { SignIn, SignUp, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import {
+  SignIn,
+  SignUp,
+  SignedIn,
+  SignedOut,
+  RedirectToSignIn,
+} from "@clerk/clerk-react";
+
 import { CartProvider } from "./context/CartContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -24,7 +31,7 @@ function ScrollToHash() {
   return null;
 }
 
-// Example: ONLY /checkout needs auth; remove if you don’t need any protected routes
+// Example protected wrapper (use for pages like /checkout if needed)
 function CheckoutGuard({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -51,11 +58,29 @@ export default function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/thank-you" element={<ThankYou />} />
 
-            {/* CLERK PAGES (public) */}
-            <Route path="/sign-in" element={<SignIn afterSignInUrl="/" signUpUrl="/sign-up" />} />
-            <Route path="/sign-up" element={<SignUp afterSignUpUrl="/" signInUrl="/sign-in" />} />
+            {/* CLERK AUTH ROUTES (must include /* and routing="path") */}
+            <Route
+              path="/sign-in/*"
+              element={
+                <SignIn
+                  routing="path"
+                  afterSignInUrl="/"
+                  signUpUrl="/sign-up"
+                />
+              }
+            />
+            <Route
+              path="/sign-up/*"
+              element={
+                <SignUp
+                  routing="path"
+                  afterSignUpUrl="/"
+                  signInUrl="/sign-in"
+                />
+              }
+            />
 
-            {/* OPTIONAL PROTECTED ROUTE */}
+            {/* OPTIONAL: PROTECTED ROUTE EXAMPLE */}
             <Route
               path="/checkout"
               element={

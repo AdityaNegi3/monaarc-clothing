@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ShoppingCart, Menu, X, ChevronDown } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
+import { useCart } from "../context/CartContext";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/clerk-react";
 
 const Header: React.FC = () => {
   const { getTotalItems } = useCart();
@@ -9,6 +16,17 @@ const Header: React.FC = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
+
+  // --- hover-intent to prevent flicker when moving into dropdown
+  const hoverTimer = useRef<number | null>(null);
+  const openCollections = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    setCollectionsOpen(true);
+  };
+  const closeCollections = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 150);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
@@ -24,7 +42,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
 
-        {/* ROW 2 (Desktop): Cart (left) | Nav (center) | Sign Up (right) */}
+        {/* ROW 2 (Desktop): Cart (left) | Nav (center) | Auth (right) */}
         <div className="hidden md:grid grid-cols-3 items-center h-12">
           {/* Left: Cart */}
           <div className="flex items-center">
@@ -51,9 +69,9 @@ const Header: React.FC = () => {
             {/* Collections */}
             <div
               className="relative"
-              onMouseEnter={() => setCollectionsOpen(true)}
-              onMouseLeave={() => setCollectionsOpen(false)}
-              onFocus={() => setCollectionsOpen(true)}
+              onMouseEnter={openCollections}
+              onMouseLeave={closeCollections}
+              onFocus={openCollections}
               onBlur={(e) => {
                 const container = e.currentTarget as HTMLElement;
                 const next = (e.relatedTarget as Node) || null;
@@ -76,8 +94,9 @@ const Header: React.FC = () => {
                   role="menu"
                   className="absolute left-1/2 -translate-x-1/2 top-full w-56 pt-3"
                 >
-                  <div className="rounded-2xl bg-black/95 backdrop-blur ring-1 ring-white/10 shadow-xl p-2">
-                    {/* hash links to sections on Home */}
+                  {/* invisible padding bridge to prevent hover gap */}
+                  <div className="absolute -top-2 left-0 right-0 h-2" />
+                  <div className="rounded-2xl bg-black/95 backdrop-blur ring-1 ring-white/10 shadow-xl p-2 pointer-events-auto">
                     <Link
                       to="/#anime"
                       className="block px-3 py-2 rounded-lg text-white/90 hover:text-black hover:bg-yellow-400 transition"
@@ -113,14 +132,23 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Right: Sign Up */}
-          <div className="flex justify-end">
-            <Link
-              to="/signup"
-              className="px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
-            >
-              Sign Up
-            </Link>
+          {/* Right: Auth (Clerk) */}
+          <div className="flex justify-end gap-3">
+            <SignedOut>
+              <SignInButton mode="redirect" signUpUrl="/sign-up">
+                <button className="px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition">
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="redirect" signInUrl="/sign-in">
+                <button className="px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 hover:text-black transition">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
           </div>
         </div>
 
@@ -203,13 +231,30 @@ const Header: React.FC = () => {
                 About
               </Link>
 
-              <Link
-                to="/signup"
-                className="block mt-2 text-center px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign Up
-              </Link>
+              {/* Mobile auth */}
+              <SignedOut>
+                <SignInButton mode="redirect" signUpUrl="/sign-up">
+                  <button
+                    className="w-full mt-2 text-center px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="redirect" signInUrl="/sign-in">
+                  <button
+                    className="w-full mt-2 text-center px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign Up
+                  </button>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <div className="px-3">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
+              </SignedIn>
             </div>
           </div>
         )}
