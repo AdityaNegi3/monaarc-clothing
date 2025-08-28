@@ -68,14 +68,22 @@ const HomePage: React.FC = () => {
                 to={`/product/${product.id}`}
                 className="group bg-gray-900/50 rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 hover:scale-105"
               >
-                <div className="aspect-w-3 aspect-h-4 relative overflow-hidden">
+                {/* ✅ Hover image swap */}
+                <div className="relative w-full h-80 overflow-hidden">
+                  {/* Front image */}
                   <img
                     src={product.frontImage}
                     alt={product.name}
-                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-0"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
+                  {/* Back image */}
+                  <img
+                    src={product.backImage}
+                    alt={`${product.name} back`}
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                  />
                 </div>
+
                 <div className="p-6">
                   <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-yellow-400 transition-colors duration-300">
                     {product.name}
@@ -113,14 +121,22 @@ const HomePage: React.FC = () => {
                 to={`/product/${product.id}`}
                 className="group bg-gray-900/50 rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 hover:scale-105"
               >
-                <div className="aspect-w-3 aspect-h-4 relative overflow-hidden">
+                {/* ✅ Hover image swap */}
+                <div className="relative w-full h-80 overflow-hidden">
+                  {/* Front image */}
                   <img
                     src={product.frontImage}
                     alt={product.name}
-                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-0"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
+                  {/* Back image */}
+                  <img
+                    src={product.backImage}
+                    alt={`${product.name} back`}
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                  />
                 </div>
+
                 <div className="p-6">
                   <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-yellow-400 transition-colors duration-300">
                     {product.name}
