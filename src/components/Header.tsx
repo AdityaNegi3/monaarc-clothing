@@ -128,30 +128,25 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Right: Auth (ONE option: Sign In modal, or avatar if signed in) */}
+          {/* RIGHT: Auth (Clerk) */}
           <div className="w-1/3 flex justify-end items-center gap-3">
-            {!isLoaded ? (
-              <span className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 opacity-70">
-                Sign In
-              </span>
-            ) : isSignedIn ? (
+            <SignedOut>
+              {/* Removed asChild so the modal is reliably clickable */}
+              <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
+                <button
+                  type="button"
+                  className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                >
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
               <UserButton
                 appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
                 afterSignOutUrl="/"
               />
-            ) : (
-              <SignedOut>
-                {/* ✅ no asChild so modal is reliably clickable */}
-                <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
-                  <button
-                    type="button"
-                    className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
-                  >
-                    Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-            )}
+            </SignedIn>
           </div>
         </div>
 
@@ -232,31 +227,22 @@ const Header: React.FC = () => {
                 About
               </Link>
 
-              {/* Mobile auth: ONE Sign In button (modal) or avatar */}
-              {!isLoaded ? (
-                <button
-                  className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 opacity-70"
-                  disabled
-                >
-                  Sign In
-                </button>
-              ) : isSignedIn ? (
+              {/* Mobile auth */}
+              <SignedOut>
+                <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
+                  <button
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign In
+                  </button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
                 <div className="px-3 mt-2">
                   <UserButton afterSignOutUrl="/" />
                 </div>
-              ) : (
-                <SignedOut>
-                  {/* ✅ no asChild so modal is reliably clickable */}
-                  <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
-                    <button
-                      className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Sign In
-                    </button>
-                  </SignInButton>
-                </SignedOut>
-              )}
+              </SignedIn>
             </div>
           </div>
         )}
