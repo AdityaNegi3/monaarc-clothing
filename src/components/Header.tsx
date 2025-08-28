@@ -99,19 +99,11 @@ const Header: React.FC = () => {
           {/* Right: Auth (desktop) */}
           <div className="flex justify-end items-center gap-3">
             <SignedOut>
-              {/* Use route links on desktop so the option is always visible */}
-              <Link
-                to="/sign-in"
-                className="px-4 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black text-sm"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/sign-up"
-                className="px-4 py-1 rounded-md bg-yellow-400 text-black hover:opacity-90 text-sm"
-              >
-                Sign Up
-              </Link>
+              <SignInButton mode="modal" signUpUrl="/sign-up" afterSignInUrl="/">
+                <button className="px-4 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black text-sm">
+                  Sign In
+                </button>
+              </SignInButton>
             </SignedOut>
             <SignedIn>
               <UserButton afterSignOutUrl="/" />
@@ -144,11 +136,6 @@ const Header: React.FC = () => {
                   Sign In
                 </button>
               </SignInButton>
-              <SignUpButton mode="modal" signInUrl="/sign-in" afterSignUpUrl="/">
-                <button className="px-2.5 py-1 rounded-md bg-yellow-400 text-[13px] text-black hover:opacity-90">
-                  Sign Up
-                </button>
-              </SignUpButton>
             </SignedOut>
             <SignedIn>
               <UserButton afterSignOutUrl="/" />
@@ -194,11 +181,6 @@ const Header: React.FC = () => {
                       Sign In
                     </button>
                   </SignInButton>
-                  <SignUpButton mode="modal" signInUrl="/sign-in" afterSignUpUrl="/">
-                    <button className="flex-1 px-3 py-2 rounded-md bg-white text-black hover:opacity-90">
-                      Sign Up
-                    </button>
-                  </SignUpButton>
                 </SignedOut>
               </div>
             </nav>
