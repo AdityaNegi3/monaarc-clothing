@@ -5,11 +5,10 @@ import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import {
   SignInButton,
-  SignUpButton,
   SignedIn,
   SignedOut,
   UserButton,
-  useUser,               // ⬅️ fallback visibility while Clerk loads
+  useUser,
 } from "@clerk/clerk-react";
 
 const Header: React.FC = () => {
@@ -19,7 +18,6 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
 
-  // Hover-intent to prevent dropdown flicker
   const hoverTimer = useRef<number | null>(null);
   const openCollections = () => {
     if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
@@ -30,7 +28,6 @@ const Header: React.FC = () => {
     hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 150);
   };
 
-  // Clerk loading state (for showing fallback links immediately)
   const { isLoaded, isSignedIn } = useUser();
 
   return (
@@ -47,7 +44,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
 
-        {/* ROW 2 (Desktop): Cart (left) | Nav (center) | Auth (right) */}
+        {/* ROW 2 (Desktop): Cart | Nav | Auth */}
         <div className="hidden md:grid grid-cols-3 items-center h-12">
           {/* Left: Cart */}
           <div className="flex items-center">
@@ -65,13 +62,12 @@ const Header: React.FC = () => {
             </Link>
           </div>
 
-          {/* Center: Navigation with dropdown */}
+          {/* Center: Nav */}
           <nav className="flex justify-center items-center space-x-10">
             <Link to="/" className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium">
               Home
             </Link>
 
-            {/* Collections */}
             <div
               className="relative"
               onMouseEnter={openCollections}
@@ -86,42 +82,27 @@ const Header: React.FC = () => {
               <button
                 type="button"
                 className="inline-flex items-center gap-1 text-white hover:text-yellow-400 transition-colors duration-300 font-medium"
-                aria-haspopup="menu"
-                aria-expanded={collectionsOpen}
-                aria-controls="collections-menu"
               >
                 Collections <ChevronDown className="w-4 h-4" />
               </button>
 
               {collectionsOpen && (
-                <div
-                  id="collections-menu"
-                  role="menu"
-                  className="absolute left-1/2 -translate-x-1/2 top-full w-56 pt-3"
-                >
-                  {/* invisible padding bridge to prevent hover gap */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-full w-56 pt-3">
                   <div className="absolute -top-2 left-0 right-0 h-2" />
-                  <div className="rounded-2xl bg-black/95 backdrop-blur ring-1 ring-white/10 shadow-xl p-2 pointer-events-auto">
+                  <div className="rounded-2xl bg-black/95 backdrop-blur ring-1 ring-white/10 shadow-xl p-2">
                     <Link
                       to="/#anime"
                       className="block px-3 py-2 rounded-lg text-white/90 hover:text-black hover:bg-yellow-400 transition"
-                      role="menuitem"
                     >
                       Anime Edition
                     </Link>
                     <Link
                       to="/#gym"
                       className="block px-3 py-2 rounded-lg text-white/90 hover:text-black hover:bg-yellow-400 transition"
-                      role="menuitem"
                     >
                       Gym Edition
                     </Link>
-                    <span
-                      className="block px-3 py-2 rounded-lg text-gray-500 cursor-not-allowed select-none"
-                      role="menuitem"
-                      aria-disabled="true"
-                      title="Coming soon"
-                    >
+                    <span className="block px-3 py-2 rounded-lg text-gray-500 cursor-not-allowed select-none">
                       MONAARC Edition (Coming Soon)
                     </span>
                   </div>
@@ -137,50 +118,41 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Right: Auth (Clerk) with fallbacks */}
-          <div className="flex justify-end gap-3">
+          {/* Right: Auth (only one Sign In OR avatar) */}
+          <div className="w-1/3 flex justify-end items-center gap-3">
             {!isLoaded ? (
-              // Fallback links while Clerk bootstraps (prevents "options vanished")
-              <>
-                <Link
-                  to="/sign-in"
-                  className="px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/sign-up"
-                  className="px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
-                >
-                  Sign Up
-                </Link>
-              </>
+              <Link
+                to="#"
+                className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 opacity-70 pointer-events-none"
+              >
+                Sign In
+              </Link>
             ) : isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton
+                appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
+                afterSignOutUrl="/"
+              />
             ) : (
-              <>
-                <SignInButton mode="redirect" signUpUrl="/sign-up">
-                  <button className="px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition">
+              <SignedOut>
+                <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+                  <button
+                    type="button"
+                    className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                  >
                     Sign In
                   </button>
                 </SignInButton>
-                <SignUpButton mode="redirect" signInUrl="/sign-in">
-                  <button className="px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition">
-                    Sign Up
-                  </button>
-                </SignUpButton>
-              </>
+              </SignedOut>
             )}
           </div>
         </div>
 
-        {/* MOBILE: row with burger + cart */}
+        {/* MOBILE: burger + cart */}
         <div className="md:hidden flex items-center justify-between py-2">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="text-white hover:text-yellow-400 transition-colors duration-300"
             aria-label="Toggle menu"
-            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -199,104 +171,55 @@ const Header: React.FC = () => {
           </Link>
         </div>
 
-        {/* MOBILE: collapsible menu */}
+        {/* MOBILE MENU */}
         {isMenuOpen && (
           <div className="md:hidden bg-black/95 backdrop-blur-md border-t border-white/10">
             <div className="px-3 py-3 space-y-1">
               <Link
                 to="/"
-                className="block px-3 py-2 text-white hover:text-yellow-400 transition font-medium"
+                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </Link>
-
-              {/* Mobile Collections */}
-              <details className="px-3 py-2 border border-white/10 rounded-lg text-white">
-                <summary className="cursor-pointer list-none flex items-center justify-between">
-                  <span>Collections</span>
-                  <ChevronDown className="w-4 h-4" />
-                </summary>
-                <div className="mt-2 space-y-1">
-                  <Link
-                    to="/#anime"
-                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Anime Edition
-                  </Link>
-                  <Link
-                    to="/#gym"
-                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Gym Edition
-                  </Link>
-                  <span className="block px-2 py-2 text-gray-500 cursor-not-allowed select-none" aria-disabled="true">
-                    MONAARC Edition (Coming Soon)
-                  </span>
-                </div>
-              </details>
-
               <Link
                 to="/new-arrivals"
-                className="block px-3 py-2 text-white hover:text-yellow-400 transition font-medium"
+                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 New Arrivals
               </Link>
               <Link
                 to="/about"
-                className="block px-3 py-2 text-white hover:text-yellow-400 transition font-medium"
+                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
 
-              {/* Mobile auth with fallback */}
+              {/* Mobile auth */}
               {!isLoaded ? (
-                <>
-                  <Link
-                    to="/sign-in"
-                    className="block mt-2 text-center px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/sign-up"
-                    className="block mt-2 text-center px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
-                </>
+                <button
+                  className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 opacity-70"
+                  disabled
+                >
+                  Sign In
+                </button>
+              ) : isSignedIn ? (
+                <div className="px-3 mt-2">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
               ) : (
-                <>
-                  <SignedOut>
-                    <SignInButton mode="redirect" signUpUrl="/sign-up">
-                      <button
-                        className="w-full mt-2 text-center px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Sign In
-                      </button>
-                    </SignInButton>
-                    <SignUpButton mode="redirect" signInUrl="/sign-in">
-                      <button
-                        className="w-full mt-2 text-center px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Sign Up
-                      </button>
-                    </SignUpButton>
-                  </SignedOut>
-                  <SignedIn>
-                    <div className="px-3">
-                      <UserButton afterSignOutUrl="/" />
-                    </div>
-                  </SignedIn>
-                </>
+                <SignedOut>
+                  <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+                    <button
+                      className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Sign In
+                    </button>
+                  </SignInButton>
+                </SignedOut>
               )}
             </div>
           </div>
