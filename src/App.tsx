@@ -1,119 +1,77 @@
-import React, { useCallback, useEffect, useState } from 'react';
+// App.tsx
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { CartProvider } from './contexts/CartContext';
-import { AuthProvider } from './contexts/AuthContext';
-import Navbar from './components/Navbar';
-import Cart from './components/Cart';
-import OrderForm from './components/OrderForm';
-import CookieConsent from './components/CookieConsent';
-import Home from './pages/Home';
-import Collections from './pages/Collections';
-import NewArrivals from './pages/NewArrivals';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Signup from './pages/Signup';
-import { Product } from './types';
+import { SignIn, SignUp } from '@clerk/clerk-react';
+import { CartProvider } from './context/CartContext';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import ProductPage from './pages/ProductPage';
+import CartPage from './pages/CartPage';
+import AboutPage from './pages/AboutPage';
+import ThankYou from './pages/ThankYou';
 
-function AppInner() {
-  // build stamp to verify fresh bundle is loaded
-  useEffect(() => {
-    console.log('App build stamp:', 'v3-OrderFlow-OK');
-  }, []);
-
-  const [orderForm, setOrderForm] = useState<{
-    isOpen: boolean;
-    product: Product | null;
-    selectedSize: string;
-    isCartCheckout: boolean;
-  }>({
-    isOpen: false,
-    product: null,
-    selectedSize: '',
-    isCartCheckout: false,
-  });
-
-  const handleBuyNow = useCallback((product: Product, size: string) => {
-    setOrderForm({
-      isOpen: true,
-      product,
-      selectedSize: size,
-      isCartCheckout: false,
-    });
-  }, []);
-
-  const handleCartCheckout = useCallback(() => {
-    setOrderForm({
-      isOpen: true,
-      product: null,
-      selectedSize: '',
-      isCartCheckout: true,
-    });
-  }, []);
-
-  const closeOrderForm = useCallback(() => {
-    setOrderForm({
-      isOpen: false,
-      product: null,
-      selectedSize: '',
-      isCartCheckout: false,
-    });
-  }, []);
-
-  // Close modal on route change
+function ScrollToHash() {
   const location = useLocation();
   useEffect(() => {
-    if (orderForm.isOpen) closeOrderForm();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
-
-  // Lock body scroll while modal is open (nice UX)
-  useEffect(() => {
-    if (orderForm.isOpen) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = prev;
-      };
+    if (location.hash) {
+      const id = location.hash.slice(1);
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, [orderForm.isOpen]);
+  }, [location]);
+  return null;
+}
 
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (!hash) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname, hash]);
+  return null;
+}
+
+function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home onBuyNow={handleBuyNow} />} />
-          <Route path="/collections/:edition" element={<Collections onBuyNow={handleBuyNow} />} />
-          <Route path="/new-arrivals" element={<NewArrivals onBuyNow={handleBuyNow} />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-      </main>
+    <CartProvider>
+      <Router>
+        <div className="min-h-screen bg-black text-white">
+          <Header />
+          <ScrollToHash />
+          <ScrollToTop />
+          <main>
+            <Routes>
+              {/* Site pages */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/thank-you" element={<ThankYou />} />
 
-      <Cart onCheckout={handleCartCheckout} />
-
-      <OrderForm
-        isOpen={orderForm.isOpen}
-        onClose={closeOrderForm}
-        product={orderForm.product ?? undefined}
-        selectedSize={orderForm.selectedSize || undefined}
-        isCartCheckout={orderForm.isCartCheckout}
-      />
-
-      <CookieConsent />
-    </div>
+              {/* Clerk full-page auth */}
+              <Route
+                path="/sign-in"
+                element={
+                  <div className="min-h-screen flex items-center justify-center bg-black">
+                    <SignIn afterSignInUrl="/" signUpUrl="/sign-up" />
+                  </div>
+                }
+              />
+              <Route
+                path="/sign-up"
+                element={
+                  <div className="min-h-screen flex items-center justify-center bg-black">
+                    <SignUp afterSignUpUrl="/" signInUrl="/sign-in" />
+                  </div>
+                }
+              />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </CartProvider>
   );
 }
 
-export default function App() {
-  return (
-    <AuthProvider>
-      <CartProvider>
-        <Router>
-          <AppInner />
-        </Router>
-      </CartProvider>
-    </AuthProvider>
-  );
-}
+export default App;

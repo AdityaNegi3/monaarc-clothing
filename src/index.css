@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom luxury animations */
+@keyframes luxury-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(1deg);
+  }
+}
+
+@keyframes luxury-glow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.luxury-float {
+  animation: luxury-float 6s ease-in-out infinite;
+}
+
+.luxury-glow {
+  animation: luxury-glow 4s ease-in-out infinite;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+.hero-background {
+  background-image: url('/file_000000009b4c61f8adbdc1dadf14d82f.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
