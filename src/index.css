@@ -35,6 +35,7 @@
 html {
   scroll-behavior: smooth;
 }
+
 .hero-background {
   background-image: url('/file_000000009b4c61f8adbdc1dadf14d82f.png');
   background-size: cover;
@@ -43,3 +44,14 @@ html {
   background-attachment: fixed;
 }
 
+/* ✅ Custom product grid */
+.products-grid {
+  @apply grid gap-4; /* Tailwind utility apply */
+  grid-template-columns: repeat(2, 1fr); /* Default: 2 products per row */
+}
+
+@media (min-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr); /* Tablet/Desktop: 4 products per row */
+  }
+}

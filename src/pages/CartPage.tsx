@@ -48,7 +48,7 @@ const CartPage: React.FC = () => {
             {cartItems.map((item) => (
               <div
                 key={`${item.id}-${item.size}`}
-                className="bg-gray-900/50 rounded-lg border border-white/10 p-6"
+                className="bg-black rounded-lg border border-white/10 p-6"
               >
                 <div className="flex items-center space-x-6">
                   <img
@@ -93,7 +93,7 @@ const CartPage: React.FC = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-gray-900/50 rounded-lg border border-white/10 p-6 h-fit">
+          <div className="bg-black rounded-lg border border-white/10 p-6 h-fit">
             <h2 className="text-xl font-bold text-white mb-6">Order Summary</h2>
             
             <div className="space-y-4 mb-6">
@@ -133,7 +133,7 @@ const CartPage: React.FC = () => {
       {/* Checkout Modal */}
       {showCheckout && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-black rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white">Checkout</h2>
               <button

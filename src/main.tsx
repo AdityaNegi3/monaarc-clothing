@@ -1,19 +1,24 @@
-// src/main.tsx
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { ClerkProvider } from "@clerk/clerk-react";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import { ClerkProvider } from "@clerk/clerk-react";
+import { BrowserRouter } from "react-router-dom";
 
-const pk = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
+const KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
 
-createRoot(document.getElementById("root") as HTMLElement).render(
-  <StrictMode>
-    <ClerkProvider publishableKey={pk}>
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    {KEY ? (
+      <ClerkProvider publishableKey={KEY} afterSignOutUrl="/">
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ClerkProvider>
+    ) : (
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </ClerkProvider>
-  </StrictMode>
+    )}
+  </React.StrictMode>
 );

@@ -8,11 +8,11 @@ const AboutPage: React.FC = () => {
       <section className="py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-wide">
-            About monaarc
+            About MONAARC
           </h1>
           <div className="h-px w-32 bg-yellow-400 mx-auto mb-8"></div>
           <p className="text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
-            Born from a vision to redefine luxury fashion, monaarc represents the intersection 
+            Born from a vision to redefine luxury fashion, MONAARC represents the intersection 
             of timeless elegance and contemporary sophistication.
           </p>
         </div>
@@ -26,7 +26,7 @@ const AboutPage: React.FC = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Our Story</h2>
               <div className="space-y-6 text-gray-400 leading-relaxed">
                 <p>
-                  monaarc was founded on the belief that luxury fashion should be more than just clothing—
+                  MONAARC was founded on the belief that luxury fashion should be more than just clothing—
                   it should be an expression of one's identity, a statement of sophistication, and a 
                   testament to exceptional craftsmanship.
                 </p>
@@ -39,17 +39,19 @@ const AboutPage: React.FC = () => {
                 <p>
                   Our commitment to excellence extends beyond the garment itself. From the initial sketch 
                   to the final stitch, every detail is carefully considered to ensure that when you wear 
-                  monaarc, you're not just wearing clothes—you're wearing a legacy.
+                  MONAARC, you're not just wearing clothes—you're wearing a legacy.
                 </p>
               </div>
             </div>
             
             <div className="relative">
-              <img
-                src="https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop"
-                alt="monaarc craftsmanship"
-                className="w-full rounded-lg shadow-2xl"
-              />
+             <img
+                    src="/IMG_20250801_132311.jpg"
+                    alt="MONAARC craftsmanship"
+                    className="w-full rounded-lg shadow-2xl"
+/>
+
+           
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
             </div>
           </div>
@@ -63,7 +65,7 @@ const AboutPage: React.FC = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Our Values</h2>
             <div className="h-px w-32 bg-yellow-400 mx-auto mb-6"></div>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              The principles that guide everything we do at monaarc.
+              The principles that guide everything we do at MONAARC.
             </p>
           </div>
 
@@ -109,7 +111,7 @@ const AboutPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
             <a
-              href="https://instagram.com/officialmonaarcclothing"
+              href="https://instagram.com/officialMONAARCclothing"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center space-x-4 bg-gray-900/50 rounded-lg p-6 border border-white/10 hover:border-yellow-400/30 transition-all duration-300 group"
@@ -117,18 +119,18 @@ const AboutPage: React.FC = () => {
               <Instagram className="w-8 h-8 text-yellow-400 group-hover:scale-110 transition-transform duration-300" />
               <div className="text-left">
                 <div className="text-white font-semibold">Instagram</div>
-                <div className="text-gray-400 text-sm">@officialmonaarcclothing</div>
+                <div className="text-gray-400 text-sm">@officialMONAARCclothing</div>
               </div>
             </a>
 
             <a
-              href="mailto:monaarcvip.life@gmail.com"
+              href="mailto:MONAARCvip.life@gmail.com"
               className="flex items-center justify-center space-x-4 bg-gray-900/50 rounded-lg p-6 border border-white/10 hover:border-yellow-400/30 transition-all duration-300 group"
             >
               <Mail className="w-8 h-8 text-yellow-400 group-hover:scale-110 transition-transform duration-300" />
               <div className="text-left">
                 <div className="text-white font-semibold">Email</div>
-                <div className="text-gray-400 text-sm">monaarcvip.life@gmail.com</div>
+                <div className="text-gray-400 text-sm">MONAARCvip.life@gmail.com</div>
               </div>
             </a>
           </div>

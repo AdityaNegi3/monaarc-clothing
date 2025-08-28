@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-bold text-white mb-4">monaarc</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">MONAARC</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               Luxury clothing redefined. Where elegance meets sophistication in every thread.
             </p>
@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
                 @monaarcclothing
               </a>
               <a
-                href="mailto:crew@monaarcclothing.cm"
+                href="mailto:crew@monaarcclothing.com"
                 className="flex items-center text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm"
               >
                 <Mail className="w-4 h-4 mr-2" />
@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
 
         <div className="border-t border-white/10 pt-8 mt-8">
           <p className="text-gray-400 text-sm text-center">
-            © 2025 monaarc. All rights reserved. Crafted with luxury in mind.
+            © 2025 MONAARC. All rights reserved. 
           </p>
         </div>
       </div>
