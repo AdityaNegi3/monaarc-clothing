@@ -1,3 +1,4 @@
+// src/main.tsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,8 +9,8 @@ import './index.css';
 
 const pk = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
 
-if (!pk) {
-  console.error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env');
+if (!pk || !pk.startsWith('pk_')) {
+  console.error('Bad or missing VITE_CLERK_PUBLISHABLE_KEY');
 }
 
 createRoot(document.getElementById('root')!).render(
