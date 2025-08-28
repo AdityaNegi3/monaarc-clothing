@@ -84,12 +84,20 @@ const Header: React.FC = () => {
               <button
                 type="button"
                 className="inline-flex items-center gap-1 text-white hover:text-yellow-400 transition-colors duration-300 font-medium"
+                aria-haspopup="menu"
+                aria-expanded={collectionsOpen}
+                aria-controls="collections-menu"
               >
                 Collections <ChevronDown className="w-4 h-4" />
               </button>
 
               {collectionsOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-full w-56 pt-3">
+                <div
+                  id="collections-menu"
+                  role="menu"
+                  className="absolute left-1/2 -translate-x-1/2 top-full w-56 pt-3"
+                >
+                  {/* invisible padding bridge to prevent hover gap */}
                   <div className="absolute -top-2 left-0 right-0 h-2" />
                   <div className="rounded-2xl bg-black/95 backdrop-blur ring-1 ring-white/10 shadow-xl p-2">
                     <Link
@@ -133,6 +141,7 @@ const Header: React.FC = () => {
               />
             ) : (
               <SignedOut>
+                {/* ✅ no asChild so modal is reliably clickable */}
                 <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
                   <button
                     type="button"
@@ -237,6 +246,7 @@ const Header: React.FC = () => {
                 </div>
               ) : (
                 <SignedOut>
+                  {/* ✅ no asChild so modal is reliably clickable */}
                   <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
                     <button
                       className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
