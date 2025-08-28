@@ -1,53 +1,61 @@
 // src/components/Header.tsx
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  useUser,
+} from "@clerk/clerk-react";
 
-interface HeaderProps {}
-
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC = () => {
   const { getTotalItems } = useCart();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showComingSoon, setShowComingSoon] = useState(false);
   const totalItems = getTotalItems();
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleSignatureClick = () => {
-    setShowComingSoon(true);
-    setTimeout(() => setShowComingSoon(false), 3000);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [collectionsOpen, setCollectionsOpen] = useState(false);
+
+  // Prevent dropdown flicker
+  const hoverTimer = useRef<number | null>(null);
+  const openCollections = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    setCollectionsOpen(true);
+  };
+  const closeCollections = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 150);
   };
 
-  const handleMouseEnter = () => {
-    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-    setDropdownOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => setDropdownOpen(false), 200);
-  };
+  // Show a placeholder while Clerk bootstraps
+  const { isLoaded, isSignedIn } = useUser();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-lg border-b border-white/10 transition-all duration-500">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        {/* Line 1: Logo Centered */}
-        <div className="flex justify-center">
-          <Link
-            to="/"
-            className="text-2xl font-bold text-white hover:text-yellow-400 transition-colors duration-300"
-          >
-            MONAARC
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ROW 1: Centered logo */}
+        <div className="flex justify-center items-center h-16">
+          <Link to="/" className="flex items-center space-x-2">
+            <img src="/logo.png" alt="MONAARC Logo" className="h-10 w-auto object-contain" />
+            <span className="hidden md:block text-2xl font-serif font-bold text-white tracking-wide">
+              MONAARC
+            </span>
           </Link>
         </div>
 
-        {/* Line 2: Cart LEFT, Nav CENTER, Auth RIGHT */}
-        <div className="hidden md:flex items-center justify-between mt-4 relative">
-          {/* LEFT: Cart */}
-          <div className="w-1/3 flex items-center">
-            <Link to="/cart" className="relative text-white hover:text-yellow-400">
-              <ShoppingBag className="w-6 h-6" />
+        {/* ROW 2 (Desktop): Cart | Nav | Auth */}
+        <div className="hidden md:grid grid-cols-3 items-center h-12">
+          {/* Left: Cart */}
+          <div className="flex items-center">
+            <Link
+              to="/cart"
+              className="relative text-white hover:text-yellow-400 transition-colors duration-300"
+              aria-label="Cart"
+            >
+              <ShoppingCart className="w-6 h-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                   {totalItems}
@@ -56,63 +64,75 @@ const Header: React.FC<HeaderProps> = () => {
             </Link>
           </div>
 
-          {/* CENTER: Navigation */}
-          <div className="flex justify-center space-x-8 w-1/3 absolute left-1/2 -translate-x-1/2">
-            <Link to="/" className="text-white hover:text-yellow-400 font-medium">
+          {/* Center: Nav */}
+          <nav className="flex justify-center items-center space-x-10">
+            <Link to="/" className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium">
               Home
             </Link>
 
             <div
               className="relative"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={openCollections}
+              onMouseLeave={closeCollections}
+              onFocus={openCollections}
+              onBlur={(e) => {
+                const container = e.currentTarget as HTMLElement;
+                const next = (e.relatedTarget as Node) || null;
+                if (!next || !container.contains(next)) setCollectionsOpen(false);
+              }}
             >
               <button
-                className="text-white hover:text-yellow-400 font-medium focus:outline-none focus:ring-2 focus:ring-yellow-400/50 rounded"
+                type="button"
+                className="inline-flex items-center gap-1 text-white hover:text-yellow-400 transition-colors duration-300 font-medium"
                 aria-haspopup="menu"
-                aria-expanded={dropdownOpen}
+                aria-expanded={collectionsOpen}
+                aria-controls="collections-menu"
               >
-                Collections
+                Collections <ChevronDown className="w-4 h-4" />
               </button>
-              {dropdownOpen && (
+
+              {collectionsOpen && (
                 <div
-                  className="absolute mt-2 w-48 bg-black/90 border border-white/10 rounded shadow-lg z-50"
+                  id="collections-menu"
                   role="menu"
+                  className="absolute left-1/2 -translate-x-1/2 top-full w-56 pt-3"
                 >
-                  <a
-                    href="/#f1-edition"
-                    className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
-                    role="menuitem"
-                  >
-                    ANIME Edition
-                  </a>
-                  <a
-                    href="/#dark-edition"
-                    className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
-                    role="menuitem"
-                  >
-                    GYM Edition
-                  </a>
-                  <button
-                    onClick={handleSignatureClick}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-800 text-white text-sm"
-                    role="menuitem"
-                  >
-                  MONAARC EDITION
-                  </button>
+                  {/* invisible padding bridge to prevent hover gap */}
+                  <div className="absolute -top-2 left-0 right-0 h-2" />
+                  <div className="rounded-2xl bg-black/95 backdrop-blur ring-1 ring-white/10 shadow-xl p-2">
+                    <Link
+                      to="/#anime"
+                      className="block px-3 py-2 rounded-lg text-white/90 hover:text-black hover:bg-yellow-400 transition"
+                    >
+                      Anime Edition
+                    </Link>
+                    <Link
+                      to="/#gym"
+                      className="block px-3 py-2 rounded-lg text-white/90 hover:text-black hover:bg-yellow-400 transition"
+                    >
+                      Gym Edition
+                    </Link>
+                    <span className="block px-3 py-2 rounded-lg text-gray-500 cursor-not-allowed select-none">
+                      MONAARC Edition (Coming Soon)
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
 
-            <Link to="/about" className="text-white hover:text-yellow-400 font-medium">
+            <Link to="/new-arrivals" className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium">
+              New Arrivals
+            </Link>
+            <Link to="/about" className="text-white hover:text-yellow-400 transition-colors duration-300 font-medium">
               About
             </Link>
-          </div>
+          </nav>
 
           {/* RIGHT: Auth (Clerk) */}
           <div className="w-1/3 flex justify-end items-center gap-3">
             <SignedOut>
-              <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+              {/* Removed asChild so the modal is reliably clickable */}
+              <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
                 <button
                   type="button"
                   className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
@@ -130,99 +150,100 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
         </div>
 
-        {/* Mobile: Cart (left) + Menu (right) */}
-        <div className="md:hidden flex justify-between items-center mt-4">
-          <Link to="/cart" className="relative text-white hover:text-yellow-400">
-            <ShoppingBag className="w-6 h-6" />
+        {/* MOBILE: burger + cart */}
+        <div className="md:hidden flex items-center justify-between py-2">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="text-white hover:text-yellow-400 transition-colors duration-300"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+
+          <Link
+            to="/cart"
+            className="relative text-white hover:text-yellow-400 transition-colors duration-300"
+            aria-label="Cart"
+          >
+            <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                 {totalItems}
               </span>
             )}
           </Link>
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 rounded"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* MOBILE MENU */}
         {isMenuOpen && (
-          <div
-            id="mobile-menu"
-            className="md:hidden mt-2 bg-black/95 backdrop-blur-md border-b border-white/10 rounded-b-lg"
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="md:hidden bg-black/95 backdrop-blur-md border-t border-white/10">
+            <div className="px-3 py-3 space-y-1">
               <Link
                 to="/"
+                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
               >
                 Home
               </Link>
-              <a
-                href="/#f1-edition"
+
+              <details className="px-3 py-2 border border-white/10 rounded-lg text-white">
+                <summary className="cursor-pointer list-none flex items-center justify-between">
+                  <span>Collections</span>
+                  <ChevronDown className="w-4 h-4" />
+                </summary>
+                <div className="mt-2 space-y-1">
+                  <Link
+                    to="/#anime"
+                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Anime Edition
+                  </Link>
+                  <Link
+                    to="/#gym"
+                    className="block px-2 py-2 text-white/90 hover:text-yellow-400 transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Gym Edition
+                  </Link>
+                  <span className="block px-2 py-2 text-gray-500 cursor-not-allowed select-none">
+                    MONAARC Edition (Coming Soon)
+                  </span>
+                </div>
+              </details>
+
+              <Link
+                to="/new-arrivals"
+                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
               >
-                ANIME EDITION
-              </a>
-              <a
-                href="/#dark-edition"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
-              >
-                GYM EDITION
-              </a>
-              <button
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  handleSignatureClick();
-                }}
-                className="block w-full text-left px-3 py-2 text-white hover:text-yellow-400"
-              >
-                MONAARC EDITION
-              </button>
+                New Arrivals
+              </Link>
               <Link
                 to="/about"
+                className="block px-3 py-2 text-white hover:text-yellow-400 font-medium"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
               >
                 About
               </Link>
 
-              {/* Mobile Auth (Clerk) */}
+              {/* Mobile auth */}
               <SignedOut>
-                <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
-                  <button className="block w-full text-left px-3 py-2 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-md">
+                <SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
+                  <button
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     Sign In
                   </button>
                 </SignInButton>
               </SignedOut>
               <SignedIn>
-                <div className="px-3 py-2">
-                  <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }} />
+                <div className="px-3 mt-2">
+                  <UserButton afterSignOutUrl="/" />
                 </div>
               </SignedIn>
             </div>
-          </div>
-        )}
-
-        {/* Coming Soon Toast */}
-        {showComingSoon && (
-          <div className="fixed bottom-5 right-5 bg-yellow-400 text-black px-4 py-2 rounded shadow-lg z-50">
-            Coming Soon!
-            <button
-              onClick={() => setShowComingSoon(false)}
-              className="ml-4 font-bold focus:outline-none"
-              aria-label="Close"
-            >
-              ✕
-            </button>
           </div>
         )}
       </div>
