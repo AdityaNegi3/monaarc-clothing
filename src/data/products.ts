@@ -7,17 +7,17 @@ export const products: Product[] = [
     name: 'toji',
     price: 1,
     category: 'limited',
-    frontImage: 'toji front.png',
+    frontImage: '/toji front.png',
     backImage: '/toji back.png',
     description: 'Exclusive LIMITED edition signature tee with premium cotton blend and gold foil detailing.'
   },
   {
     id: 'limited-2',
-    name: 'test',
-    price: 1499,
+    name: 'yami',
+    price: 1,
     category: 'limited',
-    frontImage: 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
-    backImage: 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
+    frontImage: '/yami front.png',
+    backImage: '/yami back.png',
     description: 'LIMITED collection featuring elegant gold script typography on premium fabric.'
   },
   {
