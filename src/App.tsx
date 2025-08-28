@@ -24,7 +24,7 @@ function ScrollToHash() {
   return null;
 }
 
-// Example protected route (ONLY this path needs auth; everything else is public)
+// Example: ONLY /checkout needs auth; remove if you don’t need any protected routes
 function CheckoutGuard({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -36,7 +36,7 @@ function CheckoutGuard({ children }: { children: React.ReactNode }) {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <CartProvider>
       <div className="min-h-screen flex flex-col bg-black text-white">
@@ -51,22 +51,21 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/thank-you" element={<ThankYou />} />
 
-            {/* CLERK AUTH PAGES (still public) */}
+            {/* CLERK PAGES (public) */}
             <Route path="/sign-in" element={<SignIn afterSignInUrl="/" signUpUrl="/sign-up" />} />
             <Route path="/sign-up" element={<SignUp afterSignUpUrl="/" signInUrl="/sign-in" />} />
 
-            {/* EXAMPLE: ONLY /checkout NEEDS LOGIN */}
+            {/* OPTIONAL PROTECTED ROUTE */}
             <Route
               path="/checkout"
               element={
                 <CheckoutGuard>
-                  {/* your checkout component goes here */}
                   <div className="p-8">Checkout (protected)</div>
                 </CheckoutGuard>
               }
             />
 
-            {/* 404 */}
+            {/* 404 → home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
@@ -75,5 +74,3 @@ function App() {
     </CartProvider>
   );
 }
-
-export default App;
