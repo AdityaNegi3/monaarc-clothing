@@ -1,13 +1,7 @@
 // src/App.tsx
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import {
-  SignIn,
-  SignUp,
-  SignedIn,
-  SignedOut,
-  RedirectToSignIn,
-} from "@clerk/clerk-react";
+import { SignIn, SignUp } from "@clerk/clerk-react";
 
 import { CartProvider } from "./context/CartContext";
 import Header from "./components/Header";
@@ -31,18 +25,6 @@ function ScrollToHash() {
   return null;
 }
 
-// Protect any route you wrap with this
-function Protected({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <SignedIn>{children}</SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-    </>
-  );
-}
-
 export default function App() {
   return (
     <CartProvider>
@@ -60,6 +42,9 @@ export default function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/thank-you" element={<ThankYou />} />
+
+            {/* OPTIONAL: public checkout (no protection) */}
+            <Route path="/checkout" element={<div className="p-8">Checkout (public)</div>} />
 
             {/* CLERK AUTH ROUTES (React Router v6) */}
             <Route
@@ -82,16 +67,6 @@ export default function App() {
                   signInUrl="/sign-in"
                   afterSignUpUrl="/"
                 />
-              }
-            />
-
-            {/* EXAMPLE: PROTECTED ROUTE */}
-            <Route
-              path="/checkout"
-              element={
-                <Protected>
-                  <div className="p-8">Checkout (protected)</div>
-                </Protected>
               }
             />
 
