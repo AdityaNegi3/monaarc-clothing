@@ -1,3 +1,4 @@
+// src/components/Header.tsx
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
@@ -8,6 +9,7 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useUser,               // ⬅️ fallback visibility while Clerk loads
 } from "@clerk/clerk-react";
 
 const Header: React.FC = () => {
@@ -17,7 +19,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
 
-  // --- hover-intent to prevent flicker when moving into dropdown
+  // Hover-intent to prevent dropdown flicker
   const hoverTimer = useRef<number | null>(null);
   const openCollections = () => {
     if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
@@ -27,6 +29,9 @@ const Header: React.FC = () => {
     if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
     hoverTimer.current = window.setTimeout(() => setCollectionsOpen(false), 150);
   };
+
+  // Clerk loading state (for showing fallback links immediately)
+  const { isLoaded, isSignedIn } = useUser();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
@@ -132,23 +137,40 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Right: Auth (Clerk) */}
+          {/* Right: Auth (Clerk) with fallbacks */}
           <div className="flex justify-end gap-3">
-            <SignedOut>
-              <SignInButton mode="redirect" signUpUrl="/sign-up">
-                <button className="px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition">
+            {!isLoaded ? (
+              // Fallback links while Clerk bootstraps (prevents "options vanished")
+              <>
+                <Link
+                  to="/sign-in"
+                  className="px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
+                >
                   Sign In
-                </button>
-              </SignInButton>
-              <SignUpButton mode="redirect" signInUrl="/sign-in">
-                <button className="px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 hover:text-black transition">
+                </Link>
+                <Link
+                  to="/sign-up"
+                  className="px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
+                >
                   Sign Up
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
+                </Link>
+              </>
+            ) : isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            ) : (
+              <>
+                <SignInButton mode="redirect" signUpUrl="/sign-up">
+                  <button className="px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition">
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="redirect" signInUrl="/sign-in">
+                  <button className="px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition">
+                    Sign Up
+                  </button>
+                </SignUpButton>
+              </>
+            )}
           </div>
         </div>
 
@@ -231,30 +253,51 @@ const Header: React.FC = () => {
                 About
               </Link>
 
-              {/* Mobile auth */}
-              <SignedOut>
-                <SignInButton mode="redirect" signUpUrl="/sign-up">
-                  <button
-                    className="w-full mt-2 text-center px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
+              {/* Mobile auth with fallback */}
+              {!isLoaded ? (
+                <>
+                  <Link
+                    to="/sign-in"
+                    className="block mt-2 text-center px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign In
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="redirect" signInUrl="/sign-in">
-                  <button
-                    className="w-full mt-2 text-center px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
+                  </Link>
+                  <Link
+                    to="/sign-up"
+                    className="block mt-2 text-center px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign Up
-                  </button>
-                </SignUpButton>
-              </SignedOut>
-              <SignedIn>
-                <div className="px-3">
-                  <UserButton afterSignOutUrl="/" />
-                </div>
-              </SignedIn>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <SignedOut>
+                    <SignInButton mode="redirect" signUpUrl="/sign-up">
+                      <button
+                        className="w-full mt-2 text-center px-4 py-2 rounded-full border border-white/20 text-white hover:text-black hover:bg-yellow-400 hover:border-yellow-400 transition"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Sign In
+                      </button>
+                    </SignInButton>
+                    <SignUpButton mode="redirect" signInUrl="/sign-in">
+                      <button
+                        className="w-full mt-2 text-center px-4 py-2 rounded-full bg-white text-black hover:bg-yellow-400 transition"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Sign Up
+                      </button>
+                    </SignUpButton>
+                  </SignedOut>
+                  <SignedIn>
+                    <div className="px-3">
+                      <UserButton afterSignOutUrl="/" />
+                    </div>
+                  </SignedIn>
+                </>
+              )}
             </div>
           </div>
         )}
