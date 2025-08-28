@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 
 const Header: React.FC = () => {
   const { getTotalItems } = useCart();
@@ -80,15 +80,22 @@ const Header: React.FC = () => {
 
           {/* Right: Auth (always visible area) */}
           <div className="flex justify-end items-center gap-3">
-            {/* Fallback link so there's always a visible sign-in path */}
             <SignedOut>
               <SignInButton mode="modal" signUpUrl="/sign-up" afterSignInUrl="/">
                 <button className="px-4 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black text-sm">
                   Sign In
                 </button>
               </SignInButton>
-              {/* Fallback hard link if Clerk hasn't initialized yet */}
+
+              <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
+                <button className="px-4 py-1 rounded-md bg-yellow-400 text-black hover:opacity-90 text-sm">
+                  Sign Up
+                </button>
+              </SignUpButton>
+
+              {/* Fallback hard links if Clerk hasn't initialized yet */}
               <Link to="/sign-in" className="sr-only">Sign In (fallback)</Link>
+              <Link to="/sign-up" className="sr-only">Sign Up (fallback)</Link>
             </SignedOut>
 
             <SignedIn>
@@ -123,8 +130,17 @@ const Header: React.FC = () => {
                   Sign In
                 </button>
               </SignInButton>
+
+              <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
+                <button className="px-2.5 py-1 rounded-md bg-yellow-400 text-[13px] text-black hover:opacity-90">
+                  Sign Up
+                </button>
+              </SignUpButton>
+
               <Link to="/sign-in" className="sr-only">Sign In (fallback)</Link>
+              <Link to="/sign-up" className="sr-only">Sign Up (fallback)</Link>
             </SignedOut>
+
             <SignedIn>
               <UserButton
                 afterSignOutUrl="/"
