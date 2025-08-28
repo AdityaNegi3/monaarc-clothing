@@ -78,31 +78,31 @@ const Header: React.FC = () => {
             <Link to="/about" className="text-white hover:text-yellow-400 font-medium">About</Link>
           </nav>
 
-          {/* Right: Auth (always visible area) */}
-          <div className="flex justify-end items-center gap-3">
+          {/* Right: Auth */}
+          <div className="w-1/3 flex justify-end items-center gap-3">
             <SignedOut>
-              <SignInButton mode="modal" signUpUrl="/sign-up" afterSignInUrl="/">
-                <button className="px-4 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black text-sm">
+              <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+                <button
+                  type="button"
+                  className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                >
                   Sign In
                 </button>
               </SignInButton>
-
               <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
-                <button className="px-4 py-1 rounded-md bg-yellow-400 text-black hover:opacity-90 text-sm">
+                <button
+                  type="button"
+                  className="px-3 py-1 rounded-md bg-yellow-400 text-black hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                >
                   Sign Up
                 </button>
               </SignUpButton>
-
-              {/* Fallback hard links if Clerk hasn't initialized yet */}
-              <Link to="/sign-in" className="sr-only">Sign In (fallback)</Link>
-              <Link to="/sign-up" className="sr-only">Sign Up (fallback)</Link>
             </SignedOut>
 
             <SignedIn>
               <UserButton
-                afterSignOutUrl="/"
                 appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
-                showName={false}
+                afterSignOutUrl="/"
               />
             </SignedIn>
           </div>
@@ -125,27 +125,27 @@ const Header: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <SignedOut>
-              <SignInButton mode="modal" signUpUrl="/sign-up" afterSignInUrl="/">
-                <button className="px-2.5 py-1 rounded-md border border-yellow-400 text-[13px] text-yellow-400 hover:bg-yellow-400 hover:text-black">
+              <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+                <button
+                  type="button"
+                  className="px-2.5 py-1 rounded-md border border-yellow-400 text-[13px] text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                >
                   Sign In
                 </button>
               </SignInButton>
-
               <SignUpButton mode="modal" afterSignUpUrl="/" signInUrl="/sign-in">
-                <button className="px-2.5 py-1 rounded-md bg-yellow-400 text-[13px] text-black hover:opacity-90">
+                <button
+                  type="button"
+                  className="px-2.5 py-1 rounded-md bg-yellow-400 text-[13px] text-black hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                >
                   Sign Up
                 </button>
               </SignUpButton>
-
-              <Link to="/sign-in" className="sr-only">Sign In (fallback)</Link>
-              <Link to="/sign-up" className="sr-only">Sign Up (fallback)</Link>
             </SignedOut>
-
             <SignedIn>
               <UserButton
-                afterSignOutUrl="/"
                 appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
-                showName={false}
+                afterSignOutUrl="/"
               />
             </SignedIn>
           </div>
