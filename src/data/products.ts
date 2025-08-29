@@ -4,8 +4,8 @@ export const products: Product[] = [
   // LIMITED Edition Collection
   {
     id: 'limited-1',
-    name: 'TOJI',
-    price: 10,
+    name: 'TOJI WHITE',
+    price: 1,
     category: 'limited',
     frontImage: '/toji front product.png',
     backImage: '/toji back product.png',
