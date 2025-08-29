@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
       <section
         className="relative h-screen flex items-center justify-center overflow-hidden"
         style={{
-          backgroundImage: "url('/bg.png')",
+          backgroundImage: "url('/bg123.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'brightness(1.15)', // ✅ brighten image a bit
