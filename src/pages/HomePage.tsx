@@ -90,7 +90,7 @@ const HomePage: React.FC = () => {
               ANIME Edition
             </h2>
             <div className="h-px w-32 bg-yellow-400 mx-auto mb-6"></div>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto">blah blah.</p>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">Worn like armor, carried like destiny — every stitch holds the spirit of a hero.</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 overflow-x-hidden">
@@ -156,8 +156,7 @@ const HomePage: React.FC = () => {
             </h2>
             <div className="h-px w-32 bg-yellow-400 mx-auto mb-6" />
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Embrace the shadows. Where mystery meets elegance in perfect
-              harmony.
+             Strength isn’t built in comfort — it’s forged in sweat, struggle, and unbreakable will.
             </p>
           </div>
 

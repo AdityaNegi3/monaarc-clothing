@@ -5,7 +5,7 @@ export const products: Product[] = [
   {
     id: 'limited-1',
     name: 'TOJI WHITE',
-    price: 1,
+    price: 1599,
     category: 'limited',
     frontImage: '/toji front product.png',
     backImage: '/toji back product.png',
@@ -14,7 +14,7 @@ export const products: Product[] = [
   {
     id: 'limited-2',
     name: 'yami',
-    price: 1,
+    price: 1599,
     category: 'limited',
     frontImage: '/yami front product.png',
     backImage: '/yami hi back.png',
@@ -23,7 +23,7 @@ export const products: Product[] = [
   {
     id: 'limited-3',
     name: 'itachi',
-    price: 1,
+    price: 1099,
     category: 'limited',
     frontImage: '/itachi front prod.png',
     backImage: '/itachi back prod.png',
@@ -31,37 +31,37 @@ export const products: Product[] = [
   },
   {
     id: 'limited-4',
-    name: 'test sample',
-    price: 1,
+    name: 'Solo leveling',
+    price: 1099,
     category: 'limited',
-    frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
-    backImage: '/back.png',
+    frontImage: '/solo front.png',
+    backImage: '/solo back.png',
     description: 'Heritage collection piece with timeless design and premium craftsmanship.'
   },
   {
     id: 'limited-5',
-    name: 'test',
-    price: 1,
+    name: 'Royalty',
+    price: 2499,
     category: 'limited',
-    frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
-    backImage: '/metallica back.png',
+    frontImage: '/royal front.png',
+    backImage: '/royal back.png',
     description: 'Luxury edition with exclusive design elements and superior material quality.'
   },
-  {
-    id: 'limited-6',
-    name: 'test',
-    price: 1,
-    category: 'limited',
-    frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
-    backImage: '/all in one back.png',
-    description: 'Elite collection featuring sophisticated aesthetics and premium comfort.'
-  },
+  // {
+  //   id: 'limited-6',
+  //   name: 'test',
+  //   price: 1,
+  //   category: 'limited',
+  //   frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
+  //   backImage: '/all in one back.png',
+  //   description: 'Elite collection featuring sophisticated aesthetics and premium comfort.'
+  // },
 
   // gym Edition Collection
   {
     id: 'gym-1',
     name: 'MONAARC MENTALITY ',
-    price: 1,
+    price: 1499,
     category: 'gym',
     frontImage: '/gym 1 front.png',
     backImage: '/gym 1 back.png',
@@ -69,31 +69,31 @@ export const products: Product[] = [
   },
   {
     id: 'gym-2',
-    name: 'test',
-    price: 999,
+    name: 'MONAARC DISCIPLINE',
+    price: 1499,
     category: 'gym',
-    frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
-    backImage: '/fragile back.png',
+    frontImage: '/gym 2 front.png',
+    backImage: '/gym 2 back.png',
     description: 'Midnight collection with deep black tones and subtle design details.'
   },
-  {
-    id: 'gym-3',
-    name: 'test',
-    price: 999,
-    category: 'gym',
-    frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
-    backImage: '/back.png',
-    description: 'Noir edition featuring sophisticated gym aesthetics and premium quality.'
-  },
-  {
-    id: 'gym-4',
-    name: 'test',
-    price: 999,
-    category: 'gym',
-    frontImage: 'https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
-    backImage: 'https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
-    description: 'Phantom collection with mysterious allure and exceptional craftsmanship.'
-  },
+  // {
+  //   id: 'gym-3',
+  //   name: 'test',
+  //   price: 999,
+  //   category: 'gym',
+  //   frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
+  //   backImage: '/back.png',
+  //   description: 'Noir edition featuring sophisticated gym aesthetics and premium quality.'
+  // },
+  // {
+  //   id: 'gym-4',
+  //   name: 'test',
+  //   price: 999,
+  //   category: 'gym',
+  //   frontImage: 'https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
+  //   backImage: 'https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
+  //   description: 'Phantom collection with mysterious allure and exceptional craftsmanship.'
+  // },
   // {
   //   id: 'gym-5',
   //   name: 'gym Edition Eclipse Tee',

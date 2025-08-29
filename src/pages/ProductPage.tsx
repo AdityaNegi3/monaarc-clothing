@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
@@ -6,20 +6,24 @@ import { Check, Info } from 'lucide-react';
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
+
   const [selectedSize, setSelectedSize] = useState('M');
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [currentView, setCurrentView] = useState<'front' | 'back'>('front');
   const [addedToCart, setAddedToCart] = useState(false);
 
-  const product = products.find(p => p.id === id);
+  // Zoom
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [transformOrigin, setTransformOrigin] = useState('50% 50%');
+  const ZOOM_SCALE = 2;
 
-  if (!product) {
-    return <Navigate to="/" replace />;
-  }
+  const product = products.find(p => p.id === id);
+  if (!product) return <Navigate to="/" replace />;
 
   const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+  const mainImageSrc = currentView === 'front' ? product.frontImage : product.backImage;
 
   const handleAddToCart = () => {
     addToCart(product, selectedSize);
@@ -32,6 +36,26 @@ const ProductPage: React.FC = () => {
     navigate('/cart');
   };
 
+  const computeOrigin = useCallback((clientX: number, clientY: number, el: HTMLImageElement | null) => {
+    if (!el) return '50% 50%';
+    const rect = el.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * 100;
+    const y = ((clientY - rect.top) / rect.height) * 100;
+    return `${x}% ${y}%`;
+  }, []);
+
+  const onImageClick: React.MouseEventHandler<HTMLImageElement> = (e) => {
+    const origin = computeOrigin(e.clientX, e.clientY, e.currentTarget);
+    setTransformOrigin(origin);
+    setIsZoomed(z => !z);
+  };
+
+  const onImageMove: React.MouseEventHandler<HTMLImageElement> = (e) => {
+    if (!isZoomed) return;
+    const origin = computeOrigin(e.clientX, e.clientY, e.currentTarget);
+    setTransformOrigin(origin);
+  };
+
   return (
     <div className="pt-16 min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -40,9 +64,16 @@ const ProductPage: React.FC = () => {
           <div className="space-y-6">
             <div className="relative aspect-w-3 aspect-h-4 bg-gray-900 rounded-lg overflow-hidden">
               <img
-                src={currentView === 'front' ? product.frontImage : product.backImage}
+                src={mainImageSrc}
                 alt={`${product.name} ${currentView} view`}
-                className="w-full h-96 lg:h-[600px] object-cover"
+                className={`w-full h-96 lg:h-[600px] object-cover select-none transition-transform duration-200 ease-out will-change-transform ${isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
+                style={{
+                  transform: isZoomed ? `scale(${ZOOM_SCALE})` : 'scale(1)',
+                  transformOrigin
+                }}
+                onClick={onImageClick}
+                onMouseMove={onImageMove}
+                draggable={false}
               />
             </div>
 
@@ -53,7 +84,7 @@ const ProductPage: React.FC = () => {
                 className={`flex-1 py-3 px-6 rounded-lg border transition-all duration-300 ${
                   currentView === 'front'
                     ? 'bg-white text-black border-white font-semibold'
-                    : 'bg-transparent text-white border-white/20 hover:border-white/50'
+                    : 'bg-transparent text-white border-white/40 hover:border-white'
                 }`}
               >
                 Front View
@@ -63,7 +94,7 @@ const ProductPage: React.FC = () => {
                 className={`flex-1 py-3 px-6 rounded-lg border transition-all duration-300 ${
                   currentView === 'back'
                     ? 'bg-white text-black border-white font-semibold'
-                    : 'bg-transparent text-white border-white/20 hover:border-white/50'
+                    : 'bg-transparent text-white border-white/40 hover:border-white'
                 }`}
               >
                 Back View
@@ -83,9 +114,7 @@ const ProductPage: React.FC = () => {
               <p className="text-gray-400 text-lg leading-relaxed mb-6">
                 {product.description}
               </p>
-              <div className="text-3xl font-bold text-white">
-                ₹{product.price}
-              </div>
+              <div className="text-3xl font-bold text-white">₹{product.price}</div>
             </div>
 
             {/* Size Selection */}
@@ -108,7 +137,7 @@ const ProductPage: React.FC = () => {
                     className={`py-3 px-4 border rounded-lg transition-all duration-300 ${
                       selectedSize === size
                         ? 'bg-white text-black border-white font-semibold'
-                        : 'bg-transparent text-white border-white/20 hover:border-white/50'
+                        : 'bg-transparent text-white border-white/40 hover:border-white'
                     }`}
                   >
                     {size}
@@ -117,8 +146,8 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Add to Cart + Buy Now */}
+            <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={handleAddToCart}
                 className={`w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300 ${
@@ -130,19 +159,15 @@ const ProductPage: React.FC = () => {
                 {addedToCart ? (
                   <>
                     <Check className="w-5 h-5 mr-2" />
-                    Added to Cart!
+                    Added!
                   </>
                 ) : (
                   'Add to Cart'
                 )}
               </button>
-
               <button
                 onClick={handleBuyNow}
-                className="w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300
-                           border border-white text-white bg-transparent
-                           hover:bg-white hover:text-black"
-                aria-label="Buy Now"
+                className="w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300 bg-black text-white border border-white hover:bg-white hover:text-black"
               >
                 Buy Now
               </button>
