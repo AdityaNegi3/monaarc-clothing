@@ -27,7 +27,6 @@ const ProductPage: React.FC = () => {
     setTimeout(() => setAddedToCart(false), 2000);
   };
 
-  // NEW: Buy Now → add + go to cart (swap to '/checkout' if you have a checkout route)
   const handleBuyNow = () => {
     addToCart(product, selectedSize);
     navigate('/cart');
@@ -53,8 +52,8 @@ const ProductPage: React.FC = () => {
                 onClick={() => setCurrentView('front')}
                 className={`flex-1 py-3 px-6 rounded-lg border transition-all duration-300 ${
                   currentView === 'front'
-                    ? 'bg-yellow-400 text-black border-yellow-400 font-semibold'
-                    : 'bg-transparent text-white border-white/20 hover:border-yellow-400/50'
+                    ? 'bg-white text-black border-white font-semibold'
+                    : 'bg-transparent text-white border-white/20 hover:border-white/50'
                 }`}
               >
                 Front View
@@ -63,8 +62,8 @@ const ProductPage: React.FC = () => {
                 onClick={() => setCurrentView('back')}
                 className={`flex-1 py-3 px-6 rounded-lg border transition-all duration-300 ${
                   currentView === 'back'
-                    ? 'bg-yellow-400 text-black border-yellow-400 font-semibold'
-                    : 'bg-transparent text-white border-white/20 hover:border-yellow-400/50'
+                    ? 'bg-white text-black border-white font-semibold'
+                    : 'bg-transparent text-white border-white/20 hover:border-white/50'
                 }`}
               >
                 Back View
@@ -75,7 +74,7 @@ const ProductPage: React.FC = () => {
           {/* Product Details */}
           <div className="space-y-8">
             <div>
-              <span className="inline-block px-3 py-1 text-xs font-semibold text-yellow-400 bg-yellow-400/10 rounded-full mb-4">
+              <span className="inline-block px-3 py-1 text-xs font-semibold text-white bg-white/10 rounded-full mb-4">
                 {product.category.toUpperCase()} EDITION
               </span>
               <h1 className="text-3xl lg:text-4xl font-bold text-white mb-4">
@@ -84,7 +83,7 @@ const ProductPage: React.FC = () => {
               <p className="text-gray-400 text-lg leading-relaxed mb-6">
                 {product.description}
               </p>
-              <div className="text-3xl font-bold text-yellow-400">
+              <div className="text-3xl font-bold text-white">
                 ₹{product.price}
               </div>
             </div>
@@ -95,7 +94,7 @@ const ProductPage: React.FC = () => {
                 <h3 className="text-white font-semibold">Size</h3>
                 <button
                   onClick={() => setShowSizeChart(true)}
-                  className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 flex items-center text-sm"
+                  className="text-white hover:text-gray-300 transition-colors duration-300 flex items-center text-sm"
                 >
                   <Info className="w-4 h-4 mr-1" />
                   Size Chart
@@ -108,8 +107,8 @@ const ProductPage: React.FC = () => {
                     onClick={() => setSelectedSize(size)}
                     className={`py-3 px-4 border rounded-lg transition-all duration-300 ${
                       selectedSize === size
-                        ? 'bg-yellow-400 text-black border-yellow-400 font-semibold'
-                        : 'bg-transparent text-white border-white/20 hover:border-yellow-400/50'
+                        ? 'bg-white text-black border-white font-semibold'
+                        : 'bg-transparent text-white border-white/20 hover:border-white/50'
                     }`}
                   >
                     {size}
@@ -118,14 +117,14 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Actions: Add to Cart + Buy Now */}
+            {/* Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={handleAddToCart}
                 className={`w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300 ${
                   addedToCart
                     ? 'bg-green-600 text-white'
-                    : 'bg-yellow-400 text-black hover:bg-yellow-300'
+                    : 'bg-white text-black hover:bg-gray-200'
                 } flex items-center justify-center`}
               >
                 {addedToCart ? (
@@ -141,8 +140,8 @@ const ProductPage: React.FC = () => {
               <button
                 onClick={handleBuyNow}
                 className="w-full py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300
-                           border border-yellow-400 text-yellow-400 bg-transparent
-                           hover:bg-yellow-400 hover:text-black"
+                           border border-white text-white bg-transparent
+                           hover:bg-white hover:text-black"
                 aria-label="Buy Now"
               >
                 Buy Now

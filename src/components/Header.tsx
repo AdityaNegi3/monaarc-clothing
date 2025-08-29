@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
@@ -32,24 +32,27 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-lg border-b border-white/10 transition-all duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        {/* Line 1: Logo Centered */}
+        {/* Line 1: Logo Centered (image from /public/logo.png) */}
         <div className="flex justify-center">
           <Link
             to="/"
-            className="
-              text-2xl md:text-3xl font-extrabold
-              tracking-[0.18em] md:tracking-[0.22em] uppercase
-              bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-700
-              bg-clip-text text-transparent select-none transition
-              hover:scale-105 hover:brightness-110
-            "
-            style={{
-              fontFamily: `'Cinzel', serif`,
-              textShadow: "0 4px 12px rgba(255,215,0,0.18), 0 2px 6px rgba(0,0,0,0.35)",
-              letterSpacing: "0.22em",
-            }}
+            aria-label="Go to home"
+            className="group inline-flex items-center justify-center rounded-full px-4 py-2 ring-1 ring-white/10 bg-black/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition
+                       hover:bg-white/5 hover:ring-yellow-400/40"
           >
-            MONAARC
+            <img
+              src="/logo.png"
+              alt="MONAARC logo"
+              loading="eager"
+              className="h-10 md:h-12 w-auto select-none pointer-events-none
+                         drop-shadow-[0_0_16px_rgba(255,215,0,0.22)]
+                         transition-transform duration-300
+                         group-hover:scale-105 group-hover:drop-shadow-[0_0_28px_rgba(255,215,0,0.35)]"
+              style={{
+                imageRendering: "auto",
+                filter: "saturate(1.05) contrast(1.02)",
+              }}
+            />
           </Link>
         </div>
 
@@ -58,7 +61,7 @@ const Header: React.FC<HeaderProps> = () => {
           {/* LEFT: Cart */}
           <div className="w-1/3 flex items-center">
             <Link to="/cart" className="relative text-white hover:text-yellow-400">
-              <ShoppingBag className="w-6 h-6" />
+              <ShoppingCart className="w-6 h-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                   {totalItems}
@@ -69,7 +72,7 @@ const Header: React.FC<HeaderProps> = () => {
 
           {/* CENTER: Navigation */}
           <div className="flex justify-center space-x-8 w-1/3 absolute left-1/2 -translate-x-1/2">
-            <Link to="/" className="text-white hover:text-yellow-400 font-medium">
+            <Link to="/" className="text-white hover:text-purple-400 font-medium">
               Home
             </Link>
 
@@ -79,7 +82,7 @@ const Header: React.FC<HeaderProps> = () => {
               onMouseLeave={handleMouseLeave}
             >
               <button
-                className="text-white hover:text-yellow-400 font-medium focus:outline-none focus:ring-2 focus:ring-yellow-400/50 rounded"
+                className="text-white hover:text-purple-400 font-medium focus:outline-none focus:ring-2 focus:ring-purple-400/50 rounded"
                 aria-haspopup="menu"
                 aria-expanded={dropdownOpen}
               >
@@ -95,14 +98,14 @@ const Header: React.FC<HeaderProps> = () => {
                     className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
                     role="menuitem"
                   >
-                    ANIME Edition
+                    Anime Edition
                   </a>
                   <a
                     href="/#gym-edition"
                     className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
                     role="menuitem"
                   >
-                    gym Edition
+                    Gym Edition
                   </a>
                   <button
                     onClick={handleSignatureClick}
@@ -115,7 +118,7 @@ const Header: React.FC<HeaderProps> = () => {
               )}
             </div>
 
-            <Link to="/about" className="text-white hover:text-yellow-400 font-medium">
+            <Link to="/about" className="text-white hover:text-purple-400 font-medium">
               About
             </Link>
           </div>
@@ -144,7 +147,7 @@ const Header: React.FC<HeaderProps> = () => {
         {/* Mobile: Cart (left) + Menu (right) */}
         <div className="md:hidden flex justify-between items-center mt-4">
           <Link to="/cart" className="relative text-white hover:text-yellow-400">
-            <ShoppingBag className="w-6 h-6" />
+            <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                 {totalItems}
@@ -153,7 +156,7 @@ const Header: React.FC<HeaderProps> = () => {
           </Link>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 rounded"
+            className="text-white hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50 rounded"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
           >
@@ -171,37 +174,37 @@ const Header: React.FC<HeaderProps> = () => {
               <Link
                 to="/"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
+                className="block px-3 py-2 text-white hover:text-purple-400"
               >
                 Home
               </Link>
               <a
                 href="/#anime-edition"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
+                className="block px-3 py-2 text-white hover:text-purple-400"
               >
-                ANIME Edition
+                Anime Edition
               </a>
               <a
                 href="/#gym-edition"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
+                className="block px-3 py-2 text-white hover:text-purple-400"
               >
-                gym Edition
+                Gym Edition
               </a>
               <button
                 onClick={() => {
                   setIsMenuOpen(false);
                   handleSignatureClick();
                 }}
-                className="block w-full text-left px-3 py-2 text-white hover:text-yellow-400"
+                className="block w-full text-left px-3 py-2 text-white hover:text-purple-400"
               >
                 MONAARC Edition
               </button>
               <Link
                 to="/about"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-yellow-400"
+                className="block px-3 py-2 text-white hover:text-purple-400"
               >
                 About
               </Link>
