@@ -25,8 +25,8 @@ export const products: Product[] = [
     name: 'itachi',
     price: 1,
     category: 'limited',
-    frontImage: '/itachi front.png',
-    backImage: '/itachi back.png',
+    frontImage: '/itachi front prod.png',
+    backImage: '/itachi back prod.png',
     description: 'Royal edition with sophisticated design elements and luxury finishing.'
   },
   {
