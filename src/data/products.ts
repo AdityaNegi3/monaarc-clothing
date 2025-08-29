@@ -17,16 +17,16 @@ export const products: Product[] = [
     price: 1,
     category: 'limited',
     frontImage: '/yami front product.png',
-    backImage: '/yami back product.png',
+    backImage: '/yami hi back.png',
     description: 'LIMITED collection featuring elegant gold script typography on premium fabric.'
   },
   {
     id: 'limited-3',
-    name: 'test',
+    name: 'itachi',
     price: 1,
     category: 'limited',
-    frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
-    backImage: '/black sabbath back.png',
+    frontImage: '/itachi front.png',
+    backImage: '/itachi back.png',
     description: 'Royal edition with sophisticated design elements and luxury finishing.'
   },
   {
@@ -62,9 +62,9 @@ export const products: Product[] = [
     id: 'gym-1',
     name: 'MONAARC MENTALITY ',
     price: 1,
-    category: 'test',
-    frontImage: 'https://images.pexels.com/photos/1964979/pexels-photo-1964979.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=cro',
-    backImage: '/MONAARC mentality front.png',
+    category: 'gym',
+    frontImage: '/gym 1 front.png',
+    backImage: '/gym 1 back.png',
     description: 'gym Edition with shadow aesthetics and mysterious elegance.'
   },
   {
@@ -94,15 +94,15 @@ export const products: Product[] = [
     backImage: 'https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
     description: 'Phantom collection with mysterious allure and exceptional craftsmanship.'
   },
-  {
-    id: 'gym-5',
-    name: 'gym Edition Eclipse Tee',
-    price: 999,
-    category: 'gym',
-    frontImage: 'https://images.pexels.com/photos/3758146/pexels-photo-3758146.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
-    backImage: 'https://images.pexels.com/photos/3758146/pexels-photo-3758146.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
-    description: 'Eclipse edition symbolizing the union of light and shadow in perfect harmony.'
-  },
+  // {
+  //   id: 'gym-5',
+  //   name: 'gym Edition Eclipse Tee',
+  //   price: 999,
+  //   category: 'gym',
+  //   frontImage: 'https://images.pexels.com/photos/3758146/pexels-photo-3758146.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
+  //   backImage: 'https://images.pexels.com/photos/3758146/pexels-photo-3758146.jpeg?auto=compress&cs=tinysrgb&w=500&h=600&fit=crop',
+  //   description: 'Eclipse edition symbolizing the union of light and shadow in perfect harmony.'
+  // },
   // {
   //   id: 'gym-6',
   //   name: 'gym Edition Storm Tee',
