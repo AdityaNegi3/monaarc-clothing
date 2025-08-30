@@ -111,7 +111,7 @@ const AboutPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
             <a
-              href="https://instagram.com/officialMONAARCclothing"
+              href="https://instagram.com/monaarcclothing"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center space-x-4 bg-gray-900/50 rounded-lg p-6 border border-white/10 hover:border-yellow-400/30 transition-all duration-300 group"
@@ -119,18 +119,18 @@ const AboutPage: React.FC = () => {
               <Instagram className="w-8 h-8 text-yellow-400 group-hover:scale-110 transition-transform duration-300" />
               <div className="text-left">
                 <div className="text-white font-semibold">Instagram</div>
-                <div className="text-gray-400 text-sm">@officialMONAARCclothing</div>
+                <div className="text-gray-400 text-sm">@monaarcclothing</div>
               </div>
             </a>
 
             <a
-              href="mailto:MONAARCvip.life@gmail.com"
+              href="mailto:crew@monaarcclothing.com"
               className="flex items-center justify-center space-x-4 bg-gray-900/50 rounded-lg p-6 border border-white/10 hover:border-yellow-400/30 transition-all duration-300 group"
             >
               <Mail className="w-8 h-8 text-yellow-400 group-hover:scale-110 transition-transform duration-300" />
               <div className="text-left">
                 <div className="text-white font-semibold">Email</div>
-                <div className="text-gray-400 text-sm">MONAARCvip.life@gmail.com</div>
+                <div className="text-gray-400 text-sm">crew@monaarcclothing.com</div>
               </div>
             </a>
           </div>
