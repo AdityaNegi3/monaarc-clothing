@@ -8,7 +8,7 @@ const ThankYou = () => {
       <h1 className="text-3xl font-bold mb-2">Thank You for Your Order!</h1>
       <p className="text-lg mb-4">
         Your payment was successful. Order details will be sent to your WhatsApp
-        and Email within 15 minutes.
+        and Email within 15 minutes. After We Confirm Payment Details.
       </p>
       <p className="text-sm text-gray-400">
         If you do not receive a confirmation, contact us on Instagram{' '}

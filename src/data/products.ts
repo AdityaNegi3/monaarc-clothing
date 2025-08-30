@@ -5,7 +5,7 @@ export const products: Product[] = [
   {
     id: 'limited-1',
     name: 'Toji',
-    price: 1,
+    price: 1599,
     category: 'limited',
     frontImage: '/toji front product.png',
     backImage: '/toji back product.png',
