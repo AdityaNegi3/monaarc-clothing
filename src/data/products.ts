@@ -4,8 +4,8 @@ export const products: Product[] = [
   // LIMITED Edition Collection
   {
     id: 'limited-1',
-    name: 'TOJI WHITE',
-    price: 1599,
+    name: 'Toji',
+    price: 1,
     category: 'limited',
     frontImage: '/toji front product.png',
     backImage: '/toji back product.png',
@@ -13,7 +13,7 @@ export const products: Product[] = [
   },
   {
     id: 'limited-2',
-    name: 'yami',
+    name: 'Yami',
     price: 1599,
     category: 'limited',
     frontImage: '/yami front product.png',
@@ -22,22 +22,22 @@ export const products: Product[] = [
   },
   {
     id: 'limited-3',
-    name: 'itachi',
+    name: 'Itachi',
     price: 1099,
     category: 'limited',
     frontImage: '/itachi front prod.png',
     backImage: '/itachi back prod.png',
     description: 'Royal edition with sophisticated design elements and luxury finishing.'
   },
-  {
-    id: 'limited-4',
-    name: 'Solo leveling',
-    price: 1099,
-    category: 'limited',
-    frontImage: '/solo front.png',
-    backImage: '/solo back.png',
-    description: 'Heritage collection piece with timeless design and premium craftsmanship.'
-  },
+  // {
+  //   id: 'limited-4',
+  //   name: 'Solo leveling',
+  //   price: 1099,
+  //   category: 'limited',
+  //   frontImage: '/solo front.png',
+  //   backImage: '/solo back.png',
+  //   description: 'Heritage collection piece with timeless design and premium craftsmanship.'
+  // },
   {
     id: 'limited-5',
     name: 'Royalty',
