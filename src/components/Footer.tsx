@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-2xl font-bold text-white mb-4">MONAARC</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Luxury clothing redefined. Where elegance meets sophistication in every thread.
+              Wear strength. Own presence.
             </p>
           </div>
 
