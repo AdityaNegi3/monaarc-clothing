@@ -32,22 +32,22 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-lg border-b border-white/10 transition-all duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        {/* Line 1: Logo Centered (image from /public/logo123.png) */}
+        {/* Logo Centered */}
         <div className="flex justify-center">
           <Link
             to="/"
             aria-label="Go to home"
             className="group inline-flex items-center justify-center rounded-full px-4 py-2 ring-1 ring-white/10 bg-black/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition
-                       hover:bg-white/5 hover:ring-yellow-400/40"
+                       hover:bg-white/5 hover:ring-white/40"
           >
             <img
               src="/logo123.png"
               alt="MONAARC logo"
               loading="eager"
               className="h-10 md:h-12 w-auto select-none pointer-events-none
-                         drop-shadow-[0_0_16px_rgba(255,215,0,0.22)]
+                         drop-shadow-[0_0_16px_rgba(255,255,255,0.22)]
                          transition-transform duration-300
-                         group-hover:scale-105 group-hover:drop-shadow-[0_0_28px_rgba(255,215,0,0.35)]"
+                         group-hover:scale-105 group-hover:drop-shadow-[0_0_28px_rgba(255,255,255,0.35)]"
               style={{
                 imageRendering: "auto",
                 filter: "saturate(1.05) contrast(1.02)",
@@ -56,14 +56,14 @@ const Header: React.FC<HeaderProps> = () => {
           </Link>
         </div>
 
-        {/* Line 2: Cart LEFT, Nav CENTER, Auth RIGHT */}
+        {/* Cart LEFT, Nav CENTER, Auth RIGHT */}
         <div className="hidden md:flex items-center justify-between mt-4 relative">
           {/* LEFT: Cart */}
           <div className="w-1/3 flex items-center">
-            <Link to="/cart" className="relative text-white hover:text-yellow-400">
+            <Link to="/cart" className="relative text-white hover:text-gray-300">
               <ShoppingCart className="w-6 h-6" />
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                <span className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                   {totalItems}
                 </span>
               )}
@@ -123,13 +123,13 @@ const Header: React.FC<HeaderProps> = () => {
             </Link>
           </div>
 
-          {/* RIGHT: Auth (Clerk) */}
+          {/* RIGHT: Auth */}
           <div className="w-1/3 flex justify-end items-center gap-3">
             <SignedOut>
               <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
                 <button
                   type="button"
-                  className="px-3 py-1 rounded-md border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+                  className="px-3 py-1 rounded-md border border-white text-white hover:bg-white hover:text-black transition focus:outline-none focus:ring-2 focus:ring-white/50"
                 >
                   Sign In
                 </button>
@@ -144,12 +144,12 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
         </div>
 
-        {/* Mobile: Cart (left) + Menu (right) */}
+        {/* Mobile: Cart + Menu */}
         <div className="md:hidden flex justify-between items-center mt-4">
-          <Link to="/cart" className="relative text-white hover:text-yellow-400">
+          <Link to="/cart" className="relative text-white hover:text-gray-300">
             <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+              <span className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                 {totalItems}
               </span>
             )}
@@ -209,10 +209,10 @@ const Header: React.FC<HeaderProps> = () => {
                 About
               </Link>
 
-              {/* Mobile Auth (Clerk) */}
+              {/* Mobile Auth */}
               <SignedOut>
                 <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
-                  <button className="block w-full text-left px-3 py-2 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-md">
+                  <button className="block w-full text-left px-3 py-2 text-white border border-white rounded-md hover:bg-white hover:text-black">
                     Sign In
                   </button>
                 </SignInButton>
@@ -228,7 +228,7 @@ const Header: React.FC<HeaderProps> = () => {
 
         {/* Coming Soon Toast */}
         {showComingSoon && (
-          <div className="fixed bottom-5 right-5 bg-yellow-400 text-black px-4 py-2 rounded shadow-lg z-50">
+          <div className="fixed bottom-5 right-5 bg-white text-black px-4 py-2 rounded shadow-lg z-50">
             Coming Soon!
             <button
               onClick={() => setShowComingSoon(false)}
