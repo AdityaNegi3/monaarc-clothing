@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = () => {
         <div className="hidden md:flex items-center justify-between mt-4 relative">
           {/* LEFT: Cart */}
           <div className="w-1/3 flex items-center">
-            <Link to="/cart" className="relative text-white hover:text-gray-300">
+            <Link to="/cart" className="relative text-white hover:text-gray-300 transition-colors duration-200">
               <ShoppingCart className="w-6 h-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = () => {
 
           {/* CENTER: Navigation */}
           <div className="flex justify-center space-x-8 w-1/3 absolute left-1/2 -translate-x-1/2">
-            <Link to="/" className="text-white hover:text-purple-400 font-medium">
+            <Link to="/" className="text-white hover:text-gray-300 font-medium transition-colors duration-200">
               Home
             </Link>
 
@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = () => {
               onMouseLeave={handleMouseLeave}
             >
               <button
-                className="text-white hover:text-purple-400 font-medium focus:outline-none focus:ring-2 focus:ring-purple-400/50 rounded"
+                className="text-white hover:text-gray-300 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400/50 rounded transition-colors duration-200"
                 aria-haspopup="menu"
                 aria-expanded={dropdownOpen}
               >
@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = () => {
               )}
             </div>
 
-            <Link to="/about" className="text-white hover:text-purple-400 font-medium">
+            <Link to="/about" className="text-white hover:text-gray-300 font-medium transition-colors duration-200">
               About
             </Link>
           </div>
@@ -129,7 +129,7 @@ const Header: React.FC<HeaderProps> = () => {
               <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
                 <button
                   type="button"
-                  className="px-3 py-1 rounded-md border border-white text-white hover:bg-white hover:text-black transition focus:outline-none focus:ring-2 focus:ring-white/50"
+                  className="px-3 py-1 rounded-md border border-white text-white hover:bg-white hover:text-black transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
                 >
                   Sign In
                 </button>
@@ -146,7 +146,7 @@ const Header: React.FC<HeaderProps> = () => {
 
         {/* Mobile: Cart + Menu */}
         <div className="md:hidden flex justify-between items-center mt-4">
-          <Link to="/cart" className="relative text-white hover:text-gray-300">
+          <Link to="/cart" className="relative text-white hover:text-gray-300 transition-colors duration-200">
             <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
@@ -156,7 +156,7 @@ const Header: React.FC<HeaderProps> = () => {
           </Link>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50 rounded"
+            className="text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400/50 rounded transition-colors duration-200"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
           >
@@ -174,21 +174,21 @@ const Header: React.FC<HeaderProps> = () => {
               <Link
                 to="/"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-purple-400"
+                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
               >
                 Home
               </Link>
               <a
                 href="/#anime-edition"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-purple-400"
+                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
               >
                 Anime Edition
               </a>
               <a
                 href="/#gym-edition"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-purple-400"
+                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
               >
                 Gym Edition
               </a>
@@ -197,14 +197,14 @@ const Header: React.FC<HeaderProps> = () => {
                   setIsMenuOpen(false);
                   handleSignatureClick();
                 }}
-                className="block w-full text-left px-3 py-2 text-white hover:text-purple-400"
+                className="block w-full text-left px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
               >
                 MONAARC Edition
               </button>
               <Link
                 to="/about"
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-purple-400"
+                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
               >
                 About
               </Link>
@@ -212,7 +212,7 @@ const Header: React.FC<HeaderProps> = () => {
               {/* Mobile Auth */}
               <SignedOut>
                 <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
-                  <button className="block w-full text-left px-3 py-2 text-white border border-white rounded-md hover:bg-white hover:text-black">
+                  <button className="block w-full text-left px-3 py-2 text-white border border-white rounded-md hover:bg-white hover:text-black transition-colors duration-200">
                     Sign In
                   </button>
                 </SignInButton>
