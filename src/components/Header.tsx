@@ -100,13 +100,7 @@ const Header: React.FC<HeaderProps> = () => {
                   >
                     Anime Edition
                   </a>
-                  <a
-                    href="/#gym-edition"
-                    className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
-                    role="menuitem"
-                  >
-                    Gym Edition
-                  </a>
+                  
                   <button
                     onClick={handleSignatureClick}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-800 text-white text-sm"
@@ -185,13 +179,7 @@ const Header: React.FC<HeaderProps> = () => {
               >
                 Anime Edition
               </a>
-              <a
-                href="/#gym-edition"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
-              >
-                Gym Edition
-              </a>
+            
               <button
                 onClick={() => {
                   setIsMenuOpen(false);

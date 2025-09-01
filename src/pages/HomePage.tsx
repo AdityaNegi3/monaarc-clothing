@@ -143,7 +143,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* GYM Edition (same as before) */}
-      <section
+      {/* <section
         id="gym-edition"
         className="py-20 relative bg-cover bg-center"
         style={{ backgroundImage: "url('/gym-bg.png')" }}
@@ -207,7 +207,7 @@ const HomePage: React.FC = () => {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Modal same as before */}
       <div className="text-center py-10">
