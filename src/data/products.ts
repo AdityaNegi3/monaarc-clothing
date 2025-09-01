@@ -8,8 +8,8 @@ export const products: Product[] = [
   name: 'Toji Wrath White Tee',
   price: 1599,
   category: 'limited',
-  frontImage: '/toji front product.png',
-  backImage: '/toji back product.png',
+  frontImage: '/tee1.png',
+  backImage: '/yami (2).png',
   description: 'Exclusive LIMITED edition signature tee with premium cotton blend and gold foil detailing.'
 },
 
@@ -18,8 +18,8 @@ export const products: Product[] = [
     name: 'Project Yeager Black Tee',
     price: 1599,
     category: 'limited',
-    frontImage: '/yami front product.png',
-    backImage: '/yami hi back.png',
+    frontImage: '/tatake.png',
+    backImage: '/tatake copy.png',
     description: 'LIMITED collection featuring elegant gold script typography on premium fabric.'
   },
   {
