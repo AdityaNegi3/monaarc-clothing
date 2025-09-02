@@ -18,7 +18,7 @@ export const products: Product[] = [
     name: 'Project Yeager Black Tee',
     price: 1599,
     category: 'limited',
-    frontImage: '/tatake.png',
+    frontImage: '/front eren.png',
     backImage: '/tatake copy.png',
     description: 'LIMITED collection featuring elegant gold script typography on premium fabric.'
   },
@@ -27,8 +27,8 @@ export const products: Product[] = [
     name: 'Eye Of Fate White Tee',
     price: 1099,
     category: 'limited',
-    frontImage: '/itachi front prod.png',
-    backImage: '/itachi back prod.png',
+    frontImage: '/itachi front 1.png',
+    backImage: '/itachi back 2.png',
     description: 'Royal edition with sophisticated design elements and luxury finishing.'
   },
   {
@@ -36,8 +36,8 @@ export const products: Product[] = [
     name: 'Rengokus Hellfire Black Tee',
     price: 1099,
     category: 'limited',
-    frontImage: '/royal front.png',
-    backImage: '/royal back.png',
+    frontImage: '/royal front 1.png',
+    backImage: '/royal 2.png',
     description: 'Heritage collection piece with timeless design and premium craftsmanship.'
   },
   {
@@ -45,8 +45,8 @@ export const products: Product[] = [
     name: 'Beyond Average Black Tee',
     price: 2499,
     category: 'limited',
-    frontImage: '/gym 1 front.png',
-    backImage: '/gym 1 back.png',
+    frontImage: '/gym 1 front copy.png',
+    backImage: '/gym 1 back copy.png',
     description: 'Luxury edition with exclusive design elements and superior material quality.'
   },
   {
@@ -55,7 +55,7 @@ export const products: Product[] = [
     price: 1,
     category: 'limited',
     frontImage: '/gym 2 front.png',
-    backImage: '/gym 2 back.png',
+    backImage: '/gym 2 back prod copy.png',
     description: 'Elite collection featuring sophisticated aesthetics and premium comfort.'
   },
 
