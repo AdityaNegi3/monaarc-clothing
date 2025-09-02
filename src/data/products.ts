@@ -36,7 +36,7 @@ export const products: Product[] = [
   },
   {
     id: 'limited-4',
-    name: 'Rengoku',
+    name: 'Rengoku Hellfire Black Tee',
     price: 2599,
     originalPrice: 4999,
     category: 'limited',
