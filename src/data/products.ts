@@ -3,24 +3,27 @@ import { Product } from '../types/Product';
 
 export const products: Product[] = [
   // LIMITED Edition Collection
- {
-  id: 'limited-1',
-  name: 'Toji Wrath White Tee',
-  price: 1599,
-  category: 'limited',
-  frontImage: '/tee1.png',
-  backImage: '/yami (2).png',
-  description: 'Exclusive LIMITED edition signature tee with premium cotton blend and gold foil detailing.'
-},
-
+{
+    id: 'limited-1',
+    name: 'Toji Wrath White Tee',
+    price: 1599,
+    originalPrice: 2999, // ✅ Added for discount display
+    category: 'limited',
+    frontImage: '/tee1.png',
+    backImage: '/yami (2).png',
+    description:
+      'Exclusive LIMITED edition signature tee with premium cotton blend and gold foil detailing.'
+  },
   {
     id: 'limited-2',
     name: 'Project Yeager Black Tee',
     price: 1599,
+    originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
     frontImage: '/front eren.png',
     backImage: '/tatake copy.png',
-    description: 'LIMITED collection featuring elegant gold script typography on premium fabric.'
+    description:
+      'LIMITED collection featuring elegant gold script typography on premium fabric.'
   },
   {
     id: 'limited-3',
@@ -34,7 +37,8 @@ export const products: Product[] = [
   {
     id: 'limited-4',
     name: 'Rengokus Hellfire Black Tee',
-    price: 1099,
+    price: 2599,
+    originalPrice: 4999,
     category: 'limited',
     frontImage: '/royal front 1.png',
     backImage: '/royal 2.png',
@@ -43,7 +47,7 @@ export const products: Product[] = [
   {
     id: 'limited-5',
     name: 'Beyond Average Black Tee',
-    price: 2499,
+    price: 1499,
     category: 'limited',
     frontImage: '/gym 1 front copy.png',
     backImage: '/gym 1 back copy.png',
@@ -52,7 +56,7 @@ export const products: Product[] = [
   {
     id: 'limited-6',
     name: 'Prove Yourself Black Tee',
-    price: 1,
+    price: 1499,
     category: 'limited',
     frontImage: '/gym 2 front heh.png',
     backImage: '/gym 2 back prod copy.png',

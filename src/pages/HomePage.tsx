@@ -18,13 +18,12 @@ const HomePage: React.FC = () => {
           backgroundImage: "url('/bg123.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'brightness(1.15)', // ✅ brighten image a bit
+          filter: 'brightness(1.15)',
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 text-center px-4">
-          {/* ===== LUXE MONAARC HEADING ===== */}
           <h1
             className="
               mb-4
@@ -38,33 +37,25 @@ const HomePage: React.FC = () => {
               fontFamily: `'Cinzel', serif`,
               textShadow:
                 '0 4px 10px rgba(0,0,0,0.6), 0 2px 4px rgba(255,255,255,0.15)',
-              letterSpacing: '0.12em', // ✅ less spacing for mobile readability
+              letterSpacing: '0.12em',
             }}
             aria-label="MONAARC"
           >
             MONAARC
           </h1>
 
-          {/* thin luxe underline */}
           <div className="mx-auto mb-5 h-[2px] w-24 sm:w-28 bg-gradient-to-r from-transparent via-gray-300 to-transparent rounded-full" />
 
           <p className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 font-light tracking-wide">
             Wear strength. Own presence.
           </p>
           <div className="h-px w-20 sm:w-24 bg-gray-300 mx-auto mb-6" />
-          {/* <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed text-sm sm:text-base md:text-lg">
-            “Clothing is not just fabric stitched together — it’s the armor of
-            identity, the language of rebellion, and the power to turn silence
-            into presence. Wear what defines you, not what confines you.”
-          </p> */}
         </div>
 
-        {/* gentle shimmer line */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
           <div className="w-px h-10 sm:h-12 bg-gradient-to-b from-gray-300 to-transparent" />
         </div>
 
-        {/* subtle silver sheen sweep */}
         <div
           className="pointer-events-none absolute inset-0 opacity-15"
           style={{
@@ -76,8 +67,7 @@ const HomePage: React.FC = () => {
         />
       </section>
 
-      {/* === Other Sections unchanged === */}
-      {/* Chaos (Limited) Edition */}
+      {/* anime */}
       <section
         id="anime-edition"
         className="py-20 relative bg-black bg-cover bg-center bg-no-repeat"
@@ -90,7 +80,9 @@ const HomePage: React.FC = () => {
               ANIME Edition
             </h2>
             <div className="h-px w-32 bg-yellow-400 mx-auto mb-6"></div>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto">Worn like armor, carried like destiny — every stitch holds the spirit of a hero.</p>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              Worn like armor, carried like destiny — every stitch holds the spirit of a hero.
+            </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 overflow-x-hidden">
@@ -126,9 +118,23 @@ const HomePage: React.FC = () => {
                       <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-yellow-400 transition-colors duration-300">
                         {product.name}
                       </h3>
-                      <p className="text-yellow-400 font-bold text-xl">
-                        ₹{product.price}
-                      </p>
+
+                      {/* ✅ Discount price logic */}
+                      {product.originalPrice ? (
+                        <div className="text-xl font-bold">
+                          <span className="text-gray-400 line-through mr-2">
+                            ₹{product.originalPrice}
+                          </span>
+                          <span className="text-yellow-400">
+                            ₹{product.price}
+                          </span>
+                        </div>
+                      ) : (
+                        <p className="text-yellow-400 font-bold text-xl">
+                          ₹{product.price}
+                        </p>
+                      )}
+
                       <div className="flex items-center mt-4 text-gray-400 group-hover:text-white transition-colors duration-300">
                         <span className="text-sm">View Details</span>
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -142,74 +148,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* GYM Edition (same as before) */}
-      {/* <section
-        id="gym-edition"
-        className="py-20 relative bg-cover bg-center"
-        style={{ backgroundImage: "url('/gym-bg.png')" }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide">
-              GYM Edition
-            </h2>
-            <div className="h-px w-32 bg-yellow-400 mx-auto mb-6" />
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-             Strength isn’t built in comfort — it’s forged in sweat, struggle, and unbreakable will.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 overflow-x-hidden">
-            {gymProducts.map((product, i) => {
-              const col = i % 4;
-              const fromX = col === 0 ? -100 : col === 3 ? 100 : 0;
-
-              return (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, x: fromX }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.7, ease: 'easeOut' }}
-                  viewport={{ once: true, amount: 0.2 }}
-                >
-                  <Link
-                    to={`/product/${product.id}`}
-                    className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105"
-                  >
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={product.frontImage}
-                        alt={product.name}
-                        className="w-full object-contain transition-opacity duration-700 group-hover:opacity-0"
-                      />
-                      <img
-                        src={product.backImage}
-                        alt={`${product.name} back`}
-                        className="w-full object-contain absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-yellow-400 transition-colors duration-300">
-                        {product.name}
-                      </h3>
-                      <p className="text-yellow-400 font-bold text-xl">
-                        ₹{product.price}
-                      </p>
-                      <div className="flex items-center mt-4 text-gray-400 group-hover:text-white transition-colors duration-300">
-                        <span className="text-sm">View Details</span>
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section> */}
-
-      {/* Modal same as before */}
+      {/* Modal */}
       <div className="text-center py-10">
         <button
           onClick={() => setModalOpen(true)}

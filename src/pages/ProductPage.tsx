@@ -114,7 +114,22 @@ const ProductPage: React.FC = () => {
               <p className="text-gray-400 text-lg leading-relaxed mb-6">
                 {product.description}
               </p>
-              <div className="text-3xl font-bold text-white">₹{product.price}</div>
+
+              {/* ✅ Discount price logic */}
+              {product.originalPrice ? (
+                <div className="text-3xl font-bold">
+                  <span className="text-gray-500 line-through mr-3">
+                    ₹{product.originalPrice}
+                  </span>
+                  <span className="text-yellow-400">
+                    ₹{product.price}
+                  </span>
+                </div>
+              ) : (
+                <div className="text-3xl font-bold text-yellow-400">
+                  ₹{product.price}
+                </div>
+              )}
             </div>
 
             {/* Size Selection */}
