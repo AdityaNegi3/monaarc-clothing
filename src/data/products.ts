@@ -54,7 +54,7 @@ export const products: Product[] = [
     name: 'Prove Yourself Black Tee',
     price: 1,
     category: 'limited',
-    frontImage: '/gym 2 front.png',
+    frontImage: '/gym 2 front heh.png',
     backImage: '/gym 2 back prod copy.png',
     description: 'Elite collection featuring sophisticated aesthetics and premium comfort.'
   },
