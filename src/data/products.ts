@@ -9,8 +9,8 @@ export const products: Product[] = [
     price: 1599,
     originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
-    frontImage: '/tee1.png',
-    backImage: '/yami (2).png',
+    frontImage: '/toji-and-back.jpg',
+    backImage: '/toji and front.jpg',
     description:
       'Exclusive LIMITED edition signature tee with premium cotton blend and gold foil detailing.'
   },
@@ -20,8 +20,8 @@ export const products: Product[] = [
     price: 1599,
     originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
-    frontImage: '/front eren.png',
-    backImage: '/tatake copy.png',
+    frontImage: '/eren and front.jpg',
+    backImage: '/eren and back.jpg',
     description:
       'LIMITED collection featuring elegant gold script typography on premium fabric.'
   },
@@ -30,8 +30,8 @@ export const products: Product[] = [
     name: 'Eye Of Fate White Tee',
     price: 1299,
     category: 'limited',
-    frontImage: '/itachi front 1.png',
-    backImage: '/itachi back 2.png',
+    frontImage: '/front itachi.jpg',
+    backImage: '/back itachi.jpg',
     description: 'Royal edition with sophisticated design elements and luxury finishing.'
   },
   {
@@ -40,8 +40,8 @@ export const products: Product[] = [
     price: 2599,
     originalPrice: 4999,
     category: 'limited',
-    frontImage: '/royal front 1.png',
-    backImage: '/royal 2.png',
+    frontImage: '/front royal.jpg',
+    backImage: '/back royal.jpg',
     description: 'Heritage collection piece with timeless design and premium craftsmanship.'
   },
   {
@@ -49,8 +49,8 @@ export const products: Product[] = [
     name: 'Beyond Average Black Tee',
     price: 1499,
     category: 'limited',
-    frontImage: '/gym 1 front copy.png',
-    backImage: '/gym 1 back copy.png',
+    frontImage: '/dis front gym.jpg',
+    backImage: '/dis back gym.jpg',
     description: 'Luxury edition with exclusive design elements and superior material quality.'
   },
   {
@@ -58,8 +58,8 @@ export const products: Product[] = [
     name: 'Prove Yourself Black Tee',
     price: 1499,
     category: 'limited',
-    frontImage: '/gym 2 front heh.png',
-    backImage: '/gym 2 back prod copy.png',
+    frontImage: '/big back front.jpg',
+    backImage: '/back12 .jpg',
     description: 'Elite collection featuring sophisticated aesthetics and premium comfort.'
   },
 
