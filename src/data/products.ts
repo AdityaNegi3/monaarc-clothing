@@ -28,7 +28,7 @@ export const products: Product[] = [
   {
     id: 'limited-3',
     name: 'Eye Of Fate White Tee',
-    price: 1199,
+    price: 1299,
     category: 'limited',
     frontImage: '/itachi front 1.png',
     backImage: '/itachi back 2.png',

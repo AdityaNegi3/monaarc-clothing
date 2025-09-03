@@ -15,10 +15,10 @@ const HomePage: React.FC = () => {
       <section
         className="relative h-screen flex items-center justify-center overflow-hidden"
         style={{
-          backgroundImage: "url('/bg123.png')",
+          backgroundImage: "url('/bgbg12.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'brightness(1.15)',
+          filter: 'brightness(.8)',
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
@@ -29,14 +29,14 @@ const HomePage: React.FC = () => {
               mb-4
               text-5xl sm:text-6xl md:text-8xl font-extrabold 
               uppercase
-              bg-gradient-to-b from-gray-200 via-gray-100 to-gray-400
+              bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600
               bg-clip-text text-transparent
               select-none
             "
             style={{
               fontFamily: `'Cinzel', serif`,
               textShadow:
-                '0 4px 10px rgba(0,0,0,0.6), 0 2px 4px rgba(255,255,255,0.15)',
+                '0 4px 12px rgba(0,0,0,0.7), 0 2px 6px rgba(255,215,0,0.4)',
               letterSpacing: '0.12em',
             }}
             aria-label="MONAARC"
@@ -44,23 +44,31 @@ const HomePage: React.FC = () => {
             MONAARC
           </h1>
 
-          <div className="mx-auto mb-5 h-[2px] w-24 sm:w-28 bg-gradient-to-r from-transparent via-gray-300 to-transparent rounded-full" />
+          <div className="mx-auto mb-5 h-[2px] w-24 sm:w-28 bg-gradient-to-r from-transparent via-yellow-400 to-transparent rounded-full" />
 
-          <p className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 font-light tracking-wide">
+          {/* Quote in Rich Metallic Gold */}
+          <p
+            className="text-lg sm:text-xl md:text-2xl mb-6 font-light tracking-wide bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-600 bg-clip-text text-transparent"
+            style={{
+              textShadow:
+                '0 2px 6px rgba(0,0,0,0.6), 0 1px 3px rgba(255,215,0,0.3)',
+            }}
+          >
             Wear strength. Own presence.
           </p>
-          <div className="h-px w-20 sm:w-24 bg-gray-300 mx-auto mb-6" />
+
+          <div className="h-px w-20 sm:w-24 bg-yellow-400 mx-auto mb-6" />
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-px h-10 sm:h-12 bg-gradient-to-b from-gray-300 to-transparent" />
+          <div className="w-px h-10 sm:h-12 bg-gradient-to-b from-yellow-400 to-transparent" />
         </div>
 
         <div
           className="pointer-events-none absolute inset-0 opacity-15"
           style={{
             background:
-              'linear-gradient(75deg, rgba(255,255,255,0.0) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.0) 60%)',
+              'linear-gradient(75deg, rgba(255,255,255,0.0) 40%, rgba(255,215,0,0.15) 50%, rgba(255,255,255,0.0) 60%)',
             maskImage:
               'radial-gradient(1200px 600px at 50% 50%, black 40%, transparent 70%)',
           }}
@@ -103,14 +111,15 @@ const HomePage: React.FC = () => {
                     className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105"
                   >
                     <div className="relative overflow-hidden">
-                      <img
-                        src={product.frontImage}
-                        alt={product.name}
-                        className="w-full object-contain transition-opacity duration-700 group-hover:opacity-0"
-                      />
+                      {/* Back image first */}
                       <img
                         src={product.backImage}
                         alt={`${product.name} back`}
+                        className="w-full object-contain transition-opacity duration-700 group-hover:opacity-0"
+                      />
+                      <img
+                        src={product.frontImage}
+                        alt={product.name}
                         className="w-full object-contain absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
                       />
                     </div>

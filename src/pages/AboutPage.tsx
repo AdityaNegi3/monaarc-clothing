@@ -26,33 +26,33 @@ const AboutPage: React.FC = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Our Story</h2>
               <div className="space-y-6 text-gray-400 leading-relaxed">
                 <p>
-                  MONAARC was founded on the belief that luxury fashion should be more than just clothing—
-                  it should be an expression of one's identity, a statement of sophistication, and a 
-                  testament to exceptional craftsmanship.
+                  Born from passion and a lifestyle that refused to blend in, our brand was created with a simple calling — 
+                  it’s time. Inspired by anime’s raw ambition and freedom, we design for those who live unapologetically, chasing their own path
                 </p>
                 <p>
-                  Drawing inspiration from ancient mythology and modern aesthetics, every piece in our 
-                  collection tells a story. We meticulously select premium materials and employ traditional 
-                  techniques combined with contemporary design principles to create garments that transcend 
-                  fleeting trends.
+                 Every piece is crafted to give a luxury feel with minimalist design, made for individuals who want to stand out while carrying confidence and trend.
+                  We don’t just create clothing; we create statements — wearable symbols of ambition, lifestyle, and aesthetic culture.
                 </p>
                 <p>
-                  Our commitment to excellence extends beyond the garment itself. From the initial sketch 
-                  to the final stitch, every detail is carefully considered to ensure that when you wear 
-                  MONAARC, you're not just wearing clothes—you're wearing a legacy.
+                Built for the new generation (14–30) who balance ambition with expression, our brand is about more than clothes.
+                 It’s about feeling powerful in your own skin, embracing freedom, and living with the energy of your favorite anime hero.
+                  In 5 years, we see our community flexing these fits worldwide — wearing them with grace, with pride,
+                   and with the undeniable presence of luxury that makes heads turn.
+
                 </p>
+                <p>This isn’t just clothing. This is a lifestyle.</p>
               </div>
             </div>
             
             <div className="relative">
              <img
-                    src="/IMG_20250801_132311.jpg"
+                    src="/logo123.png"
                     alt="MONAARC craftsmanship"
                     className="w-full rounded-lg shadow-2xl"
 />
 
-           
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
+            
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
             </div>
           </div>
         </div>
