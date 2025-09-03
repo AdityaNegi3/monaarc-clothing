@@ -13,15 +13,16 @@ const HomePage: React.FC = () => {
     <div className="pt-16 overflow-x-hidden bg-black">
       {/* Hero Section */}
       <section
-        className="relative h-screen flex items-center justify-center overflow-hidden"
+        className="
+          relative h-screen flex items-center justify-center overflow-hidden 
+          bg-center sm:bg-center md:bg-top bg-cover
+        "
         style={{
           backgroundImage: "url('/bgbg12.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'brightness(.8)',
         }}
       >
-        <div className="absolute inset-0 bg-black/40" />
+        {/* Mobile gradient overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 sm:from-black/40 sm:via-black/20 sm:to-black/40" />
 
         <div className="relative z-10 text-center px-4">
           <h1
@@ -63,19 +64,9 @@ const HomePage: React.FC = () => {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
           <div className="w-px h-10 sm:h-12 bg-gradient-to-b from-yellow-400 to-transparent" />
         </div>
-
-        <div
-          className="pointer-events-none absolute inset-0 opacity-15"
-          style={{
-            background:
-              'linear-gradient(75deg, rgba(255,255,255,0.0) 40%, rgba(255,215,0,0.15) 50%, rgba(255,255,255,0.0) 60%)',
-            maskImage:
-              'radial-gradient(1200px 600px at 50% 50%, black 40%, transparent 70%)',
-          }}
-        />
       </section>
 
-      {/* anime */}
+      {/* Anime Section */}
       <section
         id="anime-edition"
         className="py-20 relative bg-black bg-cover bg-center bg-no-repeat"
