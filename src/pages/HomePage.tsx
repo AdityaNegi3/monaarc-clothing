@@ -15,13 +15,21 @@ const HomePage: React.FC = () => {
       <section
         className="
           relative h-screen flex items-center justify-center overflow-hidden 
-          bg-center sm:bg-center md:bg-top bg-cover
+          bg-cover bg-center sm:bg-top
         "
         style={{
-          backgroundImage: "url('/bgbg12.png')",
+          backgroundImage: "url('/bg69.jpg')", // default mobile background
         }}
       >
-        {/* Mobile gradient overlay for readability */}
+        {/* Desktop override background */}
+        <div
+          className="hidden sm:block absolute inset-0 bg-cover bg-top"
+          style={{
+            backgroundImage: "url('/bgbg12.png')", // desktop background
+          }}
+        />
+
+        {/* Overlay for readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 sm:from-black/40 sm:via-black/20 sm:to-black/40" />
 
         <div className="relative z-10 text-center px-4">
