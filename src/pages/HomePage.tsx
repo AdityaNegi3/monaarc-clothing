@@ -26,6 +26,7 @@ const HomePage: React.FC = () => {
           className="hidden sm:block absolute inset-0 bg-cover bg-top"
           style={{
             backgroundImage: "url('/bgbg12.png')", // desktop background
+            filter: "brightness(0.8)", // 👈 custom brightness
           }}
         />
 
