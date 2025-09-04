@@ -215,8 +215,13 @@ const HomePage: React.FC = () => {
 
       {/* ✅ Floating Cookie Banner */}
       {showCookies && (
-        <div className="fixed bottom-4 left-4 bg-white/95 backdrop-blur-md shadow-lg rounded-xl p-4 max-w-sm w-[90%] sm:w-auto z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <p className="text-sm text-gray-800">
+        <div
+          className="fixed bottom-0 left-0 w-full sm:bottom-4 sm:left-4 sm:max-w-sm 
+          bg-white/95 backdrop-blur-md shadow-lg rounded-t-xl sm:rounded-xl 
+          p-4 z-40 flex flex-col sm:flex-row items-center sm:items-start 
+          justify-between gap-3 animate-slide-up"
+        >
+          <p className="text-sm text-gray-800 text-center sm:text-left">
             We use cookies to improve your experience.{" "}
             {/* <Link to="/privacy" className="text-yellow-600 underline">
               Learn more
@@ -224,7 +229,8 @@ const HomePage: React.FC = () => {
           </p>
           <button
             onClick={acceptCookies}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-4 py-2 rounded-lg transition w-full sm:w-auto"
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold 
+            px-4 py-2 rounded-lg transition w-full sm:w-auto"
           >
             Accept
           </button>
