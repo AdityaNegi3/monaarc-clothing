@@ -34,7 +34,7 @@ const AboutPage: React.FC = () => {
                   We don’t just create clothing; we create statements — wearable symbols of ambition, lifestyle, and aesthetic culture.
                 </p>
                 <p>
-                Built for the new generation (14–30) who balance ambition with expression, our brand is about more than clothes.
+                Built for the new generation who balance ambition with expression, our brand is about more than clothes.
                  It’s about feeling powerful in your own skin, embracing freedom, and living with the energy of your favorite anime hero.
                   In 5 years, we see our community flexing these fits worldwide — wearing them with grace, with pride,
                    and with the undeniable presence of luxury that makes heads turn.
