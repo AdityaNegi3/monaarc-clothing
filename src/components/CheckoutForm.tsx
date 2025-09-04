@@ -100,7 +100,7 @@ const CheckoutForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <h3 className="text-2xl font-bold text-white mb-2">Secure Checkout</h3>
         <div className="flex items-center justify-center text-gray-400 text-sm">
           <Lock className="w-4 h-4 mr-2" />
-          Powered by Razorpay & FormSubmit
+          Powered by Razorpay 
         </div>
       </div>
 
@@ -195,7 +195,7 @@ const CheckoutForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       </button>
 
       <div className="text-center text-xs text-gray-500">
-        Secure payment via Razorpay • Order confirmation via FormSubmit
+        Secure payment via Razorpay 
       </div>
     </form>
   );

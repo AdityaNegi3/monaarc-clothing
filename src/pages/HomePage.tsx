@@ -9,6 +9,12 @@ const HomePage: React.FC = () => {
   const gymProducts = products.filter((p) => p.category === 'gym');
   const [modalOpen, setModalOpen] = useState(false);
 
+  // ✅ Mark your two best sellers here (ids must match your products data)
+  const bestSellerIds = new Set<string>([
+    'toji-wrath-white-tee',
+    'project-yeager-black-tee',
+  ]);
+
   return (
     <div className="pt-16 overflow-x-hidden bg-black">
       {/* Hero Section */}
@@ -18,15 +24,15 @@ const HomePage: React.FC = () => {
           bg-cover bg-center sm:bg-top
         "
         style={{
-          backgroundImage: "url('/bg69.jpg')", // default mobile background
+          backgroundImage: "url('/bg69.jpg')", // mobile default
         }}
       >
         {/* Desktop override background */}
         <div
           className="hidden sm:block absolute inset-0 bg-cover bg-top"
           style={{
-            backgroundImage: "url('/bgbg12.png')", // desktop background
-            filter: "brightness(0.8)", // 👈 custom brightness
+            backgroundImage: "url('/bgbg12.png')",
+            filter: 'brightness(0.8)',
           }}
         />
 
@@ -56,7 +62,7 @@ const HomePage: React.FC = () => {
 
           <div className="mx-auto mb-5 h-[2px] w-24 sm:w-28 bg-gradient-to-r from-transparent via-yellow-400 to-transparent rounded-full" />
 
-          {/* Quote in Rich Metallic Gold */}
+          {/* Quote */}
           <p
             className="text-lg sm:text-xl md:text-2xl mb-6 font-light tracking-wide bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-600 bg-clip-text text-transparent"
             style={{
@@ -97,6 +103,9 @@ const HomePage: React.FC = () => {
             {limitedProducts.map((product, i) => {
               const col = i % 3;
               const fromX = col === 0 ? -100 : col === 2 ? 100 : 0;
+              const isBestSeller =
+                bestSellerIds.has(product.id) ||
+                product.tags?.includes('best-seller');
 
               return (
                 <motion.div
@@ -111,7 +120,17 @@ const HomePage: React.FC = () => {
                     className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105"
                   >
                     <div className="relative overflow-hidden">
-                      {/* Back image first */}
+                      {/* ⭐ BEST SELLER banner (sits on the black strip) */}
+                      {isBestSeller && (
+                        <div className="absolute top-0 inset-x-0 h-7 flex items-center justify-center z-10
+                                        bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500
+                                        text-black font-extrabold tracking-wide text-xs sm:text-sm uppercase
+                                        shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+                          <span className="mr-1">⭐</span> Best Seller
+                        </div>
+                      )}
+
+                      {/* Images */}
                       <img
                         src={product.backImage}
                         alt={`${product.name} back`}
@@ -123,25 +142,22 @@ const HomePage: React.FC = () => {
                         className="w-full object-contain absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
                       />
                     </div>
+
                     <div className="p-6">
                       <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-yellow-400 transition-colors duration-300">
                         {product.name}
                       </h3>
 
-                      {/* ✅ Discount price logic */}
+                      {/* Price */}
                       {product.originalPrice ? (
                         <div className="text-xl font-bold">
                           <span className="text-gray-400 line-through mr-2">
                             ₹{product.originalPrice}
                           </span>
-                          <span className="text-yellow-400">
-                            ₹{product.price}
-                          </span>
+                          <span className="text-yellow-400">₹{product.price}</span>
                         </div>
                       ) : (
-                        <p className="text-yellow-400 font-bold text-xl">
-                          ₹{product.price}
-                        </p>
+                        <p className="text-yellow-400 font-bold text-xl">₹{product.price}</p>
                       )}
 
                       <div className="flex items-center mt-4 text-gray-400 group-hover:text-white transition-colors duration-300">
@@ -157,7 +173,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Modal */}
+      {/* Modal trigger */}
       <div className="text-center py-10">
         <button
           onClick={() => setModalOpen(true)}
@@ -167,6 +183,7 @@ const HomePage: React.FC = () => {
         </button>
       </div>
 
+      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-white text-black p-8 rounded-lg max-w-md w-full relative">

@@ -12,7 +12,8 @@ export const products: Product[] = [
     frontImage: '/toji-and-back.jpg',
     backImage: '/toji and front.jpg',
     description:
-      'Exclusive LIMITED edition signature tee with premium cotton blend and gold foil detailing.'
+      'Exclusive LIMITED edition signature tee with premium cotton blend and gold foil detailing.',
+      tags: ['best-seller'], // ⭐ added   
   },
   {
     id: 'limited-2',
@@ -23,7 +24,8 @@ export const products: Product[] = [
     frontImage: '/eren and front.jpg',
     backImage: '/eren and back.jpg',
     description:
-      'LIMITED collection featuring elegant gold script typography on premium fabric.'
+      'LIMITED collection featuring elegant gold script typography on premium fabric.',
+      tags: ['best-seller'], // ⭐ added   
   },
   {
     id: 'limited-3',
