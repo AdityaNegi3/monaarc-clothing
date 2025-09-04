@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { products } from '../data/products';
 import { ArrowRight } from 'lucide-react';
@@ -14,6 +14,21 @@ const HomePage: React.FC = () => {
     'toji-wrath-white-tee',
     'project-yeager-black-tee',
   ]);
+
+  // ✅ Cookie Consent
+  const [showCookies, setShowCookies] = useState(false);
+
+  useEffect(() => {
+    const accepted = localStorage.getItem('cookiesAccepted');
+    if (!accepted) {
+      setShowCookies(true);
+    }
+  }, []);
+
+  const acceptCookies = () => {
+    localStorage.setItem('cookiesAccepted', 'true');
+    setShowCookies(false);
+  };
 
   return (
     <div className="pt-16 overflow-x-hidden bg-black">
@@ -36,7 +51,7 @@ const HomePage: React.FC = () => {
           }}
         />
 
-        {/* Overlay for readability */}
+        {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 sm:from-black/40 sm:via-black/20 sm:to-black/40" />
 
         <div className="relative z-10 text-center px-4">
@@ -62,7 +77,6 @@ const HomePage: React.FC = () => {
 
           <div className="mx-auto mb-5 h-[2px] w-24 sm:w-28 bg-gradient-to-r from-transparent via-yellow-400 to-transparent rounded-full" />
 
-          {/* Quote */}
           <p
             className="text-lg sm:text-xl md:text-2xl mb-6 font-light tracking-wide bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-600 bg-clip-text text-transparent"
             style={{
@@ -120,7 +134,6 @@ const HomePage: React.FC = () => {
                     className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105"
                   >
                     <div className="relative overflow-hidden">
-                      {/* ⭐ BEST SELLER banner (sits on the black strip) */}
                       {isBestSeller && (
                         <div className="absolute top-0 inset-x-0 h-7 flex items-center justify-center z-10
                                         bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500
@@ -130,7 +143,6 @@ const HomePage: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Images */}
                       <img
                         src={product.backImage}
                         alt={`${product.name} back`}
@@ -148,7 +160,6 @@ const HomePage: React.FC = () => {
                         {product.name}
                       </h3>
 
-                      {/* Price */}
                       {product.originalPrice ? (
                         <div className="text-xl font-bold">
                           <span className="text-gray-400 line-through mr-2">
@@ -199,6 +210,24 @@ const HomePage: React.FC = () => {
               exclusive drop of the year.
             </p>
           </div>
+        </div>
+      )}
+
+      {/* ✅ Floating Cookie Banner */}
+      {showCookies && (
+        <div className="fixed bottom-4 left-4 bg-white/95 backdrop-blur-md shadow-lg rounded-xl p-4 max-w-sm w-[90%] sm:w-auto z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <p className="text-sm text-gray-800">
+            We use cookies to improve your experience.{" "}
+            {/* <Link to="/privacy" className="text-yellow-600 underline">
+              Learn more
+            </Link> */}
+          </p>
+          <button
+            onClick={acceptCookies}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-4 py-2 rounded-lg transition w-full sm:w-auto"
+          >
+            Accept
+          </button>
         </div>
       )}
     </div>
