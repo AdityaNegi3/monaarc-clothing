@@ -6,7 +6,7 @@ export const products: Product[] = [
 {
     id: 'limited-1',
     name: 'Toji Wrath White Tee',
-    price: 1599,
+    price: 1499,
     originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
     frontImage: '/toji-and-back.jpg',
@@ -18,7 +18,7 @@ export const products: Product[] = [
   {
     id: 'limited-2',
     name: 'Project Yeager Black Tee',
-    price: 1599,
+    price: 1499,
     originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
     frontImage: '/eren and front.jpg',
@@ -30,7 +30,7 @@ export const products: Product[] = [
   {
     id: 'limited-3',
     name: 'Eye Of Fate White Tee',
-    price: 1299,
+    price: 1099,
     category: 'limited',
     frontImage: '/front itachi.jpg',
     backImage: '/back itachi.jpg',
@@ -39,8 +39,8 @@ export const products: Product[] = [
   {
     id: 'limited-4',
     name: 'Rengoku Hellfire Black Tee',
-    price: 2599,
-    originalPrice: 4999,
+    price: 1599,
+    originalPrice: 3999,
     category: 'limited',
     frontImage: '/front royal.jpg',
     backImage: '/back royal.jpg',
@@ -49,7 +49,7 @@ export const products: Product[] = [
   {
     id: 'limited-5',
     name: 'Beyond Average Black Tee',
-    price: 1499,
+    price: 1299,
     category: 'limited',
     frontImage: '/dis front gym.jpg',
     backImage: '/dis back gym.jpg',
@@ -58,7 +58,7 @@ export const products: Product[] = [
   {
     id: 'limited-6',
     name: 'Prove Yourself Black Tee',
-    price: 1499,
+    price: 1299,
     category: 'limited',
     frontImage: '/big back front.jpg',
     backImage: '/back12 .jpg',
