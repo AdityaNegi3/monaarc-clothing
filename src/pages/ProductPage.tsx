@@ -192,11 +192,11 @@ const ProductPage: React.FC = () => {
             <div className="border-t border-white/10 pt-8">
               <h4 className="text-white font-semibold mb-4">Product Features</h4>
               <ul className="space-y-2 text-gray-400">
-                <li>• Premium cotton blend fabric</li>
+                <li>• Crafted from 100% ring-spun cotton </li>
                 <li>• Luxury finishing and attention to detail</li>
-                <li>• Comfortable fit for all-day wear</li>
-                <li>• Exclusive design elements</li>
-                <li>• Machine washable</li>
+                <li>• Premium 240 GSM fabric and bio-wash treatment</li>
+                <li>• Anti-pilling technology and designed to last for up to 50 washes</li>
+                <li>• Comfortable and durable</li>
               </ul>
             </div>
           </div>
