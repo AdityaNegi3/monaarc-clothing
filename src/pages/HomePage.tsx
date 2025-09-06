@@ -39,7 +39,8 @@ const HomePage: React.FC = () => {
           bg-cover bg-center sm:bg-top
         "
         style={{
-          backgroundImage: "url('/phonebg.jpg')", // mobile default
+          backgroundImage: "url('/phonebg.jpg')",  // mobile default
+          filter: 'brightness(0.9)',
         }}
       >
         {/* Desktop override background */}
@@ -60,14 +61,13 @@ const HomePage: React.FC = () => {
               mb-4
               text-5xl sm:text-6xl md:text-8xl font-extrabold 
               uppercase
-              bg-gradient-to-b from-gray-200 via-gray-300 to-gray-100
-              bg-clip-text text-transparent
+              text-white
               select-none
             "
             style={{
               fontFamily: `'Cinzel', serif`,
               textShadow:
-                '0 4px 12px rgba(0,0,0,0.7), 0 2px 6px rgba(255,255,255,0.3)',
+                '0 4px 12px rgba(0,0,0,0.7), 0 2px 6px rgba(255,255,255,0.4)',
               letterSpacing: '0.12em',
             }}
             aria-label="MONAARC"
@@ -75,10 +75,10 @@ const HomePage: React.FC = () => {
             MONAARC
           </h1>
 
-          <div className="mx-auto mb-5 h-[2px] w-24 sm:w-28 bg-gradient-to-r from-transparent via-gray-300 to-transparent rounded-full" />
+          <div className="mx-auto mb-5 h-[2px] w-24 sm:w-28 bg-white rounded-full" />
 
           <p
-            className="text-lg sm:text-xl md:text-2xl mb-6 font-light tracking-wide bg-gradient-to-r from-gray-200 via-gray-300 to-gray-100 bg-clip-text text-transparent"
+            className="text-lg sm:text-xl md:text-2xl mb-6 font-light tracking-wide text-white"
             style={{
               textShadow:
                 '0 2px 6px rgba(0,0,0,0.6), 0 1px 3px rgba(255,255,255,0.3)',
@@ -87,11 +87,11 @@ const HomePage: React.FC = () => {
             Wear strength. Own presence.
           </p>
 
-          <div className="h-px w-20 sm:w-24 bg-gray-300 mx-auto mb-6" />
+          <div className="h-px w-20 sm:w-24 bg-white mx-auto mb-6" />
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-px h-10 sm:h-12 bg-gradient-to-b from-gray-300 to-transparent" />
+          <div className="w-px h-10 sm:h-12 bg-gradient-to-b from-white to-transparent" />
         </div>
       </section>
 
@@ -223,9 +223,6 @@ const HomePage: React.FC = () => {
         >
           <p className="text-sm text-gray-800 text-center sm:text-left">
             We use cookies to improve your experience.{" "}
-            {/* <Link to="/privacy" className="text-yellow-600 underline">
-              Learn more
-            </Link> */}
           </p>
           <button
             onClick={acceptCookies}
