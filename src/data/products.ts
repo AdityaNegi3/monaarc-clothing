@@ -21,8 +21,8 @@ export const products: Product[] = [
     price: 1499,
     originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
-    frontImage: '/eren and front.jpg',
-    backImage: '/eren and back.jpg',
+    frontImage: '/tatake.jpg',
+    backImage: '/atake(2).jpg',
     description:
       'LIMITED collection featuring elegant gold script typography on premium fabric.',
       tags: ['best-seller'], // ⭐ added   
@@ -42,7 +42,7 @@ export const products: Product[] = [
     price: 1599,
     originalPrice: 3999,
     category: 'limited',
-    frontImage: '/front royal.jpg',
+    frontImage: '/royal new front.jpg',
     backImage: '/back royal.jpg',
     description: 'Heritage collection piece with timeless design and premium craftsmanship.'
   },
