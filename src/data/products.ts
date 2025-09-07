@@ -21,8 +21,8 @@ export const products: Product[] = [
     price: 1499,
     originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
-    frontImage: '/tatake.jpg',
-    backImage: '/atake(2).jpg',
+    frontImage: '/new frony.jpg',
+    backImage: '/new back.jpg',
     description:
       'LIMITED collection featuring elegant gold script typography on premium fabric.',
       tags: ['best-seller'], // ⭐ added   
