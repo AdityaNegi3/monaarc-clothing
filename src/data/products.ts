@@ -6,7 +6,7 @@ export const products: Product[] = [
 {
     id: 'limited-1',
     name: 'Toji Wrath White Tee',
-    price: 1499,
+    price: 0,
     originalPrice: 2999, // ✅ Added for discount display
     category: 'limited',
     frontImage: '/toji-and-back.jpg',
