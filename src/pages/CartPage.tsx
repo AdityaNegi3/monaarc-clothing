@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+// src/pages/CartPage.tsx
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CheckoutForm from '../components/CheckoutForm';
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
+
+const formatCurrency = (n: number) => `₹${n.toFixed(0)}`;
 
 const CartPage: React.FC = () => {
   const { cartItems, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
@@ -10,12 +13,28 @@ const CartPage: React.FC = () => {
   const [shippingOption, setShippingOption] = useState<'free' | 'fast'>('free');
 
   const shippingCost = shippingOption === 'fast' ? 100 : 0;
-  const totalPrice = getTotalPrice();
-  const finalTotal = totalPrice + shippingCost;
+  const subtotal = useMemo(() => getTotalPrice(), [cartItems, getTotalPrice]);
+
+  // total quantity in cart
+  const totalQty = useMemo(() => cartItems.reduce((s, it) => s + (it.quantity || 0), 0), [cartItems]);
+
+  // Discount tiers by total quantity
+  const discountRate = useMemo(() => {
+    if (totalQty >= 3) return 0.15;
+    if (totalQty === 2) return 0.10;
+    return 0;
+  }, [totalQty]);
+
+  const discountAmount = useMemo(() => +(subtotal * discountRate), [subtotal, discountRate]);
+  const totalAfterDiscount = useMemo(() => subtotal - discountAmount, [subtotal, discountAmount]);
+  const finalTotal = useMemo(() => totalAfterDiscount + shippingCost, [totalAfterDiscount, shippingCost]);
+
+  // Simple points system: 1 point for every ₹100 spent (after discount, before shipping)
+  const pointsEarned = Math.floor(totalAfterDiscount / 100);
 
   if (cartItems.length === 0) {
     return (
-      <div className="pt-16 min-h-screen bg-black flex items-center justify-center">
+      <div className="pt-24 min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <ShoppingBag className="w-16 h-16 text-gray-600 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Your Cart is Empty</h2>
@@ -32,17 +51,27 @@ const CartPage: React.FC = () => {
   }
 
   return (
-    <div className="pt-16 min-h-screen bg-black">
+    // NOTE: we use pt-24 and an explicit spacer to avoid the fixed nav covering content.
+    <div className="pt-24 min-h-screen bg-black">
+      {/* Spacer to match fixed navbar height so everything sits below the header */}
+      <div className="h-20 lg:h-24" aria-hidden />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-white">Shopping Cart</h1>
-          <button
-            onClick={clearCart}
-            className="text-gray-400 hover:text-red-400 transition-colors duration-300 flex items-center"
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            Clear Cart
-          </button>
+        {/* Add scroll-margin-top on the main heading so anchors / focus won't hide under navbar */}
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold text-white" style={{ scrollMarginTop: '6rem' }}>
+            Shopping Cart
+          </h1>
+
+          {/* Promotional banner */}
+          <div className="ml-4">
+            <div className="inline-flex items-center bg-white/5 border border-white/10 text-sm text-yellow-300 px-3 py-2 rounded-lg">
+              <strong className="mr-2 text-white">Bundle deal:</strong>
+              <span className="mr-2">Buy 2 — 10% off</span>
+              <span className="mr-2">|</span>
+              <span>Buy 3+ — 15% off</span>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -63,12 +92,12 @@ const CartPage: React.FC = () => {
                   <div className="flex-1">
                     <h3 className="text-white font-semibold text-lg mb-1">{item.name}</h3>
                     <p className="text-gray-400 text-sm mb-2">Size: {item.size}</p>
-                    <p className="text-yellow-400 font-bold">₹{item.price}</p>
+                    <p className="text-yellow-400 font-bold">{formatCurrency(item.price)}</p>
                   </div>
 
                   <div className="flex items-center space-x-3">
                     <button
-                      onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
+                      onClick={() => updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))}
                       className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition-colors duration-300"
                     >
                       <Minus className="w-4 h-4" />
@@ -97,15 +126,29 @@ const CartPage: React.FC = () => {
 
           {/* Order Summary */}
           <div className="bg-black rounded-lg border border-white/10 p-6 h-fit">
-            <h2 className="text-xl font-bold text-white mb-6">Order Summary</h2>
+            <h2 className="text-xl font-bold text-white mb-3">Order Summary</h2>
+
+            {discountRate > 0 ? (
+              <div className="mb-4 p-3 rounded-md bg-green-900/30 border border-green-700 text-green-200 text-sm">
+                Nice! You're getting <strong>{discountRate * 100}%</strong> off for buying <strong>{totalQty}</strong> item(s).
+              </div>
+            ) : (
+              <div className="mb-4 p-3 rounded-md bg-white/3 border border-white/10 text-gray-300 text-sm">
+                Buy 2 items to get 10% off, or 3+ items to get 15% off.
+              </div>
+            )}
 
             <div className="space-y-4 mb-6">
               <div className="flex justify-between text-gray-400">
                 <span>Subtotal</span>
-                <span>₹{totalPrice}</span>
+                <span>{formatCurrency(subtotal)}</span>
               </div>
 
-              {/* Shipping Options */}
+              <div className="flex justify-between text-gray-400">
+                <span>Discount ({discountRate * 100}%)</span>
+                <span className="text-green-300">-{formatCurrency(discountAmount)}</span>
+              </div>
+
               <div className="flex flex-col space-y-2">
                 <label className="flex items-center text-gray-400 cursor-pointer">
                   <input
@@ -133,23 +176,27 @@ const CartPage: React.FC = () => {
 
               <div className="flex justify-between text-gray-400 mt-2">
                 <span>Shipping</span>
-                <span>{shippingOption === 'fast' ? '₹100' : 'Free'}</span>
+                <span>{shippingOption === 'fast' ? formatCurrency(shippingCost) : 'Free'}</span>
               </div>
 
               <div className="border-t border-white/10 pt-4">
                 <div className="flex justify-between text-white font-bold text-lg">
                   <span>Total</span>
-                  <span>₹{finalTotal}</span>
+                  <span>{formatCurrency(finalTotal)}</span>
                 </div>
+
+                <p className="text-sm text-gray-400 mt-2">Points you'll earn: <span className="text-yellow-300 font-semibold">{pointsEarned}</span></p>
               </div>
             </div>
 
-            <button
-              onClick={() => setShowCheckout(true)}
-              className="w-full bg-yellow-400 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-300 transition-colors duration-300 mb-4"
-            >
-              Secure Checkout
-            </button>
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setShowCheckout(true)}
+                className="w-full bg-yellow-400 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-300 transition-colors duration-300 mb-4"
+              >
+                Secure Checkout
+              </button>
+            </div>
 
             <Link
               to="/"
@@ -175,7 +222,10 @@ const CartPage: React.FC = () => {
               </button>
             </div>
 
-            <CheckoutForm onClose={() => setShowCheckout(false)} />
+            <CheckoutForm
+              onClose={() => setShowCheckout(false)}
+              summary={{ subtotal, discountAmount, shippingCost, finalTotal, pointsEarned }}
+            />
           </div>
         </div>
       )}
