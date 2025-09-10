@@ -1,4 +1,3 @@
-// src/pages/CartPage.tsx
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
@@ -29,9 +28,6 @@ const CartPage: React.FC = () => {
   const totalAfterDiscount = useMemo(() => subtotal - discountAmount, [subtotal, discountAmount]);
   const finalTotal = useMemo(() => totalAfterDiscount + shippingCost, [totalAfterDiscount, shippingCost]);
 
-  // Simple points system: 1 point for every ₹100 spent (after discount, before shipping)
-  const pointsEarned = Math.floor(totalAfterDiscount / 100);
-
   if (cartItems.length === 0) {
     return (
       <div className="pt-24 min-h-screen bg-black flex items-center justify-center">
@@ -51,13 +47,10 @@ const CartPage: React.FC = () => {
   }
 
   return (
-    // NOTE: we use pt-24 and an explicit spacer to avoid the fixed nav covering content.
     <div className="pt-24 min-h-screen bg-black">
-      {/* Spacer to match fixed navbar height so everything sits below the header */}
       <div className="h-20 lg:h-24" aria-hidden />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Add scroll-margin-top on the main heading so anchors / focus won't hide under navbar */}
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-3xl font-bold text-white" style={{ scrollMarginTop: '6rem' }}>
             Shopping Cart
@@ -184,8 +177,6 @@ const CartPage: React.FC = () => {
                   <span>Total</span>
                   <span>{formatCurrency(finalTotal)}</span>
                 </div>
-
-                <p className="text-sm text-gray-400 mt-2">Points you'll earn: <span className="text-yellow-300 font-semibold">{pointsEarned}</span></p>
               </div>
             </div>
 
@@ -224,7 +215,7 @@ const CartPage: React.FC = () => {
 
             <CheckoutForm
               onClose={() => setShowCheckout(false)}
-              summary={{ subtotal, discountAmount, shippingCost, finalTotal, pointsEarned }}
+              summary={{ subtotal, discountAmount, shippingCost, finalTotal }}
             />
           </div>
         </div>
