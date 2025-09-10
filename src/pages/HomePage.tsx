@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
           bg-cover bg-center sm:bg-top
         "
         style={{
-          backgroundImage: "url('/phonebg.jpg')",  // mobile default
+          backgroundImage: "url('/phonebg.webp')",  // mobile default
           filter: 'brightness(0.9)',
         }}
       >
@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
         <div
           className="hidden sm:block absolute inset-0 bg-cover bg-top"
           style={{
-            backgroundImage: "url('/testbg.png')",
+            backgroundImage: "url('/testbg.webp)",
             filter: 'brightness(0.8)',
           }}
         />
