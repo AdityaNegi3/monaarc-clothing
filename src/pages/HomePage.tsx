@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
         <div
           className="hidden sm:block absolute inset-0 bg-cover bg-top"
           style={{
-            backgroundImage: "url('/testbg.webp)",
+            backgroundImage: "url('/testbg.jpg)",
             filter: 'brightness(0.8)',
           }}
         />
