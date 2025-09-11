@@ -1,11 +1,17 @@
 // src/pages/CartPage.tsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CheckoutForm from '../components/CheckoutForm';
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 
-const formatCurrency = (n: number) => `₹${n.toFixed(0)}`;
+const currencyFormatter = new Intl.NumberFormat('en-IN', {
+  style: 'currency',
+  currency: 'INR',
+  maximumFractionDigits: 0,
+});
+
+const formatCurrency = (n: number) => currencyFormatter.format(n);
 
 const CartPage: React.FC = () => {
   const { cartItems, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
@@ -13,10 +19,15 @@ const CartPage: React.FC = () => {
   const [shippingOption, setShippingOption] = useState<'free' | 'fast'>('free');
 
   const shippingCost = shippingOption === 'fast' ? 100 : 0;
+
+  // Subtotal derived from cart (getTotalPrice is expected to compute from cartItems)
   const subtotal = useMemo(() => getTotalPrice(), [cartItems, getTotalPrice]);
 
-  // total quantity in cart
-  const totalQty = useMemo(() => cartItems.reduce((s, it) => s + (it.quantity || 0), 0), [cartItems]);
+  // total quantity in cart (defensive: ensure quantity is number)
+  const totalQty = useMemo(
+    () => cartItems.reduce((s, it) => s + (Number(it.quantity) || 0), 0),
+    [cartItems]
+  );
 
   // Discount tiers by total quantity
   const discountRate = useMemo(() => {
@@ -25,9 +36,15 @@ const CartPage: React.FC = () => {
     return 0;
   }, [totalQty]);
 
-  const discountAmount = useMemo(() => +(subtotal * discountRate), [subtotal, discountRate]);
-  const totalAfterDiscount = useMemo(() => subtotal - discountAmount, [subtotal, discountAmount]);
+  // compute discount amount and totals (rounded to nearest rupee)
+  const discountAmount = useMemo(() => Math.round(subtotal * discountRate), [subtotal, discountRate]);
+  const totalAfterDiscount = useMemo(() => Math.max(0, subtotal - discountAmount), [subtotal, discountAmount]);
   const finalTotal = useMemo(() => totalAfterDiscount + shippingCost, [totalAfterDiscount, shippingCost]);
+
+  // close checkout modal if cart empties
+  useEffect(() => {
+    if (cartItems.length === 0) setShowCheckout(false);
+  }, [cartItems.length]);
 
   if (cartItems.length === 0) {
     return (
@@ -58,7 +75,6 @@ const CartPage: React.FC = () => {
             Shopping Cart
           </h1>
 
-          {/* Promo banner - responsive */}
           <div className="ml-0 sm:ml-4">
             <div className="inline-flex items-center bg-white/5 border border-white/10 text-xs sm:text-sm text-yellow-300 px-3 py-2 rounded-lg">
               <strong className="mr-2 text-white text-sm sm:text-base">Bundle deal:</strong>
@@ -69,75 +85,75 @@ const CartPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Grid: items first, summary second on desktop; on mobile stacks */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Cart Items (spans 2 cols on lg) */}
           <div className="lg:col-span-2 space-y-6">
-            {cartItems.map((item) => (
-              <div key={`${item.id}-${item.size}`} className="bg-black rounded-lg border border-white/10 p-4 sm:p-6">
-                {/* Use column on mobile, row on sm+ */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                  {/* Image */}
-                  <div className="flex-shrink-0">
-                    <img
-                      src={item.frontImage}
-                      alt={item.name}
-                      className="w-28 h-28 sm:w-24 sm:h-24 object-cover rounded-lg"
-                    />
-                  </div>
+            {cartItems.map((item) => {
+              // defensive defaults
+              const quantity = Number(item.quantity) || 1;
+              const safeSize = item.size ?? 'One size';
+              const itemKey = `${item.id}-${safeSize}`;
 
-                  {/* Details */}
-                  <div className="flex-1">
-                    <h3 className="text-white font-semibold text-lg sm:text-base leading-tight">
-                      {/* keep name wrapped cleanly */}
-                      {item.name}
-                    </h3>
-                    <p className="text-gray-400 text-sm mt-1">Size: {item.size}</p>
-                    <p className="text-yellow-400 font-bold mt-3">{formatCurrency(item.price)}</p>
-                  </div>
-
-                  {/* Controls: place under details on mobile, inline on desktop */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                    <div className="flex items-center justify-start sm:justify-center space-x-3">
-                      <button
-                        onClick={() => updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))}
-                        className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition-colors duration-200"
-                        aria-label="Decrease quantity"
-                      >
-                        <Minus className="w-4 h-4" />
-                      </button>
-
-                      <span className="text-white font-semibold w-8 text-center">{item.quantity}</span>
-
-                      <button
-                        onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
-                        className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition-colors duration-200"
-                        aria-label="Increase quantity"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
+              return (
+                <div key={itemKey} className="bg-black rounded-lg border border-white/10 p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div className="flex-shrink-0">
+                      <img
+                        src={item.frontImage}
+                        alt={item.name ?? 'product image'}
+                        className="w-28 h-28 sm:w-24 sm:h-24 object-cover rounded-lg"
+                      />
                     </div>
 
-                    <button
-                      onClick={() => removeFromCart(item.id, item.size)}
-                      className="text-gray-400 hover:text-red-400 transition-colors duration-200 flex items-center justify-center p-2"
-                      aria-label="Remove item"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
+                    <div className="flex-1">
+                      <h3 className="text-white font-semibold text-lg sm:text-base leading-tight">{item.name}</h3>
+                      <p className="text-gray-400 text-sm mt-1">Size: {safeSize}</p>
+                      <p className="text-yellow-400 font-bold mt-3">{formatCurrency(item.price)}</p>
+                      <p className="text-gray-400 text-sm mt-1">Item total: {formatCurrency((item.price || 0) * quantity)}</p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                      <div className="flex items-center justify-start sm:justify-center space-x-3">
+                        <button
+                          onClick={() => updateQuantity(item.id, item.size, Math.max(1, quantity - 1))}
+                          className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition-colors duration-200"
+                          aria-label={`Decrease quantity for ${item.name}`}
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+
+                        <span className="text-white font-semibold w-8 text-center" aria-live="polite">
+                          {quantity}
+                        </span>
+
+                        <button
+                          onClick={() => updateQuantity(item.id, item.size, quantity + 1)}
+                          className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition-colors duration-200"
+                          aria-label={`Increase quantity for ${item.name}`}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => removeFromCart(item.id, item.size)}
+                        className="text-gray-400 hover:text-red-400 transition-colors duration-200 flex items-center justify-center p-2"
+                        aria-label={`Remove ${item.name} from cart`}
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Order Summary */}
           <div className="bg-black rounded-lg border border-white/10 p-4 sm:p-6">
             <h2 className="text-xl font-bold text-white mb-3">Order Summary</h2>
 
             {discountRate > 0 ? (
               <div className="mb-4 p-3 rounded-md bg-green-900/30 border border-green-700 text-green-200 text-sm">
-                Nice! You're getting <strong>{discountRate * 100}%</strong> off for buying <strong>{totalQty}</strong> item(s).
+                Nice! You're getting <strong>{Math.round(discountRate * 100)}%</strong> off for buying <strong>{totalQty}</strong> item(s).
               </div>
             ) : (
               <div className="mb-4 p-3 rounded-md bg-white/3 border border-white/10 text-gray-300 text-sm">
@@ -152,7 +168,7 @@ const CartPage: React.FC = () => {
               </div>
 
               <div className="flex justify-between text-gray-400">
-                <span>Discount ({discountRate * 100}%)</span>
+                <span>Discount ({Math.round(discountRate * 100)}%)</span>
                 <span className="text-green-300">-{formatCurrency(discountAmount)}</span>
               </div>
 
@@ -177,7 +193,7 @@ const CartPage: React.FC = () => {
                     onChange={() => setShippingOption('fast')}
                     className="mr-2"
                   />
-                  Fast Shipping (3 days) — ₹100
+                  Fast Shipping (3 days) — {formatCurrency(shippingCost)}
                 </label>
               </div>
 
@@ -210,19 +226,28 @@ const CartPage: React.FC = () => {
 
       {/* Checkout Modal */}
       {showCheckout && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Checkout dialog"
+        >
           <div className="bg-black rounded-lg p-4 sm:p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold text-white">Checkout</h2>
               <button
                 onClick={() => setShowCheckout(false)}
                 className="text-gray-400 hover:text-white transition-colors duration-200 text-2xl"
+                aria-label="Close checkout"
               >
                 ✕
               </button>
             </div>
 
-            <CheckoutForm onClose={() => setShowCheckout(false)} summary={{ subtotal, discountAmount, shippingCost, finalTotal }} />
+            <CheckoutForm
+              onClose={() => setShowCheckout(false)}
+              summary={{ subtotal, discountAmount, shippingCost, finalTotal }}
+            />
           </div>
         </div>
       )}
