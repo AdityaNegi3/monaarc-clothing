@@ -47,8 +47,8 @@ const HomePage: React.FC = () => {
         <div
           className="hidden sm:block absolute inset-0 bg-cover bg-top"
           style={{
-            backgroundImage: "url('/testbg.jpg)",
-            filter: 'brightness(0.8)',
+            backgroundImage: "url('/testbg.webp')",
+            filter: 'brightness(0.8)'
           }}
         />
 
@@ -101,13 +101,13 @@ const HomePage: React.FC = () => {
         className="py-20 relative bg-black bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/file_0000000044c8622fb0caf79179595f70.png')" }}
       >
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/80 via-black/70 to-black/90 backdrop-blur-sm"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide">
               ANIME Edition
             </h2>
-            <div className="h-px w-32 bg-yellow-400 mx-auto mb-6"></div>
+            <div className="h-px w-32 bg-purple-500 mx-auto mb-6"></div>
             <p className="text-gray-300 text-lg max-w-2xl mx-auto">
               Worn like armor, carried like destiny — every stitch holds the spirit of a hero.
             </p>
@@ -131,12 +131,12 @@ const HomePage: React.FC = () => {
                 >
                   <Link
                     to={`/product/${product.id}`}
-                    className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-yellow-400/30 transition-all duration-500 md:hover:transform md:hover:scale-105"
+                    className="group bg-black rounded-lg overflow-hidden border border-white/10 hover:border-purple-400/40 transition-all duration-500 md:hover:transform md:hover:scale-105"
                   >
                     <div className="relative overflow-hidden">
                       {isBestSeller && (
                         <div className="absolute top-0 inset-x-0 h-7 flex items-center justify-center z-10
-                                        bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500
+                                        bg-gradient-to-r from-purple-500 via-purple-400 to-purple-500
                                         text-black font-extrabold tracking-wide text-xs sm:text-sm uppercase
                                         shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
                           <span className="mr-1">⭐</span> Best Seller
@@ -156,7 +156,7 @@ const HomePage: React.FC = () => {
                     </div>
 
                     <div className="p-6">
-                      <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-yellow-400 transition-colors duration-300">
+                      <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-purple-400 transition-colors duration-300">
                         {product.name}
                       </h3>
 
@@ -165,10 +165,10 @@ const HomePage: React.FC = () => {
                           <span className="text-gray-400 line-through mr-2">
                             ₹{product.originalPrice}
                           </span>
-                          <span className="text-yellow-400">₹{product.price}</span>
+                          <span className="text-purple-400">₹{product.price}</span>
                         </div>
                       ) : (
-                        <p className="text-yellow-400 font-bold text-xl">₹{product.price}</p>
+                        <p className="text-purple-400 font-bold text-xl">₹{product.price}</p>
                       )}
 
                       <div className="flex items-center mt-4 text-gray-400 group-hover:text-white transition-colors duration-300">
@@ -188,7 +188,7 @@ const HomePage: React.FC = () => {
       <div className="text-center py-10">
         <button
           onClick={() => setModalOpen(true)}
-          className="text-white bg-yellow-500 hover:bg-yellow-600 px-6 py-2 rounded-lg transition"
+          className="text-white bg-purple-500 hover:bg-purple-600 px-6 py-2 rounded-lg transition"
         >
           View MONAARC Edition
         </button>
@@ -222,11 +222,11 @@ const HomePage: React.FC = () => {
           justify-between gap-3 animate-slide-up"
         >
           <p className="text-sm text-gray-800 text-center sm:text-left">
-            We use cookies to improve your experience.{" "}
+            We use cookies to improve your experience.{' '}
           </p>
           <button
             onClick={acceptCookies}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold 
+            className="bg-purple-500 hover:bg-purple-600 text-black font-semibold 
             px-4 py-2 rounded-lg transition w-full sm:w-auto"
           >
             Accept
