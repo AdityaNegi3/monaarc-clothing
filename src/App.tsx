@@ -12,6 +12,10 @@ import CartPage from "./pages/CartPage";
 import AboutPage from "./pages/AboutPage";
 import ThankYou from "./pages/ThankYou";
 
+// <-- ADDED: import Terms and Privacy pages
+import Terms from "./pages/Terms";
+import PrivacyPolicy from "./pages/Privacy";
+
 // ✅ Pages for ANIME and gym Editions
 const animeEdition = () => (
   <div className="p-8 text-center text-xl">ANIME Edition Collection</div>
@@ -60,6 +64,10 @@ export default function App() {
             <Route path="/collections/anime" element={<animeEdition />} />
             <Route path="/collections/gym" element={<gymEdition />} />
             <Route path="/thank-you" element={<ThankYou />} />
+
+            {/* <-- ADDED: Terms & Privacy routes */}
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
           </Routes>
         </main>
 

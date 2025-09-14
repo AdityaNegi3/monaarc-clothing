@@ -19,18 +19,36 @@ const Footer: React.FC = () => {
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm">
+                <a
+                  href="/"
+                  className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm"
+                >
                   Collections
                 </a>
               </li>
               <li>
-                <a href="/about" className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm">
+                <a
+                  href="/about"
+                  className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm"
+                >
                   About Us
                 </a>
               </li>
+            
               <li>
-                <a href="/cart" className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm">
-                  Cart
+                <a
+                  href="/terms"
+                  className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm"
+                >
+                  Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/privacy"
+                  className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm"
+                >
+                  Privacy Policy
                 </a>
               </li>
             </ul>
@@ -62,7 +80,7 @@ const Footer: React.FC = () => {
 
         <div className="border-t border-white/10 pt-8 mt-8">
           <p className="text-gray-400 text-sm text-center">
-            © 2025 MONAARC. All rights reserved. 
+            © 2025 MONAARC. All rights reserved.
           </p>
         </div>
       </div>
