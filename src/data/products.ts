@@ -30,7 +30,7 @@ export const products: Product[] = [
   {
     id: 'limited-3',
     name: 'Eye Of Fate White Tee',
-    price: 1099,
+    price: 999,
     category: 'limited',
     frontImage: '/front itachi.jpg',
     backImage: '/back itachi.jpg',
@@ -49,7 +49,7 @@ export const products: Product[] = [
   {
     id: 'limited-5',
     name: 'Beyond Average Black Tee',
-    price: 1099,
+    price: 999,
     category: 'limited',
     frontImage: '/dis front gym.jpg',
     backImage: '/dis back gym.jpg',
@@ -58,7 +58,7 @@ export const products: Product[] = [
   {
     id: 'limited-6',
     name: 'Prove Yourself Black Tee',
-    price: 1099,
+    price: 999,
     category: 'limited',
     frontImage: '/big back front.jpg',
     backImage: '/back12 .jpg',
