@@ -1,5 +1,5 @@
 // src/components/Header.tsx
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -9,11 +9,25 @@ interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = () => {
   const { getTotalItems } = useCart();
+  const totalItems = getTotalItems();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
-  const totalItems = getTotalItems();
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // handle scroll to toggle header background
+  useEffect(() => {
+    const onScroll = () => {
+      const scrolled = window.scrollY > 20; // change threshold if you want
+      setIsScrolled(scrolled);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleSignatureClick = () => {
     setShowComingSoon(true);
@@ -29,50 +43,33 @@ const Header: React.FC<HeaderProps> = () => {
     closeTimeoutRef.current = setTimeout(() => setDropdownOpen(false), 200);
   };
 
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-lg border-b border-white/10 transition-all duration-500">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        {/* Logo Centered */}
-        <div className="flex justify-center">
-          <Link
-            to="/"
-            aria-label="Go to home"
-            className="group inline-flex items-center justify-center rounded-full px-4 py-2 ring-1 ring-white/10 bg-black/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition
-                       hover:bg-white/5 hover:ring-white/40"
-          >
-            <img
-              src="/logo123.png"
-              alt="MONAARC logo"
-              loading="eager"
-              className="h-10 md:h-12 w-auto select-none pointer-events-none
-                         drop-shadow-[0_0_16px_rgba(255,255,255,0.22)]
-                         transition-transform duration-300
-                         group-hover:scale-105 group-hover:drop-shadow-[0_0_28px_rgba(255,255,255,0.35)]"
-              style={{
-                imageRendering: "auto",
-                filter: "saturate(1.05) contrast(1.02)",
-              }}
-            />
-          </Link>
-        </div>
+  // dynamic styles depending on scroll state
+  const headerBgClass = isScrolled ? "bg-white text-black border-b shadow-sm" : "bg-transparent text-white";
+  const navLinkBase = "font-medium transition-colors duration-200";
+  const navLinkColor = isScrolled ? "hover:text-gray-700 text-black/90" : "hover:text-gray-300 text-white";
 
-        {/* Cart LEFT, Nav CENTER, Auth RIGHT */}
-        <div className="hidden md:flex items-center justify-between mt-4 relative">
-          {/* LEFT: Cart */}
-          <div className="w-1/3 flex items-center">
-            <Link to="/cart" className="relative text-white hover:text-gray-300 transition-colors duration-200">
-              <ShoppingCart className="w-6 h-6" />
-              {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                  {totalItems}
-                </span>
-              )}
+  return (
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md ${headerBgClass}`}
+      role="banner"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Desktop / Tablet */}
+        <div className="hidden md:grid grid-cols-3 items-center h-16">
+          {/* Left: Brand */}
+          <div className="flex items-center">
+            <Link
+              to="/"
+              aria-label="MONAARC home"
+              className={`text-lg md:text-xl font-bold tracking-wide ${isScrolled ? "text-black" : "text-white"}`}
+            >
+              MONAARC
             </Link>
           </div>
 
-          {/* CENTER: Navigation */}
-          <div className="flex justify-center space-x-8 w-1/3 absolute left-1/2 -translate-x-1/2">
-            <Link to="/" className="text-white hover:text-gray-300 font-medium transition-colors duration-200">
+          {/* Center: Nav */}
+          <nav className="flex items-center justify-center space-x-8" aria-label="Primary navigation">
+            <Link to="/" className={`${navLinkBase} ${navLinkColor}`}>
               Home
             </Link>
 
@@ -82,28 +79,30 @@ const Header: React.FC<HeaderProps> = () => {
               onMouseLeave={handleMouseLeave}
             >
               <button
-                className="text-white hover:text-gray-300 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400/50 rounded transition-colors duration-200"
+                className={`${navLinkBase} ${navLinkColor} focus:outline-none`}
                 aria-haspopup="menu"
                 aria-expanded={dropdownOpen}
+                onClick={() => setDropdownOpen((v) => !v)}
               >
                 Collections
               </button>
+
               {dropdownOpen && (
                 <div
-                  className="absolute mt-2 w-48 bg-black/90 border border-white/10 rounded shadow-lg z-50"
+                  className={`absolute left-1/2 -translate-x-1/2 mt-3 w-48 rounded shadow-lg z-50 ${isScrolled ? "bg-white border" : "bg-black/90 border border-white/10"}`}
                   role="menu"
                 >
                   <a
                     href="/#anime-edition"
-                    className="block px-4 py-2 hover:bg-gray-800 text-white text-sm"
+                    className={`block px-4 py-2 text-sm ${isScrolled ? "text-black hover:bg-gray-100" : "text-white hover:bg-gray-800"}`}
                     role="menuitem"
                   >
                     Anime Edition
                   </a>
-                  
+
                   <button
                     onClick={handleSignatureClick}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-800 text-white text-sm"
+                    className={`block w-full text-left px-4 py-2 text-sm ${isScrolled ? "text-black hover:bg-gray-100" : "text-white hover:bg-gray-800"}`}
                     role="menuitem"
                   >
                     MONAARC Edition
@@ -112,104 +111,112 @@ const Header: React.FC<HeaderProps> = () => {
               )}
             </div>
 
-            <Link to="/about" className="text-white hover:text-gray-300 font-medium transition-colors duration-200">
+            <Link to="/about" className={`${navLinkBase} ${navLinkColor}`}>
               About
             </Link>
-          </div>
+          </nav>
 
-          {/* RIGHT: Auth */}
-          <div className="w-1/3 flex justify-end items-center gap-3">
+          {/* Right: Auth + Cart */}
+          <div className="flex items-center justify-end space-x-3">
             <SignedOut>
               <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
                 <button
                   type="button"
-                  className="px-3 py-1 rounded-md border border-white text-white hover:bg-white hover:text-black transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  className={`${isScrolled ? "border border-black text-black hover:bg-black/5" : "border border-white text-white hover:bg-white hover:text-black"} px-3 py-1 rounded-md transition`}
                 >
                   Sign In
                 </button>
               </SignInButton>
             </SignedOut>
+
             <SignedIn>
-              <UserButton
-                appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }}
-                afterSignOutUrl="/"
-              />
+              <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }} afterSignOutUrl="/" />
             </SignedIn>
+
+            <Link to="/cart" className={`relative ${isScrolled ? "text-black" : "text-white"} hover:opacity-80 transition`}>
+              <ShoppingCart className="w-6 h-6" />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
 
-        {/* Mobile: Cart + Menu */}
-        <div className="md:hidden flex justify-between items-center mt-4">
-          <Link to="/cart" className="relative text-white hover:text-gray-300 transition-colors duration-200">
-            <ShoppingCart className="w-6 h-6" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            )}
+        {/* Mobile */}
+        <div className="md:hidden flex items-center justify-between h-16">
+          {/* Left: Brand */}
+          <Link to="/" aria-label="MONAARC home" className={`text-lg font-bold ${isScrolled ? "text-black" : "text-white"}`}>
+            MONAARC
           </Link>
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400/50 rounded transition-colors duration-200"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+
+          {/* Right: cart + menu */}
+          <div className="flex items-center gap-4">
+            <Link to="/cart" className={`relative ${isScrolled ? "text-black" : "text-white"} hover:opacity-80 transition`}>
+              <ShoppingCart className="w-6 h-6" />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+
+            <button
+              onClick={() => setIsMenuOpen((s) => !s)}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+              className={`${isScrolled ? "text-black" : "text-white"} focus:outline-none`}
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* Mobile dropdown panel */}
         {isMenuOpen && (
           <div
             id="mobile-menu"
-            className="md:hidden mt-2 bg-black/95 backdrop-blur-md border-b border-white/10 rounded-b-lg"
+            className={`md:hidden mt-2 rounded-b-lg ${isScrolled ? "bg-white border-t border-gray-200 text-black" : "bg-black/95 text-white border-t border-white/10"} shadow-lg`}
           >
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link
-                to="/"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
-              >
+            <div className="px-4 py-3 space-y-2">
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-2 py-2">
                 Home
               </Link>
-              <a
-                href="/#anime-edition"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
-              >
+
+              <a href="/#anime-edition" onClick={() => setIsMenuOpen(false)} className="block px-2 py-2">
                 Anime Edition
               </a>
-            
+
               <button
                 onClick={() => {
                   setIsMenuOpen(false);
                   handleSignatureClick();
                 }}
-                className="block w-full text-left px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
+                className="block w-full text-left px-2 py-2"
               >
                 MONAARC Edition
               </button>
-              <Link
-                to="/about"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-white hover:text-gray-300 transition-colors duration-200"
-              >
+
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-2 py-2">
                 About
               </Link>
 
-              {/* Mobile Auth */}
-              <SignedOut>
-                <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
-                  <button className="block w-full text-left px-3 py-2 text-white border border-white rounded-md hover:bg-white hover:text-black transition-colors duration-200">
-                    Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-              <SignedIn>
-                <div className="px-3 py-2">
-                  <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }} />
-                </div>
-              </SignedIn>
+              <div className="pt-2 border-t border-white/10">
+                <SignedOut>
+                  <SignInButton mode="modal" asChild afterSignInUrl="/" afterSignUpUrl="/">
+                    <button className={`w-full text-left px-2 py-2 rounded-md ${isScrolled ? "border border-black text-black" : "border border-white text-white"}`}>
+                      Sign In
+                    </button>
+                  </SignInButton>
+                </SignedOut>
+
+                <SignedIn>
+                  <div className="px-2 py-2">
+                    <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }} />
+                  </div>
+                </SignedIn>
+              </div>
             </div>
           </div>
         )}
