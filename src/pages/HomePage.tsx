@@ -1,3 +1,4 @@
+// src/pages/HomePage.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { products } from '../data/products';
@@ -14,6 +15,14 @@ const HomePage: React.FC = () => {
     'toji-wrath-white-tee',
     'project-yeager-black-tee',
   ]);
+
+  // Price font style (regular, clean, no bold)
+  const priceFont: React.CSSProperties = {
+    fontFamily: "'Poppins', sans-serif",
+    fontWeight: 400, // regular
+    fontSize: '1.1rem',
+    color: '#1a1a1a',
+  };
 
   useEffect(() => {
     document.documentElement.style.margin = '0';
@@ -80,9 +89,8 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN */}
       <main className="pt-16">
-        {/* Anime Section */}
         <section id="anime-edition" className="py-20 relative bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
@@ -143,14 +151,16 @@ const HomePage: React.FC = () => {
                         </h3>
 
                         {product.originalPrice ? (
-                          <div className="text-xl font-bold">
+                          <div className="text-lg" style={priceFont}>
                             <span className="text-gray-400 line-through mr-2">
-                              ₹{product.originalPrice}
+                              Rs. {product.originalPrice}
                             </span>
-                            <span className="text-black">₹{product.price}</span>
+                            <span className="text-black">Rs. {product.price}</span>
                           </div>
                         ) : (
-                          <p className="text-black font-bold text-xl">₹{product.price}</p>
+                          <p className="text-lg text-black" style={priceFont}>
+                            Rs. {product.price}
+                          </p>
                         )}
 
                         <div className="flex items-center mt-4 text-gray-500 group-hover:text-black transition-colors duration-300">
