@@ -7,6 +7,13 @@
     <title>MONAARC Clothing</title>
     <meta name="description" content="MONAARC - Premium Anime Inspired Clothing.">
 
+    <!-- Preconnect for faster font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Montserrat: lightweight, geometric sans — adjust weights if you need others -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
     <!-- ✅ Google Analytics Code -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JW4K8WKFNY"></script>
     <script>
@@ -18,6 +25,30 @@
     <!-- ✅ End Google Analytics Code -->
 
     <style>
+      /* small CSS reset + base font settings */
+      html, body, #root {
+        height: 100%;
+      }
+
+      :root{
+        --brand-font: 'Montserrat', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: var(--brand-font);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #111;
+        background: #ffffff;
+      }
+
+      /* optional utility classes you might rely on */
+      .text-brand { font-family: var(--brand-font); }
+      .font-heavy { font-weight: 800; }
+      .font-medium { font-weight: 600; }
+
       @keyframes fade-in {
         from {
           opacity: 0;
