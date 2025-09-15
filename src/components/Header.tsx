@@ -1,6 +1,6 @@
 // src/components/Header.tsx
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
@@ -9,7 +9,10 @@ interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = () => {
   const { getTotalItems } = useCart();
-  const totalItems = getTotalItems();
+  const totalItems = getTotalItems ? getTotalItems() : 0;
+
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -18,16 +21,23 @@ const Header: React.FC<HeaderProps> = () => {
 
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // handle scroll to toggle header background
+  // handle scroll to toggle header background only on homepage
   useEffect(() => {
+    if (!isHome) {
+      // If not on homepage ensure header uses the "scrolled" appearance (white)
+      setIsScrolled(true);
+      return;
+    }
+
     const onScroll = () => {
-      const scrolled = window.scrollY > 20; // change threshold if you want
+      const scrolled = window.scrollY > 20; // threshold
       setIsScrolled(scrolled);
     };
-    onScroll();
+
+    onScroll(); // init
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   const handleSignatureClick = () => {
     setShowComingSoon(true);
@@ -43,8 +53,11 @@ const Header: React.FC<HeaderProps> = () => {
     closeTimeoutRef.current = setTimeout(() => setDropdownOpen(false), 200);
   };
 
-  // dynamic styles depending on scroll state
-  const headerBgClass = isScrolled ? "bg-white text-black border-b shadow-sm" : "bg-transparent text-white";
+  // dynamic classes
+  // If it's not homepage we want an always-white navbar (so `isScrolled` will be true there)
+  const headerBgClass = isScrolled
+    ? "bg-white text-black border-b shadow-sm"
+    : "bg-transparent text-white";
   const navLinkBase = "font-medium transition-colors duration-200";
   const navLinkColor = isScrolled ? "hover:text-gray-700 text-black/90" : "hover:text-gray-300 text-white";
 
