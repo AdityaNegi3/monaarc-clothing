@@ -11,7 +11,7 @@ const ProductPage: React.FC = () => {
   const [selectedSize, setSelectedSize] = useState('M');
   const [selectedImage, setSelectedImage] = useState(0);
 
-  const product = products.find(p => p.id === id);
+  const product = products.find((p) => p.id === id);
   if (!product) return <Navigate to="/" replace />;
 
   // Example size options
@@ -33,31 +33,34 @@ const ProductPage: React.FC = () => {
     <div className="bg-white min-h-screen text-black">
       {/* ✅ Added mt-20 so content starts below navbar */}
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-2 gap-12 mt-20">
-        
-        {/* LEFT: Thumbnails + Main Image */}
-        <div className="flex">
-          {/* Thumbnails */}
-          <div className="flex flex-col space-y-4 mr-4">
-            {images.map((img, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedImage(idx)}
-                className={`w-20 h-28 border rounded overflow-hidden ${
-                  selectedImage === idx ? 'border-black' : 'border-gray-300'
-                }`}
-              >
-                <img src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
-
+        {/* LEFT: Images Section */}
+        <div className="flex flex-col lg:flex-row">
           {/* Main Image */}
           <div className="flex-1">
             <img
               src={images[selectedImage]}
               alt={product.name}
-              className="w-full h-[600px] object-cover rounded"
+              className="w-full h-[500px] lg:h-[600px] object-cover rounded"
             />
+          </div>
+
+          {/* Thumbnails (below on mobile, left on desktop) */}
+          <div className="flex lg:flex-col mt-4 lg:mt-0 lg:ml-4 space-x-2 lg:space-x-0 lg:space-y-4 overflow-x-auto lg:overflow-visible">
+            {images.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedImage(idx)}
+                className={`w-20 h-28 flex-shrink-0 border rounded overflow-hidden ${
+                  selectedImage === idx ? 'border-black' : 'border-gray-300'
+                }`}
+              >
+                <img
+                  src={img}
+                  alt={`${product.name} ${idx}`}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
           </div>
         </div>
 
@@ -104,9 +107,6 @@ const ProductPage: React.FC = () => {
               Buy it now
             </button>
           </div>
-
-          {/* Share */}
-          
         </div>
       </div>
     </div>
