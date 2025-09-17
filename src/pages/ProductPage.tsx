@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
@@ -10,6 +10,7 @@ const ProductPage: React.FC = () => {
 
   const [selectedSize, setSelectedSize] = useState('M');
   const [selectedImage, setSelectedImage] = useState(0);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
 
   const product = products.find((p) => p.id === id);
   if (!product) return <Navigate to="/" replace />;
@@ -17,7 +18,7 @@ const ProductPage: React.FC = () => {
   // Example size options
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-  // Assume product.images is an array of 4 images [front, side, back, angle]
+  // Assume product.images is an array of images; fallback to front/back
   const images = product.images || [product.frontImage, product.backImage];
 
   const handleAddToCart = () => {
@@ -28,6 +29,23 @@ const ProductPage: React.FC = () => {
     addToCart(product, selectedSize);
     navigate('/cart');
   };
+
+  // Close size guide on ESC
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowSizeGuide(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // Prevent body scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = showSizeGuide ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showSizeGuide]);
 
   return (
     <div className="bg-white min-h-screen text-black">
@@ -76,9 +94,22 @@ const ProductPage: React.FC = () => {
           {/* Description */}
           <p className="text-gray-700 leading-relaxed">{product.description}</p>
 
-          {/* Size Dropdown */}
+          {/* Size Dropdown + Guide */}
           <div>
-            <label className="block mb-2 font-medium">SIZE</label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block font-medium">SIZE</label>
+
+              {/* Size guide trigger */}
+              <button
+                onClick={() => setShowSizeGuide(true)}
+                className="text-sm underline underline-offset-2"
+                aria-haspopup="dialog"
+                aria-expanded={showSizeGuide}
+              >
+                Size guide
+              </button>
+            </div>
+
             <select
               value={selectedSize}
               onChange={(e) => setSelectedSize(e.target.value)}
@@ -90,6 +121,9 @@ const ProductPage: React.FC = () => {
                 </option>
               ))}
             </select>
+
+            {/* Quick visual: show chosen size and a small hint */}
+            <p className="text-sm text-gray-500 mt-2">Selected: {selectedSize} — chest approx. {getChestApprox(selectedSize)} cm</p>
           </div>
 
           {/* Buttons */}
@@ -109,8 +143,109 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Size Guide Modal - uses /size.jpg from public folder */}
+      {showSizeGuide && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Size guide dialog"
+          onClick={() => setShowSizeGuide(false)}
+        >
+          {/* backdrop */}
+          <div className="absolute inset-0 bg-black/50" />
+
+          {/* modal content - stop propagation so clicks inside don't close */}
+          <div
+            className="relative max-w-3xl w-full bg-white rounded shadow-lg p-4 z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-semibold">Size guide</h3>
+              <button
+                onClick={() => setShowSizeGuide(false)}
+                aria-label="Close size guide"
+                className="text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Replace the src with the path where you put the image inside public/ */}
+            <div className="overflow-auto max-h-[70vh]">
+              <img src="/size.jpg" alt="Size guide" className="w-full h-auto rounded" />
+
+              {/* Optional textual table fallback for quick reference */}
+              <div className="mt-4">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left pb-2">Size</th>
+                      <th className="text-left pb-2">Chest (cm)</th>
+                      <th className="text-left pb-2">Waist (cm)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>XS</td>
+                      <td>78 - 82</td>
+                      <td>64 - 68</td>
+                    </tr>
+                    <tr>
+                      <td>S</td>
+                      <td>86 - 90</td>
+                      <td>70 - 74</td>
+                    </tr>
+                    <tr>
+                      <td>M</td>
+                      <td>94 - 98</td>
+                      <td>78 - 82</td>
+                    </tr>
+                    <tr>
+                      <td>L</td>
+                      <td>102 - 106</td>
+                      <td>86 - 90</td>
+                    </tr>
+                    <tr>
+                      <td>XL</td>
+                      <td>110 - 114</td>
+                      <td>94 - 98</td>
+                    </tr>
+                    <tr>
+                      <td>XXL</td>
+                      <td>118 - 122</td>
+                      <td>102 - 106</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+// small helper to return an approximate chest measurement for the selected size
+function getChestApprox(size: string) {
+  switch (size) {
+    case 'XS':
+      return 80;
+    case 'S':
+      return 88;
+    case 'M':
+      return 96;
+    case 'L':
+      return 104;
+    case 'XL':
+      return 112;
+    case 'XXL':
+      return 120;
+    default:
+      return '-';
+  }
+}
 
 export default ProductPage;
